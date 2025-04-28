@@ -1,0 +1,160 @@
+name: sat-network
+mgmt:
+  network: my_network
+  ipv4-subnet: 166.166.0.0/16
+topology:
+  nodes:
+    TSN1:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN1/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.1.2/24 dev e1_8
+        - ip address add 10.0.2.1/24 dev e1_2
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN2:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN2/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.2.2/24 dev e2_1
+        - ip address add 10.0.3.1/24 dev e2_3
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN3:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN3/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.3.2/24 dev e3_2
+        - ip address add 10.0.4.1/24 dev e3_4
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN4:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN4/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.4.2/24 dev e4_3
+        - ip address add 10.0.5.1/24 dev e4_5
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN5:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN5/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.5.2/24 dev e5_4
+        - ip address add 10.0.6.1/24 dev e5_6
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN6:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN6/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.6.2/24 dev e6_5
+        - ip address add 10.0.7.1/24 dev e6_7
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN7:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN7/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.7.2/24 dev e7_6
+        - ip address add 10.0.8.1/24 dev e7_8
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+    TSN8:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN8/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 10.0.8.2/24 dev e8_7
+        - ip address add 10.0.1.1/24 dev e8_1
+        - >-
+          vtysh -c 'conf t'
+          -c 'router ospf'
+          -c 'network 10.0.0.0/16 area 0'
+          -c 'exit'
+          -c 'exit'
+          -c 'write'
+          -c '!'
+      
+  links:
+    - endpoints:
+        - TSN1:e1_2
+        - TSN2:e2_1
+    - endpoints:
+        - TSN2:e2_3
+        - TSN3:e3_2
+    - endpoints:
+        - TSN3:e3_4
+        - TSN4:e4_3
+    - endpoints:
+        - TSN4:e4_5
+        - TSN5:e5_4
+    - endpoints:
+        - TSN5:e5_6
+        - TSN6:e6_5
+    - endpoints:
+        - TSN6:e6_7
+        - TSN7:e7_6
+    - endpoints:
+        - TSN7:e7_8
+        - TSN8:e8_7
+    - endpoints:
+        - TSN8:e8_1
+        - TSN1:e1_8

@@ -1,0 +1,145 @@
+name: test-topo-network
+mgmt:
+  network: my_network
+  ipv4-subnet: 166.166.0.0/16
+topology:
+  nodes:
+    TSN_NOCC:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/TSN_NOCC/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 193.168.1.1/24 dev eTSN_2
+        - ip route del default
+        - ip route add default via 193.168.1.2 dev eTSN_2
+    TX_NOCC:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/TX_NOCC/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 193.168.2.1/24 dev eTX_3
+        - ip route del default
+        - ip route add default via 193.168.2.2 dev eTX_3
+    YG_NOCC:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/YG_NOCC/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 193.168.3.1/24 dev eYG_1
+        - ip route del default
+        - ip route add default via 193.168.3.2 dev eYG_1
+    TSN1:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/TSN1/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 193.168.4.1/24 dev e1_2
+        - ip address add 193.168.6.2/24 dev e1_3
+        - ip address add 193.168.3.2/24 dev e1_YG
+        - ip route del default
+        - ip route add default via 193.168.4.2 dev e1_2
+    TSN2:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/TSN2/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 193.168.4.2/24 dev e2_1
+        - ip address add 193.168.5.1/24 dev e2_3
+        - ip address add 193.168.1.2/24 dev e2_TSN
+        - ip route del default
+        - ip route add default via 193.168.5.2 dev e2_3
+    TSN3:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/TSN3/daemons:/etc/frr/daemons
+      exec:
+        - ip address add 193.168.5.2/24 dev e3_2
+        - ip address add 193.168.6.1/24 dev e3_1
+        - ip address add 193.168.2.2/24 dev e3_TX
+        - ip route del default
+        - ip route add default via 193.168.6.2 dev e3_1
+    DG1:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG1/daemons:/etc/frr/daemons
+      exec: []
+    DG2:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG2/daemons:/etc/frr/daemons
+      exec: []
+    DG3:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG3/daemons:/etc/frr/daemons
+      exec: []
+    DG4:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG4/daemons:/etc/frr/daemons
+      exec: []
+    DG5:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG5/daemons:/etc/frr/daemons
+      exec: []
+    DG6:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG6/daemons:/etc/frr/daemons
+      exec: []
+    DG7:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG7/daemons:/etc/frr/daemons
+      exec: []
+    DG8:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG8/daemons:/etc/frr/daemons
+      exec: []
+    DG9:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG9/daemons:/etc/frr/daemons
+      exec: []
+    DG10:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output2/DG10/daemons:/etc/frr/daemons
+      exec: []
+  links:
+    - endpoints:
+        - TSN1:e1_2
+        - TSN2:e2_1
+    - endpoints:
+        - TSN2:e2_3
+        - TSN3:e3_2
+    - endpoints:
+        - TSN3:e3_1
+        - TSN1:e1_3
+    - endpoints:
+        - TSN1:e1_YG
+        - YG_NOCC:eYG_1
+    - endpoints:
+        - TSN2:e2_TSN
+        - TSN_NOCC:eTSN_2
+    - endpoints:
+        - TSN3:e3_TX
+        - TX_NOCC:eTX_3

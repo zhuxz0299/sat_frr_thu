@@ -1,0 +1,372 @@
+{
+  "name": "sat-network",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "clab",
+      "mgmt": {
+        "network": "my_network",
+        "bridge": "br-64fb146e8553",
+        "ipv4-subnet": "166.166.0.0/16",
+        "ipv4-gw": "166.166.0.1",
+        "external-access": true
+      }
+    }
+  },
+  "nodes": {
+    "TSN1": {
+      "index": "0",
+      "shortname": "TSN1",
+      "longname": "clab-sat-network-TSN1",
+      "fqdn": "TSN1.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN1",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.8",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN1",
+        "clab-node-name": "TSN1",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN2": {
+      "index": "1",
+      "shortname": "TSN2",
+      "longname": "clab-sat-network-TSN2",
+      "fqdn": "TSN2.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN2",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.6",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN2",
+        "clab-node-name": "TSN2",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN3": {
+      "index": "2",
+      "shortname": "TSN3",
+      "longname": "clab-sat-network-TSN3",
+      "fqdn": "TSN3.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN3",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.3",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN3",
+        "clab-node-name": "TSN3",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN4": {
+      "index": "3",
+      "shortname": "TSN4",
+      "longname": "clab-sat-network-TSN4",
+      "fqdn": "TSN4.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN4",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.9",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN4",
+        "clab-node-name": "TSN4",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN5": {
+      "index": "4",
+      "shortname": "TSN5",
+      "longname": "clab-sat-network-TSN5",
+      "fqdn": "TSN5.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN5",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.7",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN5",
+        "clab-node-name": "TSN5",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN6": {
+      "index": "5",
+      "shortname": "TSN6",
+      "longname": "clab-sat-network-TSN6",
+      "fqdn": "TSN6.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN6",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.5",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN6",
+        "clab-node-name": "TSN6",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN7": {
+      "index": "6",
+      "shortname": "TSN7",
+      "longname": "clab-sat-network-TSN7",
+      "fqdn": "TSN7.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN7",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.4",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN7",
+        "clab-node-name": "TSN7",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    },
+    "TSN8": {
+      "index": "7",
+      "shortname": "TSN8",
+      "longname": "clab-sat-network-TSN8",
+      "fqdn": "TSN8.sat-network.io",
+      "group": "",
+      "labdir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN8",
+      "kind": "linux",
+      "image": "frrouting/frr:v8.2.2",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "166.166.0.2",
+      "mgmt-ipv4-prefix-length": 16,
+      "mgmt-ipv6-address": "",
+      "mgmt-ipv6-prefix-length": 0,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-64fb146e8553",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/sail01/875/frr/FRR_TSN_CIRCLE/clab-sat-network/TSN8",
+        "clab-node-name": "TSN8",
+        "clab-node-type": "",
+        "clab-owner": "sail01",
+        "clab-topo-file": "/home/sail01/875/frr/FRR_TSN_CIRCLE/TSN8-circle-network.clab.yaml",
+        "containerlab": "sat-network"
+      },
+      "port-bindings": [
+      ]
+    }
+  },
+  "links": [
+    {
+      "a": {
+        "node": "TSN1",
+        "interface": "e1_2",
+        "mac": "aa:c1:ab:05:9c:15",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN2",
+        "interface": "e2_1",
+        "mac": "aa:c1:ab:88:ab:3c",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN2",
+        "interface": "e2_3",
+        "mac": "aa:c1:ab:f8:2a:25",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN3",
+        "interface": "e3_2",
+        "mac": "aa:c1:ab:a2:f4:c0",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN3",
+        "interface": "e3_4",
+        "mac": "aa:c1:ab:ac:64:8a",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN4",
+        "interface": "e4_3",
+        "mac": "aa:c1:ab:95:f6:ab",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN4",
+        "interface": "e4_5",
+        "mac": "aa:c1:ab:3b:ab:db",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN5",
+        "interface": "e5_4",
+        "mac": "aa:c1:ab:aa:44:bb",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN5",
+        "interface": "e5_6",
+        "mac": "aa:c1:ab:5a:97:85",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN6",
+        "interface": "e6_5",
+        "mac": "aa:c1:ab:53:54:3a",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN6",
+        "interface": "e6_7",
+        "mac": "aa:c1:ab:ae:29:50",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN7",
+        "interface": "e7_6",
+        "mac": "aa:c1:ab:1d:39:fc",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN7",
+        "interface": "e7_8",
+        "mac": "aa:c1:ab:fc:b8:63",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN8",
+        "interface": "e8_7",
+        "mac": "aa:c1:ab:df:59:51",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "TSN8",
+        "interface": "e8_1",
+        "mac": "aa:c1:ab:d0:e5:d7",
+        "peer": "z"
+      },
+      "z": {
+        "node": "TSN1",
+        "interface": "e1_8",
+        "mac": "aa:c1:ab:a4:c5:20",
+        "peer": "a"
+      }
+    }
+  ]
+}

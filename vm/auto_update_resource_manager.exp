@@ -1,0 +1,119 @@
+#!/usr/bin/expect -f
+
+# 设置超时时间
+set timeout 120
+
+# 创建一个函数处理VM1到VM44
+proc process_vm {vm_name source_dir} {
+    global timeout
+    
+    puts "正在处理虚拟机: $vm_name"
+    
+    # 获取源目录中的所有文件（不包含子目录）
+    spawn bash -c "ls -1 $source_dir"
+    set files ""
+    expect -re "(.*)\n" {
+        append files "[string trim $expect_out(1,string)] "
+        exp_continue
+    } eof {}
+    set files [string trim $files]
+    
+    if {$files == ""} {
+        puts "源目录中没有文件，跳过此虚拟机"
+        return
+    }
+    
+    # 检查虚拟机状态
+    spawn sudo virsh domstate $vm_name
+    expect {
+        "running" {
+            # 如果虚拟机在运行，优雅地关闭它
+            puts "虚拟机正在运行，正在关闭..."
+            spawn sudo virsh shutdown $vm_name
+            expect eof
+            # 等待虚拟机完全关闭
+            set wait_count 0
+            set max_wait 30
+            while {$wait_count < $max_wait} {
+                spawn sudo virsh domstate $vm_name
+                expect {
+                    "shut off" {
+                        break
+                    }
+                    eof
+                }
+                incr wait_count
+                sleep 2
+            }
+        }
+        "shut off" {
+            puts "虚拟机已关闭，继续操作..."
+        }
+        eof
+    }
+    
+    # 逐个传输文件
+    foreach file [split $files] {
+        set full_path "$source_dir/$file"
+        puts "传输文件: $full_path 到 $vm_name:/home/resource_manager/"
+        spawn sudo virt-copy-in -d $vm_name $full_path /home/resource_manager/
+        expect {
+            "error:" {
+                puts "无法传输文件 $file 到 $vm_name，错误!"
+                continue
+            }
+            eof
+        }
+    }
+    
+    # 重新启动虚拟机
+    spawn sudo virsh start $vm_name
+    expect eof
+    sleep 5
+    
+    # 连接到虚拟机控制台
+    spawn sudo virsh console $vm_name
+    sleep 2
+    send "\r"
+    
+    # 登录到虚拟机
+    expect {
+        "login:" {
+            send "root\r"
+            expect "Password:"
+            send "passw0rd@123\r"
+        }
+        timeout {
+            puts "登录超时，跳过此虚拟机"
+            return
+        }
+    }
+    
+    expect "# "
+    
+    # 对每个传输的文件执行chmod +x
+    foreach file [split $files] {
+        send "chmod +x /home/resource_manager/$file\r"
+        expect "# "
+        send "ls -la /home/resource_manager/$file\r"
+        expect "# "
+    }
+    
+    
+    # 退出虚拟机控制台
+    send "exit\r"
+    sleep 1
+    send "exit\r"
+    sleep 1
+}
+
+# 主脚本开始
+# 确定要传输的文件夹路径（替换为实际文件夹路径）
+set source_dir "/home/zmx/875/resource_manager"
+
+# 遍历vm1到vm44
+for {set i 1} {$i <= 44} {incr i} {
+    process_vm "vm$i" $source_dir
+}
+
+puts "所有虚拟机处理完成"

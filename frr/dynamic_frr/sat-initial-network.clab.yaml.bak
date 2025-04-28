@@ -1,0 +1,1103 @@
+name: sat-network
+mgmt:
+  network: sat_network
+  ipv4-subnet: 166.167.0.0/16
+topology:
+  nodes:
+    XW1:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW1/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW2:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW2/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW3:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW3/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW4:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW4/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW5:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW5/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW6:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW6/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW7:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW7/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW8:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW8/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW9:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW9/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW10:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW10/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW11:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW11/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW12:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW12/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW13:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW13/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW14:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW14/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW15:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW15/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW16:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW16/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW17:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW17/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW18:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW18/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW19:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW19/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW20:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW20/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW21:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW21/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW22:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW22/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW23:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW23/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    XW24:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/XW24/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG1:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG1/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG2:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG2/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG3:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG3/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG4:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG4/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG5:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG5/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG6:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG6/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG7:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG7/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG8:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG8/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG9:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG9/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG10:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG10/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG11:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG11/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    YG12:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/YG12/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN1:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN1/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.101.2/30 dev tsn1-tsn8
+        - ip address add 10.0.102.1/30 dev tsn1-tsn2
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN2:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN2/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.102.2/30 dev tsn2-tsn1
+        - ip address add 10.0.103.1/30 dev tsn2-tsn3
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN3:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN3/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.103.2/30 dev tsn3-tsn2
+        - ip address add 10.0.104.1/30 dev tsn3-tsn4
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN4:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN4/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.104.2/30 dev tsn4-tsn3
+        - ip address add 10.0.105.1/30 dev tsn4-tsn5
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN5:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN5/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.105.2/30 dev tsn5-tsn4
+        - ip address add 10.0.106.1/30 dev tsn5-tsn6
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN6:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN6/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.106.2/30 dev tsn6-tsn5
+        - ip address add 10.0.107.1/30 dev tsn6-tsn7
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN7:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN7/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.107.2/30 dev tsn7-tsn6
+        - ip address add 10.0.108.1/30 dev tsn7-tsn8
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+    TSN8:
+      kind: linux
+      image: frrouting/frr:v8.2.2
+      binds:
+        - sat_output/TSN8/daemons:/etc/frr/daemons
+      exec:
+        - mkdir -p /etc/frr
+        - touch /etc/frr/vtysh.conf
+        - echo "service integrated-vtysh-config" > /etc/frr/vtysh.conf
+        - sleep 1
+        - ip address add 10.0.108.2/30 dev tsn8-tsn7
+        - ip address add 10.0.101.1/30 dev tsn8-tsn1
+        - >-
+          vtysh -c 'conf t'
+
+          -c 'router ospf'
+
+          -c 'network 10.0.0.0/16 area 0'
+
+          -c 'exit'
+
+          -c 'exit'
+
+          -c 'write'
+
+          -c '!'
+  links:
+    - endpoints:
+        - TSN1:tsn1-tsn2
+        - TSN2:tsn2-tsn1
+    - endpoints:
+        - TSN2:tsn2-tsn3
+        - TSN3:tsn3-tsn2
+    - endpoints:
+        - TSN3:tsn3-tsn4
+        - TSN4:tsn4-tsn3
+    - endpoints:
+        - TSN4:tsn4-tsn5
+        - TSN5:tsn5-tsn4
+    - endpoints:
+        - TSN5:tsn5-tsn6
+        - TSN6:tsn6-tsn5
+    - endpoints:
+        - TSN6:tsn6-tsn7
+        - TSN7:tsn7-tsn6
+    - endpoints:
+        - TSN7:tsn7-tsn8
+        - TSN8:tsn8-tsn7
+    - endpoints:
+        - TSN8:tsn8-tsn1
+        - TSN1:tsn1-tsn8

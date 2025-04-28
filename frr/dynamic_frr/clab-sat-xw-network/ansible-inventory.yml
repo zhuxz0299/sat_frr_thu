@@ -1,0 +1,57 @@
+all:
+  vars:
+    # The generated inventory is assumed to be used from the clab host.
+    # Hence no http proxy should be used. Therefore we make sure the http
+    # module does not attempt using any global http proxy.
+    ansible_httpapi_use_proxy: false
+  children:
+    linux:
+      hosts:
+        clab-sat-xw-network-XW1:
+          ansible_host: 166.167.0.5
+        clab-sat-xw-network-XW10:
+          ansible_host: 166.167.0.13
+        clab-sat-xw-network-XW11:
+          ansible_host: 166.167.0.20
+        clab-sat-xw-network-XW12:
+          ansible_host: 166.167.0.14
+        clab-sat-xw-network-XW13:
+          ansible_host: 166.167.0.16
+        clab-sat-xw-network-XW14:
+          ansible_host: 166.167.0.10
+        clab-sat-xw-network-XW15:
+          ansible_host: 166.167.0.22
+        clab-sat-xw-network-XW16:
+          ansible_host: 166.167.0.12
+        clab-sat-xw-network-XW17:
+          ansible_host: 166.167.0.24
+        clab-sat-xw-network-XW18:
+          ansible_host: 166.167.0.6
+        clab-sat-xw-network-XW19:
+          ansible_host: 166.167.0.21
+        clab-sat-xw-network-XW2:
+          ansible_host: 166.167.0.11
+        clab-sat-xw-network-XW20:
+          ansible_host: 166.167.0.3
+        clab-sat-xw-network-XW21:
+          ansible_host: 166.167.0.19
+        clab-sat-xw-network-XW22:
+          ansible_host: 166.167.0.9
+        clab-sat-xw-network-XW23:
+          ansible_host: 166.167.0.8
+        clab-sat-xw-network-XW24:
+          ansible_host: 166.167.0.2
+        clab-sat-xw-network-XW3:
+          ansible_host: 166.167.0.7
+        clab-sat-xw-network-XW4:
+          ansible_host: 166.167.0.23
+        clab-sat-xw-network-XW5:
+          ansible_host: 166.167.0.18
+        clab-sat-xw-network-XW6:
+          ansible_host: 166.167.0.25
+        clab-sat-xw-network-XW7:
+          ansible_host: 166.167.0.15
+        clab-sat-xw-network-XW8:
+          ansible_host: 166.167.0.4
+        clab-sat-xw-network-XW9:
+          ansible_host: 166.167.0.17
