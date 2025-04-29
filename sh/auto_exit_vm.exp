@@ -1,0 +1,16 @@
+#!/usr/bin/expect -f
+
+# 设置超时时间
+set timeout 300
+
+# 遍历vm1到vm8
+for {set i 1} {$i <= 8} {incr i} {
+        
+    spawn sudo virsh console "vm$i"
+    sleep 2
+    send "\r"
+
+    send "exit\r"
+    sleep 1
+}
+

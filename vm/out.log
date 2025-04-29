@@ -1,24 +1,17 @@
 spawn sudo ip link add veth-vm1 type veth peer name veth-contTSN1
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN1
-[sudo] zmx 的密码： 
-'877382'
-spawn sudo ip link set veth-contTSN1 netns 877382
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877382 -n ip link set veth-contTSN1 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877382 -n ip addr add 10.0.64.1/30 dev veth-contTSN1
-[sudo] zmx 的密码： 
+'1127668'
+spawn sudo ip link set veth-contTSN1 netns 1127668
+spawn sudo nsenter -t 1127668 -n ip link set veth-contTSN1 up
+spawn sudo nsenter -t 1127668 -n ip addr add 10.0.64.1/30 dev veth-contTSN1
 spawn sudo ip link set veth-vm1 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm1
-[sudo] zmx 的密码： 
 Connected to domain vm1
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 19:45:55 on ttyS0
+Last login: Mon Apr 28 16:00:36 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -29,46 +22,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.1' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm1
-[sudo] zmx 的密码： 
-Domain vm1 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm1 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm1' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm1' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm1
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm1 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm1' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm1
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm1
-[sudo] zmx 的密码： 
-Domain vm1 started
-
 spawn sudo ip link add veth-vm2 type veth peer name veth-contTSN2
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN2
-[sudo] zmx 的密码： 
-'876675'
-spawn sudo ip link set veth-contTSN2 netns 876675
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876675 -n ip link set veth-contTSN2 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876675 -n ip addr add 10.0.64.5/30 dev veth-contTSN2
-[sudo] zmx 的密码： 
+'1127566'
+spawn sudo ip link set veth-contTSN2 netns 1127566
+spawn sudo nsenter -t 1127566 -n ip link set veth-contTSN2 up
+spawn sudo nsenter -t 1127566 -n ip addr add 10.0.64.5/30 dev veth-contTSN2
 spawn sudo ip link set veth-vm2 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm2
-[sudo] zmx 的密码： 
 Connected to domain vm2
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:05:14 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -79,46 +55,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.5' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm2
-[sudo] zmx 的密码： 
-Domain vm2 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm2 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm2' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm2' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm2
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm2 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm2' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm2
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm2
-[sudo] zmx 的密码： 
-Domain vm2 started
-
 spawn sudo ip link add veth-vm3 type veth peer name veth-contTSN3
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN3
-[sudo] zmx 的密码： 
-'877500'
-spawn sudo ip link set veth-contTSN3 netns 877500
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877500 -n ip link set veth-contTSN3 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877500 -n ip addr add 10.0.64.9/30 dev veth-contTSN3
-[sudo] zmx 的密码： 
+'1127615'
+spawn sudo ip link set veth-contTSN3 netns 1127615
+spawn sudo nsenter -t 1127615 -n ip link set veth-contTSN3 up
+spawn sudo nsenter -t 1127615 -n ip addr add 10.0.64.9/30 dev veth-contTSN3
 spawn sudo ip link set veth-vm3 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm3
-[sudo] zmx 的密码： 
 Connected to domain vm3
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:07:41 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -129,46 +88,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.9' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm3
-[sudo] zmx 的密码： 
-Domain vm3 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm3 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm3' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm3' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm3
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm3 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm3' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm3
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm3
-[sudo] zmx 的密码： 
-Domain vm3 started
-
 spawn sudo ip link add veth-vm4 type veth peer name veth-contTSN4
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN4
-[sudo] zmx 的密码： 
-'876756'
-spawn sudo ip link set veth-contTSN4 netns 876756
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876756 -n ip link set veth-contTSN4 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876756 -n ip addr add 10.0.64.13/30 dev veth-contTSN4
-[sudo] zmx 的密码： 
+'1127164'
+spawn sudo ip link set veth-contTSN4 netns 1127164
+spawn sudo nsenter -t 1127164 -n ip link set veth-contTSN4 up
+spawn sudo nsenter -t 1127164 -n ip addr add 10.0.64.13/30 dev veth-contTSN4
 spawn sudo ip link set veth-vm4 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm4
-[sudo] zmx 的密码： 
 Connected to domain vm4
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:14:18 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -179,46 +121,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.13' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm4
-[sudo] zmx 的密码： 
-Domain vm4 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm4 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm4' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm4' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm4
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm4 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm4' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm4
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm4
-[sudo] zmx 的密码： 
-Domain vm4 started
-
 spawn sudo ip link add veth-vm5 type veth peer name veth-contTSN5
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN5
-[sudo] zmx 的密码： 
-'878011'
-spawn sudo ip link set veth-contTSN5 netns 878011
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878011 -n ip link set veth-contTSN5 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878011 -n ip addr add 10.0.64.17/30 dev veth-contTSN5
-[sudo] zmx 的密码： 
+'1128303'
+spawn sudo ip link set veth-contTSN5 netns 1128303
+spawn sudo nsenter -t 1128303 -n ip link set veth-contTSN5 up
+spawn sudo nsenter -t 1128303 -n ip addr add 10.0.64.17/30 dev veth-contTSN5
 spawn sudo ip link set veth-vm5 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm5
-[sudo] zmx 的密码： 
 Connected to domain vm5
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:16:41 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -229,46 +154,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.17' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm5
-[sudo] zmx 的密码： 
-Domain vm5 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm5 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm5' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm5' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm5
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm5 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm5' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm5
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm5
-[sudo] zmx 的密码： 
-Domain vm5 started
-
 spawn sudo ip link add veth-vm6 type veth peer name veth-contTSN6
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN6
-[sudo] zmx 的密码： 
-'876719'
-spawn sudo ip link set veth-contTSN6 netns 876719
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876719 -n ip link set veth-contTSN6 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876719 -n ip addr add 10.0.64.21/30 dev veth-contTSN6
-[sudo] zmx 的密码： 
+'1126151'
+spawn sudo ip link set veth-contTSN6 netns 1126151
+spawn sudo nsenter -t 1126151 -n ip link set veth-contTSN6 up
+spawn sudo nsenter -t 1126151 -n ip addr add 10.0.64.21/30 dev veth-contTSN6
 spawn sudo ip link set veth-vm6 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm6
-[sudo] zmx 的密码： 
 Connected to domain vm6
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:19:07 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -279,46 +187,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.21' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm6
-[sudo] zmx 的密码： 
-Domain vm6 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm6 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm6' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm6' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm6
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm6 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm6' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm6
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm6
-[sudo] zmx 的密码： 
-Domain vm6 started
-
 spawn sudo ip link add veth-vm7 type veth peer name veth-contTSN7
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN7
-[sudo] zmx 的密码： 
-'877799'
-spawn sudo ip link set veth-contTSN7 netns 877799
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877799 -n ip link set veth-contTSN7 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877799 -n ip addr add 10.0.64.25/30 dev veth-contTSN7
-[sudo] zmx 的密码： 
+'1127163'
+spawn sudo ip link set veth-contTSN7 netns 1127163
+spawn sudo nsenter -t 1127163 -n ip link set veth-contTSN7 up
+spawn sudo nsenter -t 1127163 -n ip addr add 10.0.64.25/30 dev veth-contTSN7
 spawn sudo ip link set veth-vm7 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm7
-[sudo] zmx 的密码： 
 Connected to domain vm7
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:19:18 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -329,46 +220,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.25' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm7
-[sudo] zmx 的密码： 
-Domain vm7 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm7 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm7' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm7' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm7
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm7 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm7' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm7
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm7
-[sudo] zmx 的密码： 
-Domain vm7 started
-
 spawn sudo ip link add veth-vm8 type veth peer name veth-contTSN8
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-TSN8
-[sudo] zmx 的密码： 
-'876245'
-spawn sudo ip link set veth-contTSN8 netns 876245
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876245 -n ip link set veth-contTSN8 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876245 -n ip addr add 10.0.64.29/30 dev veth-contTSN8
-[sudo] zmx 的密码： 
+'1128586'
+spawn sudo ip link set veth-contTSN8 netns 1128586
+spawn sudo nsenter -t 1128586 -n ip link set veth-contTSN8 up
+spawn sudo nsenter -t 1128586 -n ip addr add 10.0.64.29/30 dev veth-contTSN8
 spawn sudo ip link set veth-vm8 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm8
-[sudo] zmx 的密码： 
 Connected to domain vm8
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 16:27:06 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -379,46 +253,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.29' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm8
-[sudo] zmx 的密码： 
-Domain vm8 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm8 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm8' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm8' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm8
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm8 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm8' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm8
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm8
-[sudo] zmx 的密码： 
-Domain vm8 started
-
 spawn sudo ip link add veth-vm9 type veth peer name veth-contYG1
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG1
-[sudo] zmx 的密码： 
-'877798'
-spawn sudo ip link set veth-contYG1 netns 877798
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877798 -n ip link set veth-contYG1 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877798 -n ip addr add 10.0.64.33/30 dev veth-contYG1
-[sudo] zmx 的密码： 
+'1126267'
+spawn sudo ip link set veth-contYG1 netns 1126267
+spawn sudo nsenter -t 1126267 -n ip link set veth-contYG1 up
+spawn sudo nsenter -t 1126267 -n ip addr add 10.0.64.33/30 dev veth-contYG1
 spawn sudo ip link set veth-vm9 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm9
-[sudo] zmx 的密码： 
 Connected to domain vm9
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:42:17 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -429,46 +286,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.33' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm9
-[sudo] zmx 的密码： 
-Domain vm9 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm9 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm9' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm9' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kl
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm9
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm9 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm9' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm9
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm9
-[sudo] zmx 的密码： 
-Domain vm9 started
-
 spawn sudo ip link add veth-vm10 type veth peer name veth-contYG2
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG2
-[sudo] zmx 的密码： 
-'877945'
-spawn sudo ip link set veth-contYG2 netns 877945
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877945 -n ip link set veth-contYG2 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877945 -n ip addr add 10.0.64.37/30 dev veth-contYG2
-[sudo] zmx 的密码： 
+'1126875'
+spawn sudo ip link set veth-contYG2 netns 1126875
+spawn sudo nsenter -t 1126875 -n ip link set veth-contYG2 up
+spawn sudo nsenter -t 1126875 -n ip addr add 10.0.64.37/30 dev veth-contYG2
 spawn sudo ip link set veth-vm10 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm10
-[sudo] zmx 的密码： 
 Connected to domain vm10
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:43:01 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -479,46 +319,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.37' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm10
-[sudo] zmx 的密码： 
-Domain vm10 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm10 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm10' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm10' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm10
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm10 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm10' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm10
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm10
-[sudo] zmx 的密码： 
-Domain vm10 started
-
 spawn sudo ip link add veth-vm11 type veth peer name veth-contYG3
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG3
-[sudo] zmx 的密码： 
-'878525'
-spawn sudo ip link set veth-contYG3 netns 878525
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878525 -n ip link set veth-contYG3 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878525 -n ip addr add 10.0.64.41/30 dev veth-contYG3
-[sudo] zmx 的密码： 
+'1128300'
+spawn sudo ip link set veth-contYG3 netns 1128300
+spawn sudo nsenter -t 1128300 -n ip link set veth-contYG3 up
+spawn sudo nsenter -t 1128300 -n ip addr add 10.0.64.41/30 dev veth-contYG3
 spawn sudo ip link set veth-vm11 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm11
-[sudo] zmx 的密码： 
 Connected to domain vm11
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:43:45 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -529,46 +352,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.41' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm11
-[sudo] zmx 的密码： 
-Domain vm11 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm11 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm11' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm11' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm11
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm11 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm11' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm11
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm11
-[sudo] zmx 的密码： 
-Domain vm11 started
-
 spawn sudo ip link add veth-vm12 type veth peer name veth-contYG4
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG4
-[sudo] zmx 的密码： 
-'878530'
-spawn sudo ip link set veth-contYG4 netns 878530
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878530 -n ip link set veth-contYG4 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878530 -n ip addr add 10.0.64.45/30 dev veth-contYG4
-[sudo] zmx 的密码： 
+'1128579'
+spawn sudo ip link set veth-contYG4 netns 1128579
+spawn sudo nsenter -t 1128579 -n ip link set veth-contYG4 up
+spawn sudo nsenter -t 1128579 -n ip addr add 10.0.64.45/30 dev veth-contYG4
 spawn sudo ip link set veth-vm12 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm12
-[sudo] zmx 的密码： 
 Connected to domain vm12
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:44:32 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -579,46 +385,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.45' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm12
-[sudo] zmx 的密码： 
-Domain vm12 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm12 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm12' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm12' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm12
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm12 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm12' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm12
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm12
-[sudo] zmx 的密码： 
-Domain vm12 started
-
 spawn sudo ip link add veth-vm13 type veth peer name veth-contYG5
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG5
-[sudo] zmx 的密码： 
-'877537'
-spawn sudo ip link set veth-contYG5 netns 877537
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877537 -n ip link set veth-contYG5 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877537 -n ip addr add 10.0.64.49/30 dev veth-contYG5
-[sudo] zmx 的密码： 
+'1126569'
+spawn sudo ip link set veth-contYG5 netns 1126569
+spawn sudo nsenter -t 1126569 -n ip link set veth-contYG5 up
+spawn sudo nsenter -t 1126569 -n ip addr add 10.0.64.49/30 dev veth-contYG5
 spawn sudo ip link set veth-vm13 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm13
-[sudo] zmx 的密码： 
 Connected to domain vm13
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:45:20 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -629,46 +418,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.49' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm13
-[sudo] zmx 的密码： 
-Domain vm13 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm13 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm13' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm13' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm13
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm13 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm13' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm13
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm13
-[sudo] zmx 的密码： 
-Domain vm13 started
-
 spawn sudo ip link add veth-vm14 type veth peer name veth-contYG6
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG6
-[sudo] zmx 的密码： 
-'875766'
-spawn sudo ip link set veth-contYG6 netns 875766
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875766 -n ip link set veth-contYG6 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875766 -n ip addr add 10.0.64.53/30 dev veth-contYG6
-[sudo] zmx 的密码： 
+'1128559'
+spawn sudo ip link set veth-contYG6 netns 1128559
+spawn sudo nsenter -t 1128559 -n ip link set veth-contYG6 up
+spawn sudo nsenter -t 1128559 -n ip addr add 10.0.64.53/30 dev veth-contYG6
 spawn sudo ip link set veth-vm14 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm14
-[sudo] zmx 的密码： 
 Connected to domain vm14
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:46:08 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -679,46 +451,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.53' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm14
-[sudo] zmx 的密码： 
-Domain vm14 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm14 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm14' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm14' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm14
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm14 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm14' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm14
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm14
-[sudo] zmx 的密码： 
-Domain vm14 started
-
 spawn sudo ip link add veth-vm15 type veth peer name veth-contYG7
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG7
-[sudo] zmx 的密码： 
-'876655'
-spawn sudo ip link set veth-contYG7 netns 876655
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876655 -n ip link set veth-contYG7 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876655 -n ip addr add 10.0.64.57/30 dev veth-contYG7
-[sudo] zmx 的密码： 
+'1126169'
+spawn sudo ip link set veth-contYG7 netns 1126169
+spawn sudo nsenter -t 1126169 -n ip link set veth-contYG7 up
+spawn sudo nsenter -t 1126169 -n ip addr add 10.0.64.57/30 dev veth-contYG7
 spawn sudo ip link set veth-vm15 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm15
-[sudo] zmx 的密码： 
 Connected to domain vm15
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:46:54 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -729,46 +484,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.57' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm15
-[sudo] zmx 的密码： 
-Domain vm15 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm15 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm15' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm15' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm15
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm15 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm15' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm15
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm15
-[sudo] zmx 的密码： 
-Domain vm15 started
-
 spawn sudo ip link add veth-vm16 type veth peer name veth-contYG8
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG8
-[sudo] zmx 的密码： 
-'877946'
-spawn sudo ip link set veth-contYG8 netns 877946
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877946 -n ip link set veth-contYG8 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877946 -n ip addr add 10.0.64.61/30 dev veth-contYG8
-[sudo] zmx 的密码： 
+'1127672'
+spawn sudo ip link set veth-contYG8 netns 1127672
+spawn sudo nsenter -t 1127672 -n ip link set veth-contYG8 up
+spawn sudo nsenter -t 1127672 -n ip addr add 10.0.64.61/30 dev veth-contYG8
 spawn sudo ip link set veth-vm16 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm16
-[sudo] zmx 的密码： 
 Connected to domain vm16
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:47:39 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -779,46 +517,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.61' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm16
-[sudo] zmx 的密码： 
-Domain vm16 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm16 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm16' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm16' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm16
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm16 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm16' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm16
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm16
-[sudo] zmx 的密码： 
-Domain vm16 started
-
 spawn sudo ip link add veth-vm17 type veth peer name veth-contYG9
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG9
-[sudo] zmx 的密码： 
-'877095'
-spawn sudo ip link set veth-contYG9 netns 877095
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877095 -n ip link set veth-contYG9 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877095 -n ip addr add 10.0.64.65/30 dev veth-contYG9
-[sudo] zmx 的密码： 
+'1128297'
+spawn sudo ip link set veth-contYG9 netns 1128297
+spawn sudo nsenter -t 1128297 -n ip link set veth-contYG9 up
+spawn sudo nsenter -t 1128297 -n ip addr add 10.0.64.65/30 dev veth-contYG9
 spawn sudo ip link set veth-vm17 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm17
-[sudo] zmx 的密码： 
 Connected to domain vm17
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:48:22 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -829,46 +550,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.65' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm17
-[sudo] zmx 的密码： 
-Domain vm17 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm17 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm17' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm17' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm17
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm17 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm17' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm17
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm17
-[sudo] zmx 的密码： 
-Domain vm17 started
-
 spawn sudo ip link add veth-vm18 type veth peer name veth-contYG10
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG10
-[sudo] zmx 的密码： 
-'876694'
-spawn sudo ip link set veth-contYG10 netns 876694
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876694 -n ip link set veth-contYG10 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876694 -n ip addr add 10.0.64.69/30 dev veth-contYG10
-[sudo] zmx 的密码： 
+'1127621'
+spawn sudo ip link set veth-contYG10 netns 1127621
+spawn sudo nsenter -t 1127621 -n ip link set veth-contYG10 up
+spawn sudo nsenter -t 1127621 -n ip addr add 10.0.64.69/30 dev veth-contYG10
 spawn sudo ip link set veth-vm18 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm18
-[sudo] zmx 的密码： 
 Connected to domain vm18
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:49:04 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -879,46 +583,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.69' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm18
-[sudo] zmx 的密码： 
-Domain vm18 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm18 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm18' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm18' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm18
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm18 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm18' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm18
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm18
-[sudo] zmx 的密码： 
-Domain vm18 started
-
 spawn sudo ip link add veth-vm19 type veth peer name veth-contYG11
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG11
-[sudo] zmx 的密码： 
-'875696'
-spawn sudo ip link set veth-contYG11 netns 875696
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875696 -n ip link set veth-contYG11 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875696 -n ip addr add 10.0.64.73/30 dev veth-contYG11
-[sudo] zmx 的密码： 
+'1126173'
+spawn sudo ip link set veth-contYG11 netns 1126173
+spawn sudo nsenter -t 1126173 -n ip link set veth-contYG11 up
+spawn sudo nsenter -t 1126173 -n ip addr add 10.0.64.73/30 dev veth-contYG11
 spawn sudo ip link set veth-vm19 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm19
-[sudo] zmx 的密码： 
 Connected to domain vm19
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:49:51 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -929,46 +616,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.73' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm19
-[sudo] zmx 的密码： 
-Domain vm19 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm19 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm19' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm19' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm19
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm19 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm19' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm19
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm19
-[sudo] zmx 的密码： 
-Domain vm19 started
-
 spawn sudo ip link add veth-vm20 type veth peer name veth-contYG12
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-YG12
-[sudo] zmx 的密码： 
-'878523'
-spawn sudo ip link set veth-contYG12 netns 878523
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878523 -n ip link set veth-contYG12 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878523 -n ip addr add 10.0.64.77/30 dev veth-contYG12
-[sudo] zmx 的密码： 
+'1127605'
+spawn sudo ip link set veth-contYG12 netns 1127605
+spawn sudo nsenter -t 1127605 -n ip link set veth-contYG12 up
+spawn sudo nsenter -t 1127605 -n ip addr add 10.0.64.77/30 dev veth-contYG12
 spawn sudo ip link set veth-vm20 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm20
-[sudo] zmx 的密码： 
 Connected to domain vm20
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 10:59:20 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -979,46 +649,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.77' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm20
-[sudo] zmx 的密码： 
-Domain vm20 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm20 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm20' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm20' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm20
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm20 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm20' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm20
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm20
-[sudo] zmx 的密码： 
-Domain vm20 started
-
 spawn sudo ip link add veth-vm21 type veth peer name veth-contXW1
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW1
-[sudo] zmx 的密码： 
-'878527'
-spawn sudo ip link set veth-contXW1 netns 878527
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878527 -n ip link set veth-contXW1 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878527 -n ip addr add 10.0.64.81/30 dev veth-contXW1
-[sudo] zmx 的密码： 
+'1127567'
+spawn sudo ip link set veth-contXW1 netns 1127567
+spawn sudo nsenter -t 1127567 -n ip link set veth-contXW1 up
+spawn sudo nsenter -t 1127567 -n ip addr add 10.0.64.81/30 dev veth-contXW1
 spawn sudo ip link set veth-vm21 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm21
-[sudo] zmx 的密码： 
 Connected to domain vm21
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:51:20 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1029,46 +682,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.81' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm21
-[sudo] zmx 的密码： 
-Domain vm21 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm21 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm21' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm21' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm21
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm21 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm21' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm21
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm21
-[sudo] zmx 的密码： 
-Domain vm21 started
-
 spawn sudo ip link add veth-vm22 type veth peer name veth-contXW2
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW2
-[sudo] zmx 的密码： 
-'877489'
-spawn sudo ip link set veth-contXW2 netns 877489
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877489 -n ip link set veth-contXW2 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877489 -n ip addr add 10.0.64.85/30 dev veth-contXW2
-[sudo] zmx 的密码： 
+'1128537'
+spawn sudo ip link set veth-contXW2 netns 1128537
+spawn sudo nsenter -t 1128537 -n ip link set veth-contXW2 up
+spawn sudo nsenter -t 1128537 -n ip addr add 10.0.64.85/30 dev veth-contXW2
 spawn sudo ip link set veth-vm22 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm22
-[sudo] zmx 的密码： 
 Connected to domain vm22
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:52:04 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1079,46 +715,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.85' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm22
-[sudo] zmx 的密码： 
-Domain vm22 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm22 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm22' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm22' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm22
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm22 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm22' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm22
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm22
-[sudo] zmx 的密码： 
-Domain vm22 started
-
 spawn sudo ip link add veth-vm23 type veth peer name veth-contXW3
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW3
-[sudo] zmx 的密码： 
-'877371'
-spawn sudo ip link set veth-contXW3 netns 877371
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877371 -n ip link set veth-contXW3 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877371 -n ip addr add 10.0.64.89/30 dev veth-contXW3
-[sudo] zmx 的密码： 
+'1128173'
+spawn sudo ip link set veth-contXW3 netns 1128173
+spawn sudo nsenter -t 1128173 -n ip link set veth-contXW3 up
+spawn sudo nsenter -t 1128173 -n ip addr add 10.0.64.89/30 dev veth-contXW3
 spawn sudo ip link set veth-vm23 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm23
-[sudo] zmx 的密码： 
 Connected to domain vm23
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:52:51 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1129,46 +748,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.89' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm23
-[sudo] zmx 的密码： 
-Domain vm23 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm23 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm23' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm23' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm23
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm23 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm23' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm23
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm23
-[sudo] zmx 的密码： 
-Domain vm23 started
-
 spawn sudo ip link add veth-vm24 type veth peer name veth-contXW4
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW4
-[sudo] zmx 的密码： 
-'876748'
-spawn sudo ip link set veth-contXW4 netns 876748
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876748 -n ip link set veth-contXW4 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876748 -n ip addr add 10.0.64.93/30 dev veth-contXW4
-[sudo] zmx 的密码： 
+'1125923'
+spawn sudo ip link set veth-contXW4 netns 1125923
+spawn sudo nsenter -t 1125923 -n ip link set veth-contXW4 up
+spawn sudo nsenter -t 1125923 -n ip addr add 10.0.64.93/30 dev veth-contXW4
 spawn sudo ip link set veth-vm24 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm24
-[sudo] zmx 的密码： 
 Connected to domain vm24
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:53:36 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1179,46 +781,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.93' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm24
-[sudo] zmx 的密码： 
-Domain vm24 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm24 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm24' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm24' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm24
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm24 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm24' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm24
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm24
-[sudo] zmx 的密码： 
-Domain vm24 started
-
 spawn sudo ip link add veth-vm25 type veth peer name veth-contXW5
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW5
-[sudo] zmx 的密码： 
-'875540'
-spawn sudo ip link set veth-contXW5 netns 875540
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875540 -n ip link set veth-contXW5 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875540 -n ip addr add 10.0.64.97/30 dev veth-contXW5
-[sudo] zmx 的密码： 
+'1127165'
+spawn sudo ip link set veth-contXW5 netns 1127165
+spawn sudo nsenter -t 1127165 -n ip link set veth-contXW5 up
+spawn sudo nsenter -t 1127165 -n ip addr add 10.0.64.97/30 dev veth-contXW5
 spawn sudo ip link set veth-vm25 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm25
-[sudo] zmx 的密码： 
 Connected to domain vm25
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:54:20 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1229,46 +814,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.97' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm25
-[sudo] zmx 的密码： 
-Domain vm25 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm25 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm25' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm25' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm25
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm25 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm25' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm25
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm25
-[sudo] zmx 的密码： 
-Domain vm25 started
-
 spawn sudo ip link add veth-vm26 type veth peer name veth-contXW6
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW6
-[sudo] zmx 的密码： 
-'876877'
-spawn sudo ip link set veth-contXW6 netns 876877
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876877 -n ip link set veth-contXW6 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876877 -n ip addr add 10.0.64.101/30 dev veth-contXW6
-[sudo] zmx 的密码： 
+'1128551'
+spawn sudo ip link set veth-contXW6 netns 1128551
+spawn sudo nsenter -t 1128551 -n ip link set veth-contXW6 up
+spawn sudo nsenter -t 1128551 -n ip addr add 10.0.64.101/30 dev veth-contXW6
 spawn sudo ip link set veth-vm26 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm26
-[sudo] zmx 的密码： 
 Connected to domain vm26
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:55:02 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1279,46 +847,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.101' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm26
-[sudo] zmx 的密码： 
-Domain vm26 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm26 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm26' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm26' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm26
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm26 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm26' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm26
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm26
-[sudo] zmx 的密码： 
-Domain vm26 started
-
 spawn sudo ip link add veth-vm27 type veth peer name veth-contXW7
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW7
-[sudo] zmx 的密码： 
-'878524'
-spawn sudo ip link set veth-contXW7 netns 878524
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878524 -n ip link set veth-contXW7 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878524 -n ip addr add 10.0.64.105/30 dev veth-contXW7
-[sudo] zmx 的密码： 
+'1128163'
+spawn sudo ip link set veth-contXW7 netns 1128163
+spawn sudo nsenter -t 1128163 -n ip link set veth-contXW7 up
+spawn sudo nsenter -t 1128163 -n ip addr add 10.0.64.105/30 dev veth-contXW7
 spawn sudo ip link set veth-vm27 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm27
-[sudo] zmx 的密码： 
 Connected to domain vm27
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:55:46 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1329,46 +880,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.105' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm27
-[sudo] zmx 的密码： 
-Domain vm27 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm27 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm27' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm27' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm27
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm27 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm27' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm27
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm27
-[sudo] zmx 的密码： 
-Domain vm27 started
-
 spawn sudo ip link add veth-vm28 type veth peer name veth-contXW8
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW8
-[sudo] zmx 的密码： 
-'878010'
-spawn sudo ip link set veth-contXW8 netns 878010
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878010 -n ip link set veth-contXW8 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878010 -n ip addr add 10.0.64.109/30 dev veth-contXW8
-[sudo] zmx 的密码： 
+'1126205'
+spawn sudo ip link set veth-contXW8 netns 1126205
+spawn sudo nsenter -t 1126205 -n ip link set veth-contXW8 up
+spawn sudo nsenter -t 1126205 -n ip addr add 10.0.64.109/30 dev veth-contXW8
 spawn sudo ip link set veth-vm28 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm28
-[sudo] zmx 的密码： 
 Connected to domain vm28
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:56:28 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1379,46 +913,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.109' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm28
-[sudo] zmx 的密码： 
-Domain vm28 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm28 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm28' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm28' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm28
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm28 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm28' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm28
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm28
-[sudo] zmx 的密码： 
-Domain vm28 started
-
 spawn sudo ip link add veth-vm29 type veth peer name veth-contXW9
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW9
-[sudo] zmx 的密码： 
-'877574'
-spawn sudo ip link set veth-contXW9 netns 877574
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877574 -n ip link set veth-contXW9 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877574 -n ip addr add 10.0.64.113/30 dev veth-contXW9
-[sudo] zmx 的密码： 
+'1126257'
+spawn sudo ip link set veth-contXW9 netns 1126257
+spawn sudo nsenter -t 1126257 -n ip link set veth-contXW9 up
+spawn sudo nsenter -t 1126257 -n ip addr add 10.0.64.113/30 dev veth-contXW9
 spawn sudo ip link set veth-vm29 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm29
-[sudo] zmx 的密码： 
 Connected to domain vm29
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 11:02:46 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1429,46 +946,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.113' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm29
-[sudo] zmx 的密码： 
-Domain vm29 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm29 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm29' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm29' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm29
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm29 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm29' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm29
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm29
-[sudo] zmx 的密码： 
-Domain vm29 started
-
 spawn sudo ip link add veth-vm30 type veth peer name veth-contXW10
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW10
-[sudo] zmx 的密码： 
-'878522'
-spawn sudo ip link set veth-contXW10 netns 878522
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878522 -n ip link set veth-contXW10 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878522 -n ip addr add 10.0.64.117/30 dev veth-contXW10
-[sudo] zmx 的密码： 
+'1127980'
+spawn sudo ip link set veth-contXW10 netns 1127980
+spawn sudo nsenter -t 1127980 -n ip link set veth-contXW10 up
+spawn sudo nsenter -t 1127980 -n ip addr add 10.0.64.117/30 dev veth-contXW10
 spawn sudo ip link set veth-vm30 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm30
-[sudo] zmx 的密码： 
 Connected to domain vm30
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:58:03 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1479,46 +979,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.117' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm30
-[sudo] zmx 的密码： 
-Domain vm30 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm30 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm30' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm30' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm30
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm30 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm30' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm30
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm30
-[sudo] zmx 的密码： 
-Domain vm30 started
-
 spawn sudo ip link add veth-vm31 type veth peer name veth-contXW11
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW11
-[sudo] zmx 的密码： 
-'876361'
-spawn sudo ip link set veth-contXW11 netns 876361
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876361 -n ip link set veth-contXW11 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876361 -n ip addr add 10.0.64.121/30 dev veth-contXW11
-[sudo] zmx 的密码： 
+'1126443'
+spawn sudo ip link set veth-contXW11 netns 1126443
+spawn sudo nsenter -t 1126443 -n ip link set veth-contXW11 up
+spawn sudo nsenter -t 1126443 -n ip addr add 10.0.64.121/30 dev veth-contXW11
 spawn sudo ip link set veth-vm31 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm31
-[sudo] zmx 的密码： 
 Connected to domain vm31
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:58:52 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1529,46 +1012,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.121' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm31
-[sudo] zmx 的密码： 
-Domain vm31 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm31 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm31' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm31' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm31
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm31 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm31' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm31
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm31
-[sudo] zmx 的密码： 
-Domain vm31 started
-
 spawn sudo ip link add veth-vm32 type veth peer name veth-contXW12
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW12
-[sudo] zmx 的密码： 
-'875822'
-spawn sudo ip link set veth-contXW12 netns 875822
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875822 -n ip link set veth-contXW12 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 875822 -n ip addr add 10.0.64.125/30 dev veth-contXW12
-[sudo] zmx 的密码： 
+'1128359'
+spawn sudo ip link set veth-contXW12 netns 1128359
+spawn sudo nsenter -t 1128359 -n ip link set veth-contXW12 up
+spawn sudo nsenter -t 1128359 -n ip addr add 10.0.64.125/30 dev veth-contXW12
 spawn sudo ip link set veth-vm32 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm32
-[sudo] zmx 的密码： 
 Connected to domain vm32
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 22:59:36 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1579,93 +1045,62 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.125' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm32
-[sudo] zmx 的密码： 
-Domain vm32 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm32 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm32' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm32' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm32
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm32 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm32' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm32
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm32
-[sudo] zmx 的密码： 
-Domain vm32 started
-
 spawn sudo ip link add veth-vm33 type veth peer name veth-contXW13
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW13
-[sudo] zmx 的密码： 
-'876424'
-spawn sudo ip link set veth-contXW13 netns 876424
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876424 -n ip link set veth-contXW13 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 876424 -n ip addr add 10.0.64.129/30 dev veth-contXW13
-[sudo] zmx 的密码： 
+'1126308'
+spawn sudo ip link set veth-contXW13 netns 1126308
+spawn sudo nsenter -t 1126308 -n ip link set veth-contXW13 up
+spawn sudo nsenter -t 1126308 -n ip addr add 10.0.64.129/30 dev veth-contXW13
 spawn sudo ip link set veth-vm33 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm33
-[sudo] zmx 的密码： 
 Connected to domain vm33
 Escape character is ^]
+
+localhost login: root
+Password: 
+Last login: Mon Apr 28 10:57:06 on ttyS0
 
-[root@localhost /]# root
--bash: root: command not found
-[root@localhost /]# passw0rd@123
--bash: passw0rd@123: command not found
-[root@localhost /]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
-[root@localhost /]# echo 'DEVICE=ens2' >> /etc/sysconfig/network-scripts/ifcfg-ens2
-[root@localhost /]# echo 'ONBOOT=yes' >> /etc/sysconfig/network-scripts/ifcfg-ens2
-[root@localhost /]# echo 'BOOTPROTO=static' >> /etc/sysconfig/network-scripts/ifcfg-ens2
-[root@localhost /]# echo 'IPADDR=10.0.64.130' >> /etc/sysconfig/network-scripts/ifcfg-ens2
-[root@localhost /]# spawn sudo virsh shutdown vm33
-[sudo] zmx 的密码： 
-Domain vm33 is being shutdown
-
+Authorized users only. All activities may be monitored and reported.
+[root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# echo 'DEVICE=ens2' >> /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# echo 'ONBOOT=yes' >> /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# echo 'BOOTPROTO=static' >> /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# echo 'IPADDR=10.0.64.130' >> /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# echo 'GATEWAY=10.0.64.129' >> /etc/sysconfig/network-scripts/ifcfg-ens2
+[root@localhost ~]# spawn sudo virsh shutdown vm33
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm33 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm33' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm33' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm33
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm33 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm33' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm33
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm33
-[sudo] zmx 的密码： 
-Domain vm33 started
-
 spawn sudo ip link add veth-vm34 type veth peer name veth-contXW14
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW14
-[sudo] zmx 的密码： 
-'877591'
-spawn sudo ip link set veth-contXW14 netns 877591
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877591 -n ip link set veth-contXW14 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877591 -n ip addr add 10.0.64.133/30 dev veth-contXW14
-[sudo] zmx 的密码： 
+'1128571'
+spawn sudo ip link set veth-contXW14 netns 1128571
+spawn sudo nsenter -t 1128571 -n ip link set veth-contXW14 up
+spawn sudo nsenter -t 1128571 -n ip addr add 10.0.64.133/30 dev veth-contXW14
 spawn sudo ip link set veth-vm34 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm34
-[sudo] zmx 的密码： 
 Connected to domain vm34
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:01:05 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1676,46 +1111,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.133' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm34
-[sudo] zmx 的密码： 
-Domain vm34 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm34 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm34' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm34' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm34
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm34 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm34' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm34
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm34
-[sudo] zmx 的密码： 
-Domain vm34 started
-
 spawn sudo ip link add veth-vm35 type veth peer name veth-contXW15
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW15
-[sudo] zmx 的密码： 
-'877588'
-spawn sudo ip link set veth-contXW15 netns 877588
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877588 -n ip link set veth-contXW15 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877588 -n ip addr add 10.0.64.137/30 dev veth-contXW15
-[sudo] zmx 的密码： 
+'1127237'
+spawn sudo ip link set veth-contXW15 netns 1127237
+spawn sudo nsenter -t 1127237 -n ip link set veth-contXW15 up
+spawn sudo nsenter -t 1127237 -n ip addr add 10.0.64.137/30 dev veth-contXW15
 spawn sudo ip link set veth-vm35 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm35
-[sudo] zmx 的密码： 
 Connected to domain vm35
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:01:48 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1726,46 +1144,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.137' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm35
-[sudo] zmx 的密码： 
-Domain vm35 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm35 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm35' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm35' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm35
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm35 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm35' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm35
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm35
-[sudo] zmx 的密码： 
-Domain vm35 started
-
 spawn sudo ip link add veth-vm36 type veth peer name veth-contXW16
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW16
-[sudo] zmx 的密码： 
-'877208'
-spawn sudo ip link set veth-contXW16 netns 877208
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877208 -n ip link set veth-contXW16 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877208 -n ip addr add 10.0.64.141/30 dev veth-contXW16
-[sudo] zmx 的密码： 
+'1128585'
+spawn sudo ip link set veth-contXW16 netns 1128585
+spawn sudo nsenter -t 1128585 -n ip link set veth-contXW16 up
+spawn sudo nsenter -t 1128585 -n ip addr add 10.0.64.141/30 dev veth-contXW16
 spawn sudo ip link set veth-vm36 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm36
-[sudo] zmx 的密码： 
 Connected to domain vm36
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:02:34 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1776,46 +1177,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.141' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm36
-[sudo] zmx 的密码： 
-Domain vm36 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm36 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm36' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm36' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm36
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm36 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm36' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm36
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm36
-[sudo] zmx 的密码： 
-Domain vm36 started
-
 spawn sudo ip link add veth-vm37 type veth peer name veth-contXW17
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW17
-[sudo] zmx 的密码： 
-'877924'
-spawn sudo ip link set veth-contXW17 netns 877924
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877924 -n ip link set veth-contXW17 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877924 -n ip addr add 10.0.64.145/30 dev veth-contXW17
-[sudo] zmx 的密码： 
+'1126194'
+spawn sudo ip link set veth-contXW17 netns 1126194
+spawn sudo nsenter -t 1126194 -n ip link set veth-contXW17 up
+spawn sudo nsenter -t 1126194 -n ip addr add 10.0.64.145/30 dev veth-contXW17
 spawn sudo ip link set veth-vm37 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm37
-[sudo] zmx 的密码： 
 Connected to domain vm37
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:03:16 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1826,46 +1210,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.145' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm37
-[sudo] zmx 的密码： 
-Domain vm37 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm37 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm37' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm37' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm37
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm37 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm37' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm37
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm37
-[sudo] zmx 的密码： 
-Domain vm37 started
-
 spawn sudo ip link add veth-vm38 type veth peer name veth-contXW18
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW18
-[sudo] zmx 的密码： 
-'877948'
-spawn sudo ip link set veth-contXW18 netns 877948
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877948 -n ip link set veth-contXW18 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877948 -n ip addr add 10.0.64.149/30 dev veth-contXW18
-[sudo] zmx 的密码： 
+'1128172'
+spawn sudo ip link set veth-contXW18 netns 1128172
+spawn sudo nsenter -t 1128172 -n ip link set veth-contXW18 up
+spawn sudo nsenter -t 1128172 -n ip addr add 10.0.64.149/30 dev veth-contXW18
 spawn sudo ip link set veth-vm38 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm38
-[sudo] zmx 的密码： 
 Connected to domain vm38
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:04:01 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1876,46 +1243,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.149' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm38
-[sudo] zmx 的密码： 
-Domain vm38 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm38 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm38' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm38' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm38
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm38 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm38' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm38
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm38
-[sudo] zmx 的密码： 
-Domain vm38 started
-
 spawn sudo ip link add veth-vm39 type veth peer name veth-contXW19
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW19
-[sudo] zmx 的密码： 
-'877585'
-spawn sudo ip link set veth-contXW19 netns 877585
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877585 -n ip link set veth-contXW19 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877585 -n ip addr add 10.0.64.153/30 dev veth-contXW19
-[sudo] zmx 的密码： 
+'1127871'
+spawn sudo ip link set veth-contXW19 netns 1127871
+spawn sudo nsenter -t 1127871 -n ip link set veth-contXW19 up
+spawn sudo nsenter -t 1127871 -n ip addr add 10.0.64.153/30 dev veth-contXW19
 spawn sudo ip link set veth-vm39 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm39
-[sudo] zmx 的密码： 
 Connected to domain vm39
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:04:46 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1926,46 +1276,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.153' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm39
-[sudo] zmx 的密码： 
-Domain vm39 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm39 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm39' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm39' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm39
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm39 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm39' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm39
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm39
-[sudo] zmx 的密码： 
-Domain vm39 started
-
 spawn sudo ip link add veth-vm40 type veth peer name veth-contXW20
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW20
-[sudo] zmx 的密码： 
-'877497'
-spawn sudo ip link set veth-contXW20 netns 877497
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877497 -n ip link set veth-contXW20 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 877497 -n ip addr add 10.0.64.157/30 dev veth-contXW20
-[sudo] zmx 的密码： 
+'1128552'
+spawn sudo ip link set veth-contXW20 netns 1128552
+spawn sudo nsenter -t 1128552 -n ip link set veth-contXW20 up
+spawn sudo nsenter -t 1128552 -n ip addr add 10.0.64.157/30 dev veth-contXW20
 spawn sudo ip link set veth-vm40 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm40
-[sudo] zmx 的密码： 
 Connected to domain vm40
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:05:29 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -1976,46 +1309,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.157' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm40
-[sudo] zmx 的密码： 
-Domain vm40 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm40 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm40' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm40' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm40
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm40 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm40' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm40
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm40
-[sudo] zmx 的密码： 
-Domain vm40 started
-
 spawn sudo ip link add veth-vm41 type veth peer name veth-contXW21
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW21
-[sudo] zmx 的密码： 
-'878265'
-spawn sudo ip link set veth-contXW21 netns 878265
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878265 -n ip link set veth-contXW21 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878265 -n ip addr add 10.0.64.161/30 dev veth-contXW21
-[sudo] zmx 的密码： 
+'1127514'
+spawn sudo ip link set veth-contXW21 netns 1127514
+spawn sudo nsenter -t 1127514 -n ip link set veth-contXW21 up
+spawn sudo nsenter -t 1127514 -n ip addr add 10.0.64.161/30 dev veth-contXW21
 spawn sudo ip link set veth-vm41 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm41
-[sudo] zmx 的密码： 
 Connected to domain vm41
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:06:14 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -2026,46 +1342,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.161' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm41
-[sudo] zmx 的密码： 
-Domain vm41 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm41 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm41' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm41' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm41
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm41 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm41' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm41
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm41
-[sudo] zmx 的密码： 
-Domain vm41 started
-
 spawn sudo ip link add veth-vm42 type veth peer name veth-contXW22
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW22
-[sudo] zmx 的密码： 
-'878267'
-spawn sudo ip link set veth-contXW22 netns 878267
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878267 -n ip link set veth-contXW22 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878267 -n ip addr add 10.0.64.165/30 dev veth-contXW22
-[sudo] zmx 的密码： 
+'1128550'
+spawn sudo ip link set veth-contXW22 netns 1128550
+spawn sudo nsenter -t 1128550 -n ip link set veth-contXW22 up
+spawn sudo nsenter -t 1128550 -n ip addr add 10.0.64.165/30 dev veth-contXW22
 spawn sudo ip link set veth-vm42 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm42
-[sudo] zmx 的密码： 
 Connected to domain vm42
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:07:06 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -2076,46 +1375,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.165' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm42
-[sudo] zmx 的密码： 
-Domain vm42 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm42 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm42' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm42' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm42
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm42 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm42' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm42
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm42
-[sudo] zmx 的密码： 
-Domain vm42 started
-
 spawn sudo ip link add veth-vm43 type veth peer name veth-contXW23
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW23
-[sudo] zmx 的密码： 
-'878028'
-spawn sudo ip link set veth-contXW23 netns 878028
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878028 -n ip link set veth-contXW23 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878028 -n ip addr add 10.0.64.169/30 dev veth-contXW23
-[sudo] zmx 的密码： 
+'1127660'
+spawn sudo ip link set veth-contXW23 netns 1127660
+spawn sudo nsenter -t 1127660 -n ip link set veth-contXW23 up
+spawn sudo nsenter -t 1127660 -n ip addr add 10.0.64.169/30 dev veth-contXW23
 spawn sudo ip link set veth-vm43 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm43
-[sudo] zmx 的密码： 
 Connected to domain vm43
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Sun Apr 27 23:07:54 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -2126,46 +1408,29 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.169' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm43
-[sudo] zmx 的密码： 
-Domain vm43 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm43 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm43' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm43' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm43
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm43 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm43' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm43
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm43
-[sudo] zmx 的密码： 
-Domain vm43 started
-
 spawn sudo ip link add veth-vm44 type veth peer name veth-contXW24
-[sudo] zmx 的密码： 
 spawn sudo docker inspect -f '{{.State.Pid}}' clab-sat-network-XW24
-[sudo] zmx 的密码： 
-'878260'
-spawn sudo ip link set veth-contXW24 netns 878260
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878260 -n ip link set veth-contXW24 up
-[sudo] zmx 的密码： 
-spawn sudo nsenter -t 878260 -n ip addr add 10.0.64.173/30 dev veth-contXW24
-[sudo] zmx 的密码： 
+'1126445'
+spawn sudo ip link set veth-contXW24 netns 1126445
+spawn sudo nsenter -t 1126445 -n ip link set veth-contXW24 up
+spawn sudo nsenter -t 1126445 -n ip addr add 10.0.64.173/30 dev veth-contXW24
 spawn sudo ip link set veth-vm44 up
-[sudo] zmx 的密码： 
 spawn sudo virsh console vm44
-[sudo] zmx 的密码： 
 Connected to domain vm44
 Escape character is ^]
 
 localhost login: root
 Password: 
-Last login: Thu Apr 24 14:15:14 on ttyS0
+Last login: Mon Apr 28 10:58:28 on ttyS0
 
 Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'TYPE=Ethernet' > /etc/sysconfig/network-scripts/ifcfg-ens2
@@ -2176,23 +1441,13 @@ Authorized users only. All activities may be monitored and reported.
 [root@localhost ~]# echo 'NETMASK=255.255.255.252' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# echo 'GATEWAY=10.0.64.173' >> /etc/sysconfig/network-scripts/ifcfg-ens2
 [root@localhost ~]# spawn sudo virsh shutdown vm44
-[sudo] zmx 的密码： 
-Domain vm44 is being shutdown
-
 spawn virsh net-destroy default
 spawn virsh net-autostart default --disable
 spawn bash -c sudo virsh dumpxml vm44 > /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
 spawn bash
 perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm44' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm44' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
-(base) ]0;zmx@gdp: ~/875/vm[01;32mzmx@gdp[00m:[01;34m~/875/vm[00m$ spawn sudo virsh undefine vm44
-[sudo] zmx 的密码： spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
-[sudo] zmx 的密码： 
-Domain vm44 defined from /home/zmx/875/vm/temp_config.xml
-
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# perl -i -0777pe "s|<interface.*interface>|<interface type='direct'>\n      <source dev='veth-vm44' mode='bridge'/>\n      <model type='virtio'/>\n    </interface>|sg" /home/zmx/875/vm/temp_config.xml
+]0;root@gdp: /home/zmx/875/vmroot@gdp:/home/zmx/875/vm# spawn sudo virsh undefine vm44
+spawn sudo virsh define /home/zmx/875/vm/temp_config.xml
 spawn sudo virsh start vm44
-[sudo] zmx 的密码： 
-Domain vm44 started
-
 All VM and container connections have been established.

@@ -8,90 +8,90 @@ all:
     linux:
       hosts:
         clab-sat-network-TSN1:
-          ansible_host: 166.167.0.5
-        clab-sat-network-TSN2:
-          ansible_host: 166.167.0.22
-        clab-sat-network-TSN3:
-          ansible_host: 166.167.0.18
-        clab-sat-network-TSN4:
-          ansible_host: 166.167.0.8
-        clab-sat-network-TSN5:
-          ansible_host: 166.167.0.40
-        clab-sat-network-TSN6:
-          ansible_host: 166.167.0.21
-        clab-sat-network-TSN7:
-          ansible_host: 166.167.0.14
-        clab-sat-network-TSN8:
-          ansible_host: 166.167.0.34
-        clab-sat-network-XW1:
-          ansible_host: 166.167.0.27
-        clab-sat-network-XW10:
-          ansible_host: 166.167.0.36
-        clab-sat-network-XW11:
-          ansible_host: 166.167.0.19
-        clab-sat-network-XW12:
-          ansible_host: 166.167.0.33
-        clab-sat-network-XW13:
-          ansible_host: 166.167.0.42
-        clab-sat-network-XW14:
-          ansible_host: 166.167.0.17
-        clab-sat-network-XW15:
-          ansible_host: 166.167.0.6
-        clab-sat-network-XW16:
-          ansible_host: 166.167.0.4
-        clab-sat-network-XW17:
-          ansible_host: 166.167.0.2
-        clab-sat-network-XW18:
           ansible_host: 166.167.0.25
+        clab-sat-network-TSN2:
+          ansible_host: 166.167.0.20
+        clab-sat-network-TSN3:
+          ansible_host: 166.167.0.21
+        clab-sat-network-TSN4:
+          ansible_host: 166.167.0.18
+        clab-sat-network-TSN5:
+          ansible_host: 166.167.0.34
+        clab-sat-network-TSN6:
+          ansible_host: 166.167.0.4
+        clab-sat-network-TSN7:
+          ansible_host: 166.167.0.17
+        clab-sat-network-TSN8:
+          ansible_host: 166.167.0.41
+        clab-sat-network-XW1:
+          ansible_host: 166.167.0.22
+        clab-sat-network-XW10:
+          ansible_host: 166.167.0.29
+        clab-sat-network-XW11:
+          ansible_host: 166.167.0.12
+        clab-sat-network-XW12:
+          ansible_host: 166.167.0.32
+        clab-sat-network-XW13:
+          ansible_host: 166.167.0.14
+        clab-sat-network-XW14:
+          ansible_host: 166.167.0.45
+        clab-sat-network-XW15:
+          ansible_host: 166.167.0.16
+        clab-sat-network-XW16:
+          ansible_host: 166.167.0.42
+        clab-sat-network-XW17:
+          ansible_host: 166.167.0.6
+        clab-sat-network-XW18:
+          ansible_host: 166.167.0.33
         clab-sat-network-XW19:
           ansible_host: 166.167.0.28
         clab-sat-network-XW2:
-          ansible_host: 166.167.0.9
-        clab-sat-network-XW20:
-          ansible_host: 166.167.0.16
-        clab-sat-network-XW21:
-          ansible_host: 166.167.0.43
-        clab-sat-network-XW22:
-          ansible_host: 166.167.0.10
-        clab-sat-network-XW23:
-          ansible_host: 166.167.0.35
-        clab-sat-network-XW24:
-          ansible_host: 166.167.0.23
-        clab-sat-network-XW3:
-          ansible_host: 166.167.0.20
-        clab-sat-network-XW4:
-          ansible_host: 166.167.0.44
-        clab-sat-network-XW5:
-          ansible_host: 166.167.0.24
-        clab-sat-network-XW6:
-          ansible_host: 166.167.0.26
-        clab-sat-network-XW7:
-          ansible_host: 166.167.0.41
-        clab-sat-network-XW8:
-          ansible_host: 166.167.0.39
-        clab-sat-network-XW9:
-          ansible_host: 166.167.0.12
-        clab-sat-network-YG1:
-          ansible_host: 166.167.0.30
-        clab-sat-network-YG10:
-          ansible_host: 166.167.0.38
-        clab-sat-network-YG11:
-          ansible_host: 166.167.0.29
-        clab-sat-network-YG12:
-          ansible_host: 166.167.0.7
-        clab-sat-network-YG2:
-          ansible_host: 166.167.0.13
-        clab-sat-network-YG3:
-          ansible_host: 166.167.0.45
-        clab-sat-network-YG4:
-          ansible_host: 166.167.0.3
-        clab-sat-network-YG5:
-          ansible_host: 166.167.0.11
-        clab-sat-network-YG6:
-          ansible_host: 166.167.0.15
-        clab-sat-network-YG7:
           ansible_host: 166.167.0.37
+        clab-sat-network-XW20:
+          ansible_host: 166.167.0.44
+        clab-sat-network-XW21:
+          ansible_host: 166.167.0.19
+        clab-sat-network-XW22:
+          ansible_host: 166.167.0.38
+        clab-sat-network-XW23:
+          ansible_host: 166.167.0.24
+        clab-sat-network-XW24:
+          ansible_host: 166.167.0.11
+        clab-sat-network-XW3:
+          ansible_host: 166.167.0.30
+        clab-sat-network-XW4:
+          ansible_host: 166.167.0.2
+        clab-sat-network-XW5:
+          ansible_host: 166.167.0.15
+        clab-sat-network-XW6:
+          ansible_host: 166.167.0.36
+        clab-sat-network-XW7:
+          ansible_host: 166.167.0.35
+        clab-sat-network-XW8:
+          ansible_host: 166.167.0.8
+        clab-sat-network-XW9:
+          ansible_host: 166.167.0.9
+        clab-sat-network-YG1:
+          ansible_host: 166.167.0.7
+        clab-sat-network-YG10:
+          ansible_host: 166.167.0.26
+        clab-sat-network-YG11:
+          ansible_host: 166.167.0.3
+        clab-sat-network-YG12:
+          ansible_host: 166.167.0.23
+        clab-sat-network-YG2:
+          ansible_host: 166.167.0.10
+        clab-sat-network-YG3:
+          ansible_host: 166.167.0.39
+        clab-sat-network-YG4:
+          ansible_host: 166.167.0.43
+        clab-sat-network-YG5:
+          ansible_host: 166.167.0.13
+        clab-sat-network-YG6:
+          ansible_host: 166.167.0.40
+        clab-sat-network-YG7:
+          ansible_host: 166.167.0.5
         clab-sat-network-YG8:
-          ansible_host: 166.167.0.32
+          ansible_host: 166.167.0.27
         clab-sat-network-YG9:
           ansible_host: 166.167.0.31

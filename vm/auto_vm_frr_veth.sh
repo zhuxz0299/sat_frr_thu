@@ -48,7 +48,7 @@ set vm_container_list {
     {vm44 clab-sat-network-XW24}
 }
 set index 0
-set user "zmx"
+set user "root"
 set psw "zmx"
 set user_vm "root"
 set psw_vm "passw0rd@123"
@@ -66,51 +66,51 @@ foreach pair $vm_container_list {
     set veth_cont "veth-cont$container_suffix"
     sleep 1
     spawn sudo ip link add $veth_vm type veth peer name $veth_cont
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
 
     # Step 2: 获取容器 PID 并将 veth-cont 移动到容器命名空间
     sleep 1
     spawn sudo docker inspect -f '{{.State.Pid}}' $container_name
-    expect "password for $user:"
-    send "$psw\r"
+    # expect "password for $user:"
+    # send "$psw\r"
     expect -re {(\d+)}
     set container_pid $expect_out(1,string)
     sleep 1
     spawn sudo ip link set $veth_cont netns $container_pid
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
 
     # Step 3: 在容器命名空间中启用并配置 veth-cont
     sleep 1
     spawn sudo nsenter -t $container_pid -n ip link set $veth_cont up
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
     set ip_suffix_cont [expr {$index * 4 + 1}]
     set ip_address_cont "10.0.64.$ip_suffix_cont"
     sleep 1
     spawn sudo nsenter -t $container_pid -n ip addr add ${ip_address_cont}/30 dev $veth_cont
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
 
     # Step 4: 启用 veth-vm
     sleep 1
     spawn sudo ip link set $veth_vm up
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
 
     # Step 5: 修改虚拟机的网络配置文件
     set ip_suffix_vm [expr {$index * 4 + 2}]
     set ip_address_vm "10.0.64.$ip_suffix_vm"
     sleep 1
     spawn sudo virsh console $vm_name
-    expect "password for $user:"
-    send "$psw\r"
+    # expect "password for $user:"
+    # send "$psw\r"
 
     sleep 1
     send "\r"
@@ -143,18 +143,18 @@ foreach pair $vm_container_list {
     
     sleep 1
     spawn sudo virsh shutdown $vm_name
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
     sleep 1
 
     spawn virsh net-destroy default
     spawn virsh net-autostart default --disable
     
     spawn bash -c "sudo virsh dumpxml $vm_name > $xml_file"
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
     
     sleep 1
     spawn bash
@@ -165,21 +165,21 @@ foreach pair $vm_container_list {
 
     sleep 1
     spawn sudo virsh undefine $vm_name 
-    expect "password for $user:"
-    send "$psw\r"
+    # expect "password for $user:"
+    # send "$psw\r"
 
     sleep 1
     spawn sudo virsh define $xml_file
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
     
     # Step 7: 重启虚拟机
     sleep 1
     spawn sudo virsh start $vm_name
-    expect "password for $user:"
-    send "$psw\r"
-    expect eof
+    # expect "password for $user:"
+    # send "$psw\r"
+    # expect eof
     incr index
 
 }
