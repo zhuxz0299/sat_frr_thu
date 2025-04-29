@@ -579,7 +579,7 @@ send "exit\r"
             # 使脚本可执行
             os.chmod(script_path, 0o755)
             # 创建日志目录
-            logs_dir = "scan_logs"
+            logs_dir = "scan_logs_3"
             os.makedirs(logs_dir, exist_ok=True)
             
             # 创建日志文件名，包含时间戳以避免覆盖
