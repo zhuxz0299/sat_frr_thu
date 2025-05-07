@@ -1,0 +1,63 @@
+spawn sudo virsh console vm5
+Connected to domain vm5
+Escape character is ^]
+
+localhost login: root
+Password: 
+Last login: Tue Apr 29 15:32:26 on ttyS0
+
+Authorized users only. All activities may be monitored and reported.
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.54
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.54
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+ssh: connect to host 10.0.64.54 port 22: Connection timed out
+[失败] 命令执行失败: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.58
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.58
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-04-29 15:38:20] 主动请求已接收，开始发送状态文件到 10.0.64.18:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-04-29 15:38:21] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.102
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.102
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-04-29 15:38:23] 主动请求已接收，开始发送状态文件到 10.0.64.18:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-04-29 15:38:24] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.106
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.106
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-04-29 15:38:26] 主动请求已接收，开始发送状态文件到 10.0.64.18:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-04-29 15:38:28] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.134
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.134
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-04-29 15:38:31] 主动请求已接收，开始发送状态文件到 10.0.64.18:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-04-29 15:38:32] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.18
+[root@localhost ~]# 
