@@ -63,7 +63,7 @@ foreach pair $vm_container_list {
     # Step 1: 创建 veth 对
     set veth_vm "veth-$vm_name"
     set container_suffix [regsub {.*-} $container_name ""]
-    set veth_cont "veth-cont$container_suffix"
+    set veth_cont "veth-$container_suffix"
     sleep 1
     spawn sudo ip link add $veth_vm type veth peer name $veth_cont
     # expect "password for $user:"

@@ -1,0 +1,121 @@
+#!/usr/bin/expect -f
+
+# 设置超时时间
+set timeout 120
+
+# 创建一个函数处理VM1到VM44
+proc process_vm {vm_name source_dir} {
+    global timeout
+    
+    puts "正在处理虚拟机: $vm_name"
+    
+
+    # 检查虚拟机状态
+    spawn sudo virsh domstate $vm_name
+    expect {
+        "运行中" {
+			# 连接到虚拟机控制台
+			spawn sudo virsh console $vm_name
+			sleep 2
+			send "\r"
+		
+			# 登录到虚拟机
+			expect {
+				"login:" {
+					send "root\r"
+					expect "密码："
+					send "passw0rd@123\r"
+                    expect "# "
+                    send "mkdir /root/ftp\r"
+                    puts "创建目录 /root/ftp"
+                    send "mkdir /root/ftp/double_ts\r"
+		            puts "创建目录 /root/ftp/double_ts"
+				}
+				timeout {
+					puts "登录超时，跳过此虚拟机"
+					return
+				}
+			}
+		
+			# 退出虚拟机控制台
+			send "exit\r"
+			sleep 1
+			send "exit\r"
+			sleep 1
+
+            # 如果虚拟机在运行，优雅地关闭它
+            puts "虚拟机正在运行，正在关闭..."
+            spawn sudo virsh shutdown $vm_name
+            expect eof
+            # 等待虚拟机完全关闭
+            set wait_count 0
+            set max_wait 30
+            while {$wait_count < $max_wait} {
+                spawn sudo virsh domstate $vm_name
+                expect {
+                    "关闭" {
+                        break
+                    }
+                    eof
+                }
+                incr wait_count
+                sleep 2
+            }
+        }
+        "shut off" {
+            puts "虚拟机已关闭，继续操作..."
+        }
+        eof
+    }
+    
+    # 一次性将整个 source_dir 递归复制到 VM 的 /root/ftp/double_ts
+    puts "传输目录 $source_dir -> $vm_name:/root/ftp/double_ts"
+    spawn sudo virt-copy-in -d $vm_name $source_dir /root/ftp/double_ts
+    expect eof
+    
+    # 重新启动虚拟机
+    spawn sudo virsh start $vm_name
+    expect eof
+    sleep 10
+    
+    # 连接到虚拟机控制台
+    spawn sudo virsh console $vm_name
+    sleep 2
+    send "\r"
+    
+    # 登录到虚拟机
+    expect {
+        "login:" {
+            send "root\r"
+            expect "密码："
+            send "passw0rd@123\r"
+        }
+        timeout {
+            puts "登录超时，跳过此虚拟机"
+            return
+        }
+    }
+    
+    expect "# "
+    
+    # 对每个传输的文件执行chmod +x
+    send "find /root/ftp -type f -print0 | xargs -0 chmod +x\r"
+    expect "# "
+    
+    # 退出虚拟机控制台
+    send "exit\r"
+    sleep 1
+    send "exit\r"
+    sleep 1
+}
+
+# 主脚本开始
+# 确定要传输的文件夹路径（替换为实际文件夹路径）
+set source_dir "/root/ftp/double_ts/5.9.1"
+
+# 遍历vm1到vm44
+for {set i 1} {$i <= 47} {incr i} {
+    process_vm "vm$i" $source_dir
+}
+
+puts "所有虚拟机处理完成"

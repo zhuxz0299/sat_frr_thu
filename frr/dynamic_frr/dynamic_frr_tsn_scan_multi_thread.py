@@ -527,13 +527,18 @@ class NetworkTopologyManager:
             # 创建expect脚本，将所有IP作为列表传入
             dg_ips_tcl_list = " ".join([f"\"{ip}\"" for ip in dg_ips])
 
-            expect_script = f"""#!/usr/bin/expect -f
+            # NOCC-TSN/NOCC-XW/NOCC-YG ip地址, 顺序在分配ip时有点乱，后续改
+            nocc_ips = ["10.0.203.2","10.0.201.2","10.0.202.2"]
+            nocc_ips_tcl_list = " ".join([f"\"{ip}\"" for ip in nocc_ips])
+        
+            expect_template = r"""#!/usr/bin/expect -f
 # 设置超时时间
 set timeout 300
 
-# 定义IP列表
-set ip_list [list {dg_ips_tcl_list}]
-
+# 定义低轨节点IP列表
+set dg_list [list {dg_ips_tcl_list}]
+# 定义NOCC节点IP列表
+set nocc_list [list {nocc_ips_tcl_list}]
 # 连接到TSN的VM
 spawn sudo virsh console {tsn_vm_name}
 
@@ -549,14 +554,62 @@ expect "# "
 
 
 # 循环处理每个IP
-foreach ip $ip_list {{
+foreach ip $dg_list {{
     puts "正在扫描可见域内低轨卫星IP: $ip"
-    send "/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i $ip\r"
-    expect "# "
-    sleep 1
+    send "/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i $ip &\r"
+    # expect "# "
 }}
 
-# TODO: 将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点
+# tsn扫描完成后，将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点，并删除该目录下所有文件
+
+puts "TSN扫描完成，资源纳管信息正在从TSN中转至NOCC"
+send "cd /home/resource_manager/resource_info\r"
+expect "# "
+
+# 发送ls命令
+send "ls -1\r"
+#--- 等待命令输出结束：等待下一个提示符出现 ---
+puts "输出结束，等待读取文件列表"
+expect {{
+    -re "(.*)\r\n$prompt" {{
+        # 捕获 ls 的所有输出，保存在 expect_out(1,string)
+        set raw_output $expect_out(1,string)
+    }}
+    timeout {{
+        puts "ls 命令执行超时"
+        exit 2
+    }}
+}}
+
+puts $raw_output
+#--- raw_output 里现在类似：
+#    "node_status-10.0.64.122.yaml\r\n
+#     node_status-10.0.64.126.yaml\r\n
+#     ……"
+#--- 把它按行拆分成一个 Tcl 列表
+set yaml_files [split $raw_output "\r\n"]
+
+# （可选）去掉列表里可能的空字符串
+set yaml_files [lselect $yaml_files {string length > 0}]
+
+foreach file $yaml_files {{
+    # 提取第四个字段
+    regexp {{node_status-(\d+\.\d+\.\d+\.(\d+))\.yaml}} $file _ full_ip fourth
+    # 计算节点编号: (fourth-2)/4 + 1
+    set num [expr ((int($fourth) - 2) / 4) + 1]
+    # 选择目标NOCC节点
+    if {{ $num >= 1 && $num <= 8 }} {{
+        set target [lindex $nocc_list 0]
+    }} elseif {{ $num >= 9 && $num <= 20 }} {{
+        set target [lindex $nocc_list 1]
+    }} else {{
+        set target [lindex $nocc_list 2]
+    }}
+    puts "传输 $file 到 NOCC节点 $target"
+    # exec sshpass -p "passw0rd@123" scp -o StrictHostKeyChecking=no $file root@$target:/home/resource_manager/resource_info
+    exec rm $file
+}}
+
 
 # 退出TSN的VM控制
 sleep 1
@@ -566,8 +619,12 @@ sleep 1
 send "exit\r"
 
 """
-
-            # 将expect脚本保存到临时文件
+            expect_script = expect_template.format(
+                dg_list=dg_ips_tcl_list,
+                nocc_list=nocc_ips_tcl_list,
+                tsn_vm_name=tsn_vm_name
+            )
+            # 将expect脚本保存到临时文件并执行
             import tempfile
             import os
             import subprocess
@@ -579,7 +636,7 @@ send "exit\r"
             # 使脚本可执行
             os.chmod(script_path, 0o755)
             # 创建日志目录
-            logs_dir = "scan_logs_3"
+            logs_dir = "scan_logs_4"
             os.makedirs(logs_dir, exist_ok=True)
             
             # 创建日志文件名，包含时间戳以避免覆盖
@@ -597,7 +654,7 @@ send "exit\r"
             
             # 检查返回码
             if result.returncode == 0:
-                logger.info(f"TSN{original_tsn_idx} 成功完成所有扫描任务，详细日志: {log_path}")
+                logger.info(f"TSN{original_tsn_idx} 成功完成所有扫描任务并转发NOCC，详细日志: {log_path}")
             else:
                 logger.error(f"TSN{original_tsn_idx} 扫描任务失败，请查看日志: {log_path}")
                 
