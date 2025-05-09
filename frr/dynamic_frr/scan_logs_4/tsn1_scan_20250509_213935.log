@@ -1,0 +1,160 @@
+spawn sudo virsh console vm1
+Connected to domain vm1
+Escape character is ^]
+
+login: timed out after 60 seconds
+
+Authorized users only. All activities may be monitored and reported.
+localhost login: root
+Password: 
+Last login: Fri May  9 21:34:16 on ttyS0
+
+Authorized users only. All activities may be monitored and reported.
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.34
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.34
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:12] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:13] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+34
+9
+传输到 NOCC节点 10.0.201.2
+正在扫描可见域内低轨卫星IP: 10.0.64.38
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.38
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:14] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:15] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+38
+10
+传输到 NOCC节点 10.0.201.2
+正在扫描可见域内低轨卫星IP: 10.0.64.78
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.78
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:24] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:25] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+78
+20
+传输到 NOCC节点 10.0.201.2
+正在扫描可见域内低轨卫星IP: 10.0.64.82
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.82
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:26] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:27] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+82
+21
+传输到 NOCC节点 10.0.202.2
+正在扫描可见域内低轨卫星IP: 10.0.64.86
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.86
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:30] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:31] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+86
+22
+传输到 NOCC节点 10.0.202.2
+正在扫描可见域内低轨卫星IP: 10.0.64.126
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.126
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:32] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:33] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+126
+32
+传输到 NOCC节点 10.0.202.2
+正在扫描可见域内低轨卫星IP: 10.0.64.158
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.158
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:35] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:36] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+158
+40
+传输到 NOCC节点 10.0.202.2
+正在扫描可见域内低轨卫星IP: 10.0.64.162
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.162
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:40:37] 主动请求已接收，开始发送状态文件到 10.0.64.2:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:40:38] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.2
+[root@localhost ~]# 获取成功直接转发nocc
+162
+41
+传输到 NOCC节点 10.0.202.2
+TSN扫描完成，资源纳管信息正在从TSN中转至NOCC
+cd /home/resource_manager/resource_info
+[root@localhost resource_info]# ls -1
+node_status-10.0.64.118.yaml
+node_status-10.0.64.122.yaml
+node_status-10.0.64.126.yaml
+node_status-10.0.64.158.yaml
+node_status-10.0.64.162.yaml
+node_status-10.0.64.34.yaml
+node_status-10.0.64.38.yaml
+node_status-10.0.64.42.yaml
+node_status-10.0.64.46.yaml
+node_status-10.0.64.70.yaml
+node_status-10.0.64.74.yaml
+node_status-10.0.64.78.yaml
+node_status-10.0.64.82.yaml
+node_status-10.0.64.86.yaml
+node_status-10.0.64.90.yaml
+node_status-10.0.64.94.yaml
+[root@localhost resource_info]# 

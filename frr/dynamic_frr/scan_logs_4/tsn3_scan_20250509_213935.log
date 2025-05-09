@@ -1,0 +1,12 @@
+spawn sudo virsh console vm3
+Connected to domain vm3
+Escape character is ^]
+
+localhost login: root
+Password: 
+Last login: Fri May  9 21:14:31 on ttyS0
+
+Authorized users only. All activities may be monitored and reported.
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.46
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.46
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.10

@@ -558,9 +558,28 @@ catch {{
         puts "正在扫描可见域内低轨卫星IP: $ip"
         send "/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i $ip\r"
         expect "# "
+
+        # 方案一 tsn获取后直接转发nocc
+        puts "获取成功直接转发nocc"
+        set parts [split $ip .]
+        set fourth [lindex $parts 3]
+        puts "$fourth"
+        set num [expr ((int($fourth) - 2) / 4) + 1]
+        puts "$num"
+        # 选择目标NOCC节点
+        if {{ $num >= 1 && $num <= 8 }} {{
+            set target [lindex $nocc_list 0]
+        }} elseif {{ $num >= 9 && $num <= 20 }} {{
+            set target [lindex $nocc_list 1]
+        }} else {{
+            set target [lindex $nocc_list 2]
+        }}
+        puts "传输到 NOCC节点 $target"
+
+        ## TODO: 执行传输动作
     }}
 
-    # tsn扫描完成后，将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点，并删除该目录下所有文件
+    # 方案2 tsn扫描完成后，将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点，并删除该目录下所有文件
 
     puts "TSN扫描完成，资源纳管信息正在从TSN中转至NOCC"
     send "cd /home/resource_manager/resource_info\r"
