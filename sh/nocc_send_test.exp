@@ -1,0 +1,64 @@
+#!/usr/bin/expect -f
+
+spawn sudo virsh console vm1
+
+sleep 1
+send "\r"
+
+expect "localhost login:"
+send "root\r"
+expect "Password:"
+send "passw0rd@123\r"
+
+expect "# "
+
+catch {
+    puts "TSN扫描完成，资源纳管信息正在从TSN中转至NOCC"
+    send "cd /home/resource_manager/resource_info\r"
+    expect "# "
+
+    # 获取源目录中的所有文件（不包含子目录）
+    set files ""
+    send "ls -1\r"
+    expect -re "(.*)\n" {
+        append files "[string trim $expect_out(1,string)] "
+        exp_continue
+    } eof {}
+    set yaml_files [string trim $files]
+    puts "文件列表已获取 $yaml_files"
+    set yaml_files [lreplace $yaml_files 0 1]
+    foreach file [split $yaml_files] {
+        puts "-- $file"
+        # 提取第四个字段
+
+        regexp {node_status-(\d+\.\d+\.\d+\.(\d+))\.yaml} $file _ full_ip fourth
+        puts "full_ip = $full_ip, fourth = $fourth"
+        # 计算节点编号: (fourth-2)/4 + 1
+        set num [expr ((int($fourth) - 2) / 4) + 1]
+        puts "$num"
+        # 选择目标NOCC节点
+        if { $num >= 1 && $num <= 8 } {
+            set target 0
+        } elseif { $num >= 9 && $num <= 20 } {
+            set target 1
+        } else {
+            set target 2
+        }
+        puts "传输 $file 到 NOCC节点 $target"
+    }
+
+} errMsg
+
+puts "退出虚拟机控制台"
+sleep 1
+send "exit\r"
+
+sleep 1
+send "exit\r"
+
+if {$errMsg ne ""} {
+    puts "警告：主逻辑中发生错误：$errMsg"
+}
+
+        # send "sshpass -p \"passw0rd@123\" scp -o StrictHostKeyChecking=no $file root@$target:/home/resource_manager/resource_info\r"
+        # exec rm $file

@@ -1,0 +1,142 @@
+spawn sudo virsh console vm2
+Connected to domain vm2
+Escape character is ^]
+
+localhost login: root
+Password: 
+Last login: Fri May  9 21:01:33 on ttyS0
+
+Authorized users only. All activities may be monitored and reported.
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.42
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.42
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:15:05] 主动请求已接收，开始发送状态文件到 10.0.64.6:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:15:06] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.90
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.90
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:15:06] 主动请求已接收，开始发送状态文件到 10.0.64.6:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:15:07] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.166
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.166
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:15:10] 主动请求已接收，开始发送状态文件到 10.0.64.6:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:15:11] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+[root@localhost ~]# 正在扫描可见域内低轨卫星IP: 10.0.64.170
+/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i 10.0.64.170
+正在执行远程命令：/home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+
+Authorized users only. All activities may be monitored and reported.
+/home/resource_manager/status_sender_activate.sh: line 79: dlsmi: command not found
+/home/resource_manager/status_sender_activate.sh: line 80: dlsmi: command not found
+[2025-05-09 21:15:12] 主动请求已接收，开始发送状态文件到 10.0.64.6:/home/resource_manager/resource_info
+
+Authorized users only. All activities may be monitored and reported.
+[2025-05-09 21:15:13] 状态文件发送成功
+[成功] 命令已执行: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.6
+[root@localhost ~]# TSN扫描完成，资源纳管信息正在从TSN中转至NOCC
+cd /home/resource_manager/resource_info
+[root@localhost resource_info]# ls -1
+node_status-10.0.64.122.yaml
+node_status-10.0.64.126.yaml
+node_status-10.0.64.166.yaml
+node_status-10.0.64.170.yaml
+node_status-10.0.64.34.yaml
+node_status-10.0.64.38.yaml
+node_status-10.0.64.42.yaml
+node_status-10.0.64.46.yaml
+node_status-10.0.64.50.yaml
+node_status-10.0.64.74.yaml
+node_status-10.0.64.78.yaml
+node_status-10.0.64.82.yaml
+node_status-10.0.64.86.yaml
+node_status-10.0.64.90.yaml
+node_status-10.0.64.94.yaml
+node_status-10.0.64.98.yaml
+[root@localhost resource_info]# 文件列表已获取 node_status-10.0.64.122.yaml node_status-10.0.64.126.yaml node_status-10.0.64.166.yaml node_status-10.0.64.170.yaml node_status-10.0.64.34.yaml node_status-10.0.64.38.yaml node_status-10.0.64.42.yaml node_status-10.0.64.46.yaml node_status-10.0.64.50.yaml node_status-10.0.64.74.yaml node_status-10.0.64.78.yaml node_status-10.0.64.82.yaml node_status-10.0.64.86.yaml node_status-10.0.64.90.yaml node_status-10.0.64.94.yaml node_status-10.0.64.98.yaml
+-- node_status-10.0.64.122.yaml
+full_ip = 10.0.64.122, fourth = 122
+31
+传输 node_status-10.0.64.122.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.126.yaml
+full_ip = 10.0.64.126, fourth = 126
+32
+传输 node_status-10.0.64.126.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.166.yaml
+full_ip = 10.0.64.166, fourth = 166
+42
+传输 node_status-10.0.64.166.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.170.yaml
+full_ip = 10.0.64.170, fourth = 170
+43
+传输 node_status-10.0.64.170.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.34.yaml
+full_ip = 10.0.64.34, fourth = 34
+9
+传输 node_status-10.0.64.34.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.38.yaml
+full_ip = 10.0.64.38, fourth = 38
+10
+传输 node_status-10.0.64.38.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.42.yaml
+full_ip = 10.0.64.42, fourth = 42
+11
+传输 node_status-10.0.64.42.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.46.yaml
+full_ip = 10.0.64.46, fourth = 46
+12
+传输 node_status-10.0.64.46.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.50.yaml
+full_ip = 10.0.64.50, fourth = 50
+13
+传输 node_status-10.0.64.50.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.74.yaml
+full_ip = 10.0.64.74, fourth = 74
+19
+传输 node_status-10.0.64.74.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.78.yaml
+full_ip = 10.0.64.78, fourth = 78
+20
+传输 node_status-10.0.64.78.yaml 到 NOCC节点 10.0.201.2
+-- node_status-10.0.64.82.yaml
+full_ip = 10.0.64.82, fourth = 82
+21
+传输 node_status-10.0.64.82.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.86.yaml
+full_ip = 10.0.64.86, fourth = 86
+22
+传输 node_status-10.0.64.86.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.90.yaml
+full_ip = 10.0.64.90, fourth = 90
+23
+传输 node_status-10.0.64.90.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.94.yaml
+full_ip = 10.0.64.94, fourth = 94
+24
+传输 node_status-10.0.64.94.yaml 到 NOCC节点 10.0.202.2
+-- node_status-10.0.64.98.yaml
+full_ip = 10.0.64.98, fourth = 98
+25
+传输 node_status-10.0.64.98.yaml 到 NOCC节点 10.0.202.2
+退出TSN的VM控制
