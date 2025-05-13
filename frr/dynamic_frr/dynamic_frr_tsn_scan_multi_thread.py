@@ -527,8 +527,8 @@ class NetworkTopologyManager:
             # 创建expect脚本，将所有IP作为列表传入
             dg_ips_tcl_list = " ".join([f"\"{ip}\"" for ip in dg_ips])
 
-            # NOCC-TSN/NOCC-XW/NOCC-YG ip地址, 顺序在分配ip时有点乱，后续改
-            nocc_ips = ["10.0.203.2","10.0.201.2","10.0.202.2"]
+            # NOCC-TSN/NOCC-YG/NOCC-XW ip地址(注意是vm的ip地址不是frr的ip地址), 顺序在分配ip时有点乱，后续改
+            nocc_ips = ["10.0.64.178","10.0.64.186","10.0.64.182"]
             nocc_ips_tcl_list = " ".join([f"\"{ip}\"" for ip in nocc_ips])
         
             expect_script = f"""#!/usr/bin/expect -f
@@ -554,6 +554,8 @@ expect "# "
 
 catch {{
     # 循环处理每个IP
+    send "cd /home/resource_manager/resource_info\r"
+    expect "# "
     foreach ip $dg_list {{
         puts "正在扫描可见域内低轨卫星IP: $ip"
         send "/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i $ip\r"
@@ -577,42 +579,10 @@ catch {{
         puts "传输到 NOCC节点 $target"
 
         ## TODO: 执行传输动作
+        send "sshpass -p passw0rd@123 scp -o StrictHostKeyChecking=no node_status-$ip.yaml root@$target:/home/resource_manager/resource_info\r"
+        expect "# "
     }}
-
     # 方案2 tsn扫描完成后，将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点，并删除该目录下所有文件
-
-    puts "TSN扫描完成，资源纳管信息正在从TSN中转至NOCC"
-    send "cd /home/resource_manager/resource_info\r"
-    expect "# "
-
-    # 获取源目录中的所有文件（不包含子目录）
-    set files ""
-    send "ls -1\r"
-    expect -re "(.*)\n" {{
-        append files "[string trim $expect_out(1,string)] "
-        exp_continue
-    }} eof {{}}
-    set yaml_files [string trim $files]
-    set yaml_files [lreplace $yaml_files 0 1]
-    puts "文件列表已获取 $yaml_files"
-    foreach file [split $yaml_files] {{
-        puts "-- $file"
-        # 提取第四个字段
-        regexp {{node_status-(\d+\.\d+\.\d+\.(\d+))\.yaml}} $file _ full_ip fourth
-        puts "full_ip = $full_ip, fourth = $fourth"
-        # 计算节点编号: (fourth-2)/4 + 1
-        set num [expr ((int($fourth) - 2) / 4) + 1]
-        puts "$num"
-        # 选择目标NOCC节点
-        if {{ $num >= 1 && $num <= 8 }} {{
-            set target [lindex $nocc_list 0]
-        }} elseif {{ $num >= 9 && $num <= 20 }} {{
-            set target [lindex $nocc_list 1]
-        }} else {{
-            set target [lindex $nocc_list 2]
-        }}
-        puts "传输 $file 到 NOCC节点 $target"
-    }}
 }} errMsg
 
 puts "退出TSN的VM控制"
