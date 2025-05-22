@@ -1,0 +1,57 @@
+messageInfo: 1
+satID: 1
+timestamp: "2025-05-21T00:00:00"
+CPU:
+  health: 1
+  used: 50
+MEM:
+  health: 1
+  used: 50
+DISK:
+  health: 1
+  used: 50
+LINK:
+  num: 5
+  links:
+    - health: 1
+      type: "laser"
+      rate: 10000      # 激光通信速率可达10-100Gbps
+      delay: 5         # 激光通信延迟较低,通常在几ms
+      jitter: 1        # 激光通信抖动较小
+      loss: 0.01       # 激光通信损耗较小
+      end: "1"
+    - health: 1
+      type: "microwave"
+      rate: 1000       # 微波通信速率在1-10Gbps
+      delay: 20        # 微波通信延迟相对较高
+      jitter: 5        # 微波通信抖动中等
+      loss: 0.05       # 微波通信损耗中等
+      end: "2"
+    - health: 1
+      type: "microwave"
+      rate: 1000
+      delay: 20
+      jitter: 5
+      loss: 0.05
+      end: "3"
+    - health: 1
+      type: "rf"
+      rate: 100        # RF通信速率在100-500Mbps
+      delay: 30        # RF通信延迟最高
+      jitter: 10       # RF通信抖动较大
+      loss: 0.1        # RF通信损耗较大
+      end: "4"
+    - health: 1
+      type: "rf"
+      rate: 100
+      delay: 30
+      jitter: 10
+      loss: 0.1
+      end: "5"
+YG:
+  startTime: "2025-05-21T00:00:00"
+  endTime: "2025-05-21T10:00:00"
+  num: 10
+  type: 1
+  health: 1
+  occupied: 0

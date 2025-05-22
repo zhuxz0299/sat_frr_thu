@@ -27,7 +27,6 @@ proc process_vm {vm_name source_dir} {
     spawn sudo virsh domstate $vm_name
     expect {
         "running" {
-            # 如果虚拟机在运行，优雅地关闭它
             puts "虚拟机正在运行，正在关闭..."
             spawn sudo virsh shutdown $vm_name
             expect eof
