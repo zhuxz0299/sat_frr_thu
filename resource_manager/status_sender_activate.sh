@@ -123,6 +123,13 @@ EOF
 }
 
 # ---------- 主循环 ----------
+# 获取本机IP（优先10开头的内网IP）
+get_local_ip() {
+    local ip=$(hostname -I | awk '{for(i=1;i<=NF;i++) if ($i ~ /^10./) print $i}' | head -n1)
+    [[ -z "$ip" ]] && ip=$(hostname)
+    echo "$ip"
+}
+
 # 生成状态文件
 generate_status_yaml
 if [ $? -ne 0 ]; then
@@ -130,15 +137,32 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 发送文件
-log "主动请求已接收，开始发送状态文件到 $TARGET_IP:$REMOTE_DIR"
-sshpass -p "$TARGET_PASSWORD" scp -o StrictHostKeyChecking=no /home/resource_manager/resource_info/node_status-$local_ip.yaml "$TARGET_USER@$TARGET_IP:$REMOTE_DIR"
+# 使用UDP发送状态信息
+log "主动请求已接收，开始使用UDP发送状态信息到 $TARGET_IP"
+
+# 使用已有的get_local_ip函数获取本机IP
+local_ip=$(get_local_ip)
+yaml_file="/home/resource_manager/resource_info/node_status-${local_ip}.yaml"
+
+if [[ ! -f "$yaml_file" ]]; then
+    log "错误: 找不到特定YAML文件: $yaml_file"
+    # 尝试查找任何YAML文件作为备选
+    yaml_file=$(find /home/resource_manager/resource_info/ -name "*.yaml" | head -n 1)
+    if [[ -z "$yaml_file" ]]; then
+        log "错误: 无法找到任何YAML文件用于发送"
+        exit 1
+    fi
+    log "使用备选YAML文件: $yaml_file"
+fi
+
+# 使用Bash UDP发送脚本
+bash /home/resource_manager/udp_send.sh --target_ip "$TARGET_IP" --file "$yaml_file"
 
 # 检查是否成功
 if [ $? -eq 0 ]; then
-    log "状态文件发送成功"
+    log "状态信息通过UDP发送成功"
 else
-    log "错误: 状态文件发送失败"
+    log "错误: 状态信息通过UDP发送失败"
     exit 1
 fi
 

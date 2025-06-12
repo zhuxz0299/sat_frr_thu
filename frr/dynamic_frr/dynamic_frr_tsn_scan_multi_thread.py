@@ -217,6 +217,7 @@ class NetworkTopologyManager:
         docker exec "{dg_container_name}" bash -c "tc qdisc del dev {veth_dg} root"  
         
         # 对该链路单端添加延迟控制
+        # TODO 这里也可以设置带宽
         docker exec "{tsn_container_name}" bash -c "
         tc qdisc add dev {veth_tsn} root netem delay {real_delay}ms" || {{
             echo "添加规则失败，请检查接口或参数。"
@@ -535,6 +536,7 @@ class NetworkTopologyManager:
 # 设置超时时间
 set timeout 300
 
+# TODO 把低轨的list存到tsn里
 # 定义低轨节点IP列表
 set dg_list [list {dg_ips_tcl_list}]
 # 定义NOCC节点IP列表
@@ -547,13 +549,20 @@ send "\r"
 
 expect "localhost login:"
 send "root\r"
-expect "Password:"
+expect "密码："
 send "passw0rd@123\r"
 
 expect "# "
 
 catch {{
-    # 循环处理每个IP
+    # 首先启动UDP接收服务（在后台运行）    
+    send "cd /home/resource_manager\r"
+    expect "# "
+    # TODO 这里直接写list
+    send "pgrep -f 'bash.*udp_receive.sh' || (nohup bash /home/resource_manager/udp_receive.sh > /home/resource_manager/udp_receiver.log 2>&1 &)\r"
+    expect "# "
+    
+    # 切换到资源信息目录
     send "cd /home/resource_manager/resource_info\r"
     expect "# "
     foreach ip $dg_list {{
@@ -608,7 +617,7 @@ if {{$errMsg ne ""}} {{
             # 使脚本可执行
             os.chmod(script_path, 0o755)
             # 创建日志目录
-            logs_dir = "scan_logs_4"
+            logs_dir = "scan_logs_temp"
             os.makedirs(logs_dir, exist_ok=True)
             
             # 创建日志文件名，包含时间戳以避免覆盖
