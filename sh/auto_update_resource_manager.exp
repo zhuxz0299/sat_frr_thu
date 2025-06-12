@@ -26,7 +26,7 @@ proc process_vm {vm_name source_dir} {
     # 检查虚拟机状态
     spawn sudo virsh domstate $vm_name
     expect {
-        "running" {
+        "运行中" {
             puts "虚拟机正在运行，正在关闭..."
             spawn sudo virsh shutdown $vm_name
             expect eof
@@ -36,7 +36,7 @@ proc process_vm {vm_name source_dir} {
             while {$wait_count < $max_wait} {
                 spawn sudo virsh domstate $vm_name
                 expect {
-                    "shut off" {
+                    "关闭" {
                         break
                     }
                     eof
@@ -45,7 +45,7 @@ proc process_vm {vm_name source_dir} {
                 sleep 2
             }
         }
-        "shut off" {
+        "关闭" {
             puts "虚拟机已关闭，继续操作..."
         }
         eof
@@ -79,7 +79,7 @@ proc process_vm {vm_name source_dir} {
     expect {
         "login:" {
             send "root\r"
-            expect "Password:"
+            expect "密码："
             send "passw0rd@123\r"
         }
         timeout {
@@ -108,7 +108,7 @@ proc process_vm {vm_name source_dir} {
 
 # 主脚本开始
 # 确定要传输的文件夹路径（替换为实际文件夹路径）
-set source_dir "/home/zmx/875/resource_manager"
+set source_dir "/home/sjtu/sat_simulator_thu/resource_manager"
 
 # 遍历vm1到vm44
 for {set i 1} {$i <= 44} {incr i} {
