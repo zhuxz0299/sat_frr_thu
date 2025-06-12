@@ -547,7 +547,7 @@ send "\r"
 
 expect "localhost login:"
 send "root\r"
-expect "Password:"
+expect "密码："
 send "passw0rd@123\r"
 
 expect "# "
