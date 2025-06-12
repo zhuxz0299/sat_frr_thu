@@ -28,6 +28,7 @@
 ### sh
 存储一系列自动控制脚本，包括在虚拟机中运行的资源纳管脚本，以及在宿主机中运行的虚拟机自动化控制脚本
 
+- `auto_exit_vm.exp`: 将8个tsn对应的虚拟机退出登录
 - auto_update_resource_manager.exp 自动将resource_manager文件夹下的所有文件传输到所有虚拟机的/home/resource_manager目录下，实现所有vm更新资源纳管脚本的自动化
 - resource_request.sh 用于tsn vm向与其连接的XW/YG vm请求资源状态yaml文件，需指定目标XW/YG vm的ip地址，然后远程ssh触发对方vm中的status_sender_activate.sh，做一次资源纳管并回传
 - status_sender_activate.sh 同上，主动响应式资源纳管脚本，接收来自tsn的资源请求后，自动读取一次资源状态，生成为yaml文件回传给tsn
