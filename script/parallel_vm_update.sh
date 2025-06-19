@@ -2,7 +2,7 @@
 # 这个脚本用于并行执行auto_update_resource_manager.exp
 
 # 配置
-BATCH_SIZE=5
+BATCH_SIZE=10
 VM_COUNT=44
 SOURCE_DIR="./resource_manager"
 LOG_DIR="./vm_update_logs"
@@ -55,7 +55,7 @@ expect {
         expect eof
         # 等待虚拟机完全关闭
         set wait_count 0
-        set max_wait 30
+        set max_wait 300
         while {$wait_count < $max_wait} {
             spawn virsh domstate $vm_name
             expect {
