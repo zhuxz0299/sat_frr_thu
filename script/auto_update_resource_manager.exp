@@ -108,7 +108,7 @@ proc process_vm {vm_name source_dir} {
 
 # 主脚本开始
 # 确定要传输的文件夹路径（替换为实际文件夹路径）
-set source_dir "/home/sjtu/sat_simulator_thu/resource_manager"
+set source_dir "./resource_manager"
 
 # 遍历vm1到vm44
 for {set i 1} {$i <= 44} {incr i} {
