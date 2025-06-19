@@ -1,9 +1,0 @@
-spawn sudo virsh console vm3
-Connected to domain vm3
-Escape character is ^]
-
-[2025-05-09 21:33:35] 错误: 状态文件发送失败
-client_loop: send disconnect: Broken pipe
-lost connection
-[失败] 命令执行失败: /home/resource_manager/status_sender_activate.sh --ip 10.0.64.10
-[root@localhost ~]# 
