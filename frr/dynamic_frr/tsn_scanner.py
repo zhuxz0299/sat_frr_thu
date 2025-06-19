@@ -86,6 +86,15 @@ class TSNScanner:
             logger.info("当前没有加载任何网络拓扑，无法执行扫描")
             return False
         
+        # 首先确保NOCC节点上的UDP接收服务已启动
+        try:
+            logger.info("正在确保NOCC节点上的UDP接收服务已启动...")
+            self._ensure_nocc_udp_receiver_running()
+            logger.info("NOCC节点UDP接收服务检查完成")
+        except Exception as e:
+            logger.error(f"启动NOCC UDP接收服务时出错: {e}")
+            logger.warning("将继续扫描，但数据传输可能失败")
+        
         rows, cols = self.current_matrix.shape
         logger.info(f"开始扫描，共 {rows} 个TSN节点")
         
@@ -144,6 +153,9 @@ class TSNScanner:
             # NOCC-TSN/NOCC-YG/NOCC-XW ip地址(注意是vm的ip地址不是frr的ip地址), 顺序在分配ip时有点乱，后续改
             nocc_ips = ["10.0.64.178","10.0.64.186","10.0.64.182"]
             nocc_ips_tcl_list = " ".join([f"\"{ip}\"" for ip in nocc_ips])
+            
+            # 为NOCC设置UDP传输端口（与TSN默认12345端口不同）
+            nocc_udp_port = 12346
         
             expect_script = f"""#!/usr/bin/expect -f
 # 设置超时时间
@@ -181,8 +193,8 @@ catch {{
         send "/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i $ip\r"
         expect "# "
 
-        # 方案一 tsn获取后直接转发nocc
-        puts "获取成功直接转发nocc"
+        # 将获取的数据通过UDP发送给NOCC
+        puts "获取成功后通过UDP转发至NOCC"
         set parts [split $ip .]
         set fourth [lindex $parts 3]
         puts "$fourth"
@@ -198,11 +210,15 @@ catch {{
         }}
         puts "传输到 NOCC节点 $target"
 
-        ## TODO: 执行传输动作
-        send "sshpass -p passw0rd@123 scp -o StrictHostKeyChecking=no node-status-$ip.yaml root@$target:/home/resource_manager/resource_info\r"
+        # 使用UDP发送数据而不是SSH传输
+        send "bash /home/resource_manager/udp_send.sh --target_ip $target --port {nocc_udp_port} --file /home/resource_manager/resource_info/node-status-$ip.yaml\r"
         expect "# "
     }}
-    # 方案2 tsn扫描完成后，将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点，并删除该目录下所有文件
+    
+    # 最后，将TSN自身的状态信息也通过UDP发送给NOCC
+    puts "发送TSN自身状态信息到NOCC"
+    send "bash /home/resource_manager/status_sender_activate.sh --ip [lindex $nocc_list 0]\r"
+    expect "# "
 }} errMsg
 
 puts "退出TSN的VM控制"
@@ -243,7 +259,7 @@ if {{$errMsg ne ""}} {{
             
             # 检查返回码
             if result.returncode == 0:
-                logger.info(f"TSN{original_tsn_idx} 成功完成所有扫描任务并转发NOCC，详细日志: {log_path}")
+                logger.info(f"TSN{original_tsn_idx} 成功完成所有扫描任务并通过UDP转发NOCC，详细日志: {log_path}")
             else:
                 logger.error(f"TSN{original_tsn_idx} 扫描任务失败，请查看日志: {log_path}")
                 
@@ -252,6 +268,76 @@ if {{$errMsg ne ""}} {{
             
         except Exception as e:
             logger.error(f"TSN{original_tsn_idx} 执行扫描任务时出错: {e}")
+
+    def _ensure_nocc_udp_receiver_running(self):
+        """
+        确保NOCC节点上的UDP接收服务已启动
+        """
+        # NOCC节点IP列表
+        nocc_ips = ["10.0.64.178", "10.0.64.186", "10.0.64.182"]
+        # NOCC UDP端口
+        nocc_udp_port = 12346
+        
+        logger.info("确保NOCC节点上UDP接收服务已启动...")
+        
+        for idx, nocc_ip in enumerate(nocc_ips):
+            try:
+                nocc_idx = idx + 1
+                vm_name = f"vm{nocc_idx+44}"  # 假设NOCC节点从VM45开始
+                
+                # 创建expect脚本
+                expect_script = f"""#!/usr/bin/expect -f
+# 设置超时时间
+set timeout 60
+
+# 连接到NOCC节点
+spawn sudo virsh console {vm_name}
+
+sleep 1
+send "\r"
+
+expect "localhost login:" {{
+    send "root\r"
+}}
+
+expect "密码：" {{
+    send "passw0rd@123\r"
+}}
+
+expect "# " {{
+    # 启动UDP接收服务（如果未运行）
+    send "cd /home/resource_manager\r"
+    expect "# "
+    send "pgrep -f 'bash.*udp_receive.sh.*--port {nocc_udp_port}' || (nohup bash /home/resource_manager/udp_receive.sh --port {nocc_udp_port} > /home/resource_manager/udp_receiver.log 2>&1 &)\r"
+    expect "# "
+}}
+
+expect "# " {{
+    send "exit\r"
+}}
+
+"""
+                
+                # 将expect脚本保存到临时文件并执行
+                with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.exp') as script_file:
+                    script_file.write(expect_script)
+                    script_path = script_file.name
+                
+                # 使脚本可执行
+                os.chmod(script_path, 0o755)
+                
+                # 执行expect脚本
+                logger.info(f"确保NOCC节点 {nocc_ip} (VM: {vm_name}) 上的UDP接收服务已启动...")
+                result = subprocess.run(['expect', script_path], 
+                                        stdout=subprocess.PIPE, 
+                                        stderr=subprocess.STDOUT)
+                
+                # 删除临时脚本文件
+                os.unlink(script_path)
+                
+            except Exception as e:
+                logger.error(f"在NOCC节点 {nocc_ip} 上启动UDP接收服务时出错: {e}")
+                logger.exception("详细错误信息:")
 
 def main():
     parser = argparse.ArgumentParser(description='TSN节点扫描工具')
