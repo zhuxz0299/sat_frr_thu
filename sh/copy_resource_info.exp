@@ -53,7 +53,7 @@ proc copy_resource_info {vm_name host_dir} {
     }
     
     # 移动文件到正确的位置
-    spawn bash -c "if [ -d $vm_subdir/resource_info ]; then mv $vm_subdir/resource_info/* $vm_subdir/ && rmdir $vm_subdir/resource_info; fi"
+    spawn bash -c "if \[ -d $vm_subdir/resource_info \]; then mv $vm_subdir/resource_info/* $vm_subdir/ && rmdir $vm_subdir/resource_info; fi"
     expect eof
     
     # 重新启动虚拟机
