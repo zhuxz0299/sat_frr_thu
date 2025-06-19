@@ -9,23 +9,25 @@ proc copy_resource_info {vm_name host_dir} {
     
     puts "正在处理虚拟机: $vm_name"
     
+    # 在宿主机上创建目标子文件夹
+    set vm_subdir "$host_dir/$vm_name"
+    spawn bash -c "mkdir -p $vm_subdir"
+    expect eof
+    
     # 检查虚拟机状态
     spawn sudo virsh domstate $vm_name
     expect {
         "运行中" {
-            puts "虚拟机正在运行，继续操作..."
-        }
-        "关闭" {
-            puts "虚拟机已关闭，正在启动..."
-            spawn sudo virsh start $vm_name
+            puts "虚拟机正在运行，正在关闭..."
+            spawn sudo virsh shutdown $vm_name
             expect eof
-            # 等待虚拟机完全启动
+            # 等待虚拟机完全关闭
             set wait_count 0
             set max_wait 30
             while {$wait_count < $max_wait} {
                 spawn sudo virsh domstate $vm_name
                 expect {
-                    "运行中" {
+                    "关闭" {
                         break
                     }
                     eof
@@ -33,90 +35,31 @@ proc copy_resource_info {vm_name host_dir} {
                 incr wait_count
                 sleep 2
             }
-            sleep 10  # 给系统一些启动时间
+        }
+        "关闭" {
+            puts "虚拟机已关闭，继续操作..."
         }
         eof
     }
     
-    # 在宿主机上创建目标子文件夹
-    set vm_subdir "$host_dir/$vm_name"
-    spawn bash -c "mkdir -p $vm_subdir"
-    expect eof
-    
-    # 连接到虚拟机控制台
-    spawn sudo virsh console $vm_name
-    sleep 2
-    send "\r"
-    
-    # 登录到虚拟机
-    expect {
-        "login:" {
-            send "root\r"
-            expect "密码："
-            send "passw0rd@123\r"
-        }
-        timeout {
-            puts "登录超时，跳过此虚拟机"
-            return
-        }
-    }
-    
-    expect "# "
-    
-    # 检查resource_info目录是否存在
-    send "if [ -d /home/resource_manager/resource_info ]; then echo '目录存在'; else echo '目录不存在'; fi\r"
-    expect {
-        "目录存在" {
-            puts "resource_info目录存在，继续操作..."
-        }
-        "目录不存在" {
-            puts "resource_info目录不存在，跳过此虚拟机"
-            send "exit\r"
-            expect eof
-            return
-        }
-        "# "
-    }
-    
-    # 检查resource_info目录中是否有文件
-    send "ls -1 /home/resource_manager/resource_info/ | wc -l\r"
-    expect -re "(\[0-9\]+)"
-    set file_count $expect_out(1,string)
-    
-    if {$file_count == "0"} {
-        puts "resource_info目录中没有文件，跳过此虚拟机"
-        send "exit\r"
-        expect eof
-        return
-    }
-    
-    # 在虚拟机中创建临时目录用于打包文件
-    send "mkdir -p /tmp/resource_info_backup\r"
-    expect "# "
-    send "cp -r /home/resource_manager/resource_info/* /tmp/resource_info_backup/\r"
-    expect "# "
-    send "cd /tmp\r"
-    expect "# "
-    send "tar -czf resource_info_files.tar.gz resource_info_backup\r"
-    expect "# "
-    
-    # 退出虚拟机控制台
-    send "exit\r"
-    sleep 1
-    
-    # 使用virt-copy-out从虚拟机复制打包的文件到宿主机临时目录
-    spawn sudo virt-copy-out -d $vm_name /tmp/resource_info_files.tar.gz $vm_subdir
+    # 使用virt-copy-out将虚拟机中的resource_info目录复制到宿主机
+    puts "复制文件: $vm_name:/home/resource_manager/resource_info/ 到 $vm_subdir"
+    spawn sudo virt-copy-out -d $vm_name /home/resource_manager/resource_info/ $vm_subdir
     expect {
         "error:" {
             puts "无法从 $vm_name 复制文件，错误!"
-            return
         }
         eof
     }
     
-    # 在宿主机上解压文件
-    spawn bash -c "cd $vm_subdir && tar -xzf resource_info_files.tar.gz && mv resource_info_backup/* . && rm -rf resource_info_backup resource_info_files.tar.gz"
+    # 移动文件到正确的位置
+    spawn bash -c "if [ -d $vm_subdir/resource_info ]; then mv $vm_subdir/resource_info/* $vm_subdir/ && rmdir $vm_subdir/resource_info; fi"
     expect eof
+    
+    # 重新启动虚拟机
+    spawn sudo virsh start $vm_name
+    expect eof
+    sleep 5
     
     puts "已成功从 $vm_name 复制 resource_info 文件到 $vm_subdir"
 }
