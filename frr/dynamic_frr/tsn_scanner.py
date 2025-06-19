@@ -199,7 +199,7 @@ catch {{
         puts "传输到 NOCC节点 $target"
 
         ## TODO: 执行传输动作
-        send "sshpass -p passw0rd@123 scp -o StrictHostKeyChecking=no node_status-$ip.yaml root@$target:/home/resource_manager/resource_info\r"
+        send "sshpass -p passw0rd@123 scp -o StrictHostKeyChecking=no node-status-$ip.yaml root@$target:/home/resource_manager/resource_info\r"
         expect "# "
     }}
     # 方案2 tsn扫描完成后，将/home/resource_manager/resource_info文件夹下的所有文件发送到对应的NOCC节点，并删除该目录下所有文件
