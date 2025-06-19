@@ -98,7 +98,7 @@ generate_status_yaml() {
     # rate=${rate:-"0bit"}
 
     # 生成 YAML 文件
-    cat <<EOF > /home/resource_manager/resource_info/node_status-$local_ip.yaml
+    cat <<EOF > /home/resource_manager/resource_info/node-status-$local_ip.yaml
 metadata:
   name: node-status-$local_ip
 spec:
@@ -142,7 +142,7 @@ log "主动请求已接收，开始使用UDP发送状态信息到 $TARGET_IP"
 
 # 使用已有的get_local_ip函数获取本机IP
 local_ip=$(get_local_ip)
-yaml_file="/home/resource_manager/resource_info/node_status-${local_ip}.yaml"
+yaml_file="/home/resource_manager/resource_info/node-status-${local_ip}.yaml"
 
 if [[ ! -f "$yaml_file" ]]; then
     log "错误: 找不到特定YAML文件: $yaml_file"
