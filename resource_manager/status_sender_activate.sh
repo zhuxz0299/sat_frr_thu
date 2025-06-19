@@ -115,7 +115,7 @@ spec:
     used: "${used_disk}MB"
     free: "${free_disk}MB"
   gpuUsage:
-  	total: "${total_dismem}MB"
+    total: "${total_dismem}MB"
     used: "${used_dismem}MB"
     free: "${free_dismem}MB"
     util: "${gpu_util}"

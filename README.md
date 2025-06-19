@@ -34,6 +34,9 @@
 
 - `auto_exit_vm.exp`: 将8个tsn对应的虚拟机退出登录
 - `auto_update_resource_manager.exp` 自动将`resource_manager`文件夹下的所有文件传输到所有虚拟机的`/home/resource_manager`目录下，实现所有vm更新资源纳管脚本的自动化
+- `copy_resource_info.exp`: 用于将 nocc 虚拟机中 `/home/resource_manager/resource_info` 文件夹下的文件复制到宿主机中
+- `parallel_vm_updata.sh`: `auto_update_resource_manager.exp` 的并行化版本
+- `resource_info_gathering.py`：将宿主机收集到的 `.yaml` 文件整合为前端需要的 `.json` 文件。
 - resource_request.sh 用于tsn vm向与其连接的XW/YG vm请求资源状态yaml文件，需指定目标XW/YG vm的ip地址，然后远程ssh触发对方vm中的status_sender_activate.sh，做一次资源纳管并回传
 - status_sender_activate.sh 同上，主动响应式资源纳管脚本，接收来自tsn的资源请求后，自动读取一次资源状态，生成为yaml文件回传给tsn
 - status_sender.sh 同上，周期性主动更新资源纳管脚本，按设定周期主动读取本机资源状态并更新资源yaml，但不向外传输
