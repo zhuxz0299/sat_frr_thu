@@ -4,8 +4,8 @@
 # 配置
 BATCH_SIZE=5
 VM_COUNT=44
-SOURCE_DIR="/home/sjtu/sat_simulator_thu/resource_manager"
-LOG_DIR="/home/sjtu/sat_simulator_thu/log/vm_update_logs"
+SOURCE_DIR="./resource_manager"
+LOG_DIR="./vm_update_logs"
 
 # 确保日志目录存在
 mkdir -p "$LOG_DIR"
