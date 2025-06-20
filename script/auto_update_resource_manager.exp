@@ -111,7 +111,7 @@ proc process_vm {vm_name source_dir} {
 set source_dir "./resource_manager"
 
 # 遍历vm1到vm44
-for {set i 1} {$i <= 44} {incr i} {
+for {set i 1} {$i <= 47} {incr i} {
     process_vm "vm$i" $source_dir
 }
 

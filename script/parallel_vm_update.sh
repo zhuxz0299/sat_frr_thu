@@ -3,7 +3,7 @@
 
 # 配置
 BATCH_SIZE=10
-VM_COUNT=44
+VM_COUNT=47
 SOURCE_DIR="./resource_manager"
 LOG_DIR="./vm_update_logs"
 
