@@ -15,7 +15,52 @@ import json
 import random
 import string
 import datetime
+import re
 from glob import glob
+
+# 完整任务文件路径
+COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
+
+def ip_to_sat_id(ip_str, sat_type):
+    """从IP地址反推卫星ID
+    
+    Args:
+        ip_str: IP地址字符串，格式如 "10.0.64.46"
+        sat_type: 卫星类型，"tsn", "xw", "yg" 之一
+    
+    Returns:
+        int: 卫星ID，如果无法解析则返回None
+    """
+    # 提取IP地址
+    ip_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', ip_str)
+    if not ip_match:
+        return None
+    
+    ip = ip_match.group(1)
+    parts = ip.split('.')
+    if len(parts) != 4:
+        return None
+    
+    try:
+        fourth_byte = int(parts[3])
+        
+        # 根据VM与IP的映射关系计算sat_id
+        if sat_type.lower() == "tsn":
+            # fourth_byte = (idx-1)*4 + 2
+            idx = (fourth_byte - 2) // 4 + 1
+            return idx
+        elif sat_type.lower() == "yg":
+            # fourth_byte = (idx-1+8)*4 + 2
+            idx = (fourth_byte - 2) // 4 - 8 + 1
+            return idx
+        elif sat_type.lower() == "xw":
+            # fourth_byte = (idx-1+20)*4 + 2
+            idx = (fourth_byte - 2) // 4 - 20 + 1
+            return idx
+    except (ValueError, IndexError):
+        return None
+    
+    return None
 
 def extract_name_from_yaml(yaml_data):
     """从YAML文件中提取名称"""
@@ -152,8 +197,9 @@ def create_default_task(sat_id, sat_type, sat_count):
     }
     
     # 根据卫星类型设置传感器
-    if sat_type.lower() == "yg":
-        task["sensors"] = generate_random_sensors()
+    if sat_type.lower() in ["yg", "xw", "tsn"]:
+        # 从complete_task.json中获取传感器信息
+        task["sensors"] = get_sensors_from_tasks(sat_id, sat_type)
     else:
         task["sensors"] = []
     
@@ -183,6 +229,79 @@ def generate_random_sensors():
         sensors.append(sensor)
     
     return sensors
+
+def get_sensors_from_tasks(sat_id, sat_type):
+    """从complete_task.json中读取传感器信息
+    
+    Args:
+        sat_id: 卫星ID
+        sat_type: 卫星类型，"tsn", "xw", "yg" 之一
+    
+    Returns:
+        list: 传感器列表，包含相应类型的传感器
+    """
+    # 确保sat_id是整数
+    sat_id = int(sat_id) if sat_id is not None else 0
+    
+    # 默认传感器列表为空
+    default_sensors = []
+    
+    # 如果complete_task.json不存在，返回默认传感器（空列表）
+    if not os.path.exists(COMPLETE_TASK_JSON_PATH):
+        print(f"警告: {COMPLETE_TASK_JSON_PATH} 不存在，使用默认传感器配置（空列表）")
+        return default_sensors
+        
+    try:
+        # 读取complete_task.json
+        with open(COMPLETE_TASK_JSON_PATH, 'r', encoding='utf-8') as f:
+            task_data = json.load(f)
+            
+        sensors = []  # 从空列表开始
+        has_assignments = False
+        
+        # 遍历所有任务
+        for task in task_data.get('task_info', []):
+            # 检查任务状态，只处理已分配的任务
+            if task.get('rs_state') != 2 or task.get('comm_cmp_state') != 2:
+                continue
+                
+            # 遍历资源计划
+            plan_list = task.get('rs_plan_res', {}).get('plan_list', [])
+            for plan in plan_list:
+                # 如果计划中的卫星ID与当前卫星ID匹配
+                if plan.get('sat_id') == sat_id:
+                    sensor_type = plan.get('sensors')
+                    task_id = task.get('task_id')
+                    
+                    # 添加新的传感器
+                    sensor = {
+                        "sensor_type": sensor_type,
+                        "health": 0,  # 默认健康
+                        "occupied": str(task_id)  # 设置为任务ID
+                    }
+                    
+                    # 检查是否已存在相同类型的传感器
+                    existing_sensor = next((s for s in sensors if s["sensor_type"] == sensor_type), None)
+                    if existing_sensor:
+                        # 更新已存在的传感器
+                        existing_sensor["occupied"] = str(task_id)
+                    else:
+                        # 添加新传感器
+                        sensors.append(sensor)
+                        
+                    has_assignments = True
+                    print(f"卫星{sat_id}({sat_type})的传感器{sensor_type}被任务{task_id}占用")
+        
+        if not has_assignments:
+            print(f"卫星{sat_id}({sat_type})没有分配的任务，传感器列表为空")
+            
+        return sensors
+        
+    except Exception as e:
+        print(f"从complete_task.json读取传感器信息时出错: {e}")
+        import traceback
+        traceback.print_exc()
+        return []  # 出错时返回空列表
 
 def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
     """将VM文件夹下的YAML文件转换为JSON文件
@@ -215,6 +334,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
             # 创建默认任务信息
             task = create_default_task(i, sat_type, sat_count)
             result["task_info"].append(task)
+            print(f"为卫星{i}({sat_type})创建默认任务信息")
     else:
         # 处理每个YAML文件
         sat_count = len(yaml_files)  # 总卫星数量
@@ -236,14 +356,22 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                 if not sat_name:
                     sat_name = os.path.basename(yaml_file).replace('.yaml', '')
                 
+                # 从sat_name中解析IP地址，然后获取sat_id
+                derived_sat_id = ip_to_sat_id(sat_name, sat_type)
+                
                 # 创建任务信息
                 task = {
-                    "sat_id": str(sat_id_counter),  # 从1开始递增
+                    "sat_id": str(derived_sat_id) if derived_sat_id is not None else str(sat_id_counter),
                     "sat_name": sat_name,
                     "timestamp": convert_timestamp(spec.get('timestamp', '')),
                 }
                 
-                sat_id_counter += 1
+                # 只有在无法从IP解析sat_id时才使用计数器
+                if derived_sat_id is None:
+                    print(f"警告: 无法从 {sat_name} 解析IP地址获取sat_id，使用计数器值: {sat_id_counter}")
+                    sat_id_counter += 1
+                else:
+                    print(f"从 {sat_name} 解析得到sat_id: {derived_sat_id}")
                 
                 # CPU使用情况
                 if 'cpuUsage' in spec:
@@ -327,12 +455,14 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                     }
                 
                 # 添加链接列表
-                task["linkList"] = generate_link_list(sat_id_counter-1, sat_count)
+                # 使用task中的sat_id，而不是计数器
+                sat_id_value = int(task["sat_id"]) if task["sat_id"].isdigit() else 0
+                task["linkList"] = generate_link_list(sat_id_value, sat_count)
                 
                 # 添加传感器列表，根据卫星类型处理
-                if sat_type.lower() == "yg":
-                    # 为遥感卫星添加特定的传感器列表
-                    task["sensors"] = generate_random_sensors()
+                if sat_type.lower() in ["yg", "xw", "tsn"]:
+                    # 从complete_task.json中获取传感器信息，使用task中的sat_id
+                    task["sensors"] = get_sensors_from_tasks(sat_id_value, sat_type)
                 else:
                     # 其他类型卫星使用空传感器列表
                     task["sensors"] = []
@@ -369,9 +499,23 @@ if __name__ == "__main__":
         print(f"错误: 文件夹 {vm_folder_path} 不存在")
         sys.exit(1)
     
+    # 检查complete_task.json是否存在
+    if os.path.exists(COMPLETE_TASK_JSON_PATH):
+        print(f"信息: 将从 {COMPLETE_TASK_JSON_PATH} 读取任务信息来生成传感器状态")
+    else:
+        print(f"警告: {COMPLETE_TASK_JSON_PATH} 不存在，将使用默认传感器配置")
+    
     # 确定输出文件路径 (在输入文件夹的上一级目录)
     parent_dir = os.path.dirname(os.path.abspath(vm_folder_path))
     output_json_path = os.path.join(parent_dir, f"{sat_type}_constellation.json")
     
+    print(f"开始处理卫星类型: {sat_type}，数据源: {vm_folder_path}")
+    print(f"将使用从sat_name中提取的IP地址来反推卫星ID")
     success = convert_yaml_to_json(vm_folder_path, output_json_path, sat_type)
+    
+    if success:
+        print(f"处理完成: {sat_type} 星座JSON文件已生成到 {output_json_path}")
+    else:
+        print(f"错误: 生成 {sat_type} 星座JSON文件失败")
+    
     sys.exit(0 if success else 1)
