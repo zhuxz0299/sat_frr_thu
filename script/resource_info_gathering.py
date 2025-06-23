@@ -19,7 +19,8 @@ import re
 from glob import glob
 
 # 完整任务文件路径
-COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
+# COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
+COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
 
 def ip_to_sat_id(ip_str, sat_type):
     """从IP地址反推卫星ID
@@ -43,24 +44,12 @@ def ip_to_sat_id(ip_str, sat_type):
     
     try:
         fourth_byte = int(parts[3])
-        
-        # 根据VM与IP的映射关系计算sat_id
-        if sat_type.lower() == "tsn":
-            # fourth_byte = (idx-1)*4 + 2
-            idx = (fourth_byte - 2) // 4 + 1
-            return idx
-        elif sat_type.lower() == "yg":
-            # fourth_byte = (idx-1+8)*4 + 2
-            idx = (fourth_byte - 2) // 4 - 8 + 1
-            return idx
-        elif sat_type.lower() == "xw":
-            # fourth_byte = (idx-1+20)*4 + 2
-            idx = (fourth_byte - 2) // 4 - 20 + 1
-            return idx
+        idx = (fourth_byte - 2) // 4 + 1
+        return idx
+
     except (ValueError, IndexError):
         return None
     
-    return None
 
 def extract_name_from_yaml(yaml_data):
     """从YAML文件中提取名称"""
@@ -255,16 +244,11 @@ def get_sensors_from_tasks(sat_id, sat_type):
         # 读取complete_task.json
         with open(COMPLETE_TASK_JSON_PATH, 'r', encoding='utf-8') as f:
             task_data = json.load(f)
-            
         sensors = []  # 从空列表开始
         has_assignments = False
         
         # 遍历所有任务
         for task in task_data.get('task_info', []):
-            # 检查任务状态，只处理已分配的任务
-            if task.get('rs_state') != 2 or task.get('comm_cmp_state') != 2:
-                continue
-                
             # 遍历资源计划
             plan_list = task.get('rs_plan_res', {}).get('plan_list', [])
             for plan in plan_list:
@@ -276,7 +260,7 @@ def get_sensors_from_tasks(sat_id, sat_type):
                     # 添加新的传感器
                     sensor = {
                         "sensor_type": sensor_type,
-                        "health": 0,  # 默认健康
+                        "health": 1,  # 默认健康
                         "occupied": str(task_id)  # 设置为任务ID
                     }
                     
