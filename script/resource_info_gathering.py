@@ -19,8 +19,8 @@ import re
 from glob import glob
 
 # 完整任务文件路径
-# COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
-COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
+COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
+# COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
 
 def ip_to_sat_id(ip_str, sat_type):
     """从IP地址反推卫星ID
@@ -145,7 +145,7 @@ def create_default_task(sat_id, sat_type, sat_count):
     
     # 创建基本任务结构
     task = {
-        "sat_id": str(sat_id),
+        "sat_id": sat_id,
         "sat_name": f"{sat_type.upper()}{sat_id}",
         "timestamp": current_time,
         
@@ -213,7 +213,7 @@ def generate_random_sensors():
         sensor = {
             "sensor_type": sensor_type,
             "health": random.randint(0, 1),  # 0健康 1异常
-            "occupied": str(random.randint(100, 999))  # 任务占用ID (100-999)
+            "occupied": random.randint(100, 999)  # 任务占用ID (100-999)
         }
         sensors.append(sensor)
     
@@ -261,14 +261,14 @@ def get_sensors_from_tasks(sat_id, sat_type):
                     sensor = {
                         "sensor_type": sensor_type,
                         "health": 1,  # 默认健康
-                        "occupied": str(task_id)  # 设置为任务ID
+                        "occupied": task_id  # 设置为任务ID
                     }
                     
                     # 检查是否已存在相同类型的传感器
                     existing_sensor = next((s for s in sensors if s["sensor_type"] == sensor_type), None)
                     if existing_sensor:
                         # 更新已存在的传感器
-                        existing_sensor["occupied"] = str(task_id)
+                        existing_sensor["occupied"] = task_id
                     else:
                         # 添加新传感器
                         sensors.append(sensor)
@@ -303,9 +303,24 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
     
     # 准备JSON结构
     vm_name = os.path.basename(vm_folder_path)
+    
+    # 根据卫星类型设置file_id和constellation_name
+    if sat_type.lower() == "tsn":
+        file_id = 1
+        constellation_name = "TSN"
+    elif sat_type.lower() == "xw":
+        file_id = 2
+        constellation_name = "XINGWANG"
+    elif sat_type.lower() == "yg":
+        file_id = 3
+        constellation_name = "YAOGAN"
+    else:
+        file_id = 0
+        constellation_name = f"{sat_type.upper()}_CONSTELLATION"
+    
     result = {
-        "file_id": random.randint(1, 100),
-        "constellation_name": f"{sat_type.upper()}_CONSTELLATION",
+        "file_id": file_id,
+        "constellation_name": constellation_name,
         "task_info": []
     }
     
@@ -345,7 +360,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                 
                 # 创建任务信息
                 task = {
-                    "sat_id": str(derived_sat_id) if derived_sat_id is not None else str(sat_id_counter),
+                    "sat_id": derived_sat_id if derived_sat_id is not None else sat_id_counter,
                     "sat_name": sat_name,
                     "timestamp": convert_timestamp(spec.get('timestamp', '')),
                 }
@@ -440,7 +455,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                 
                 # 添加链接列表
                 # 使用task中的sat_id，而不是计数器
-                sat_id_value = int(task["sat_id"]) if task["sat_id"].isdigit() else 0
+                sat_id_value = task["sat_id"]
                 task["linkList"] = generate_link_list(sat_id_value, sat_count)
                 
                 # 添加传感器列表，根据卫星类型处理
