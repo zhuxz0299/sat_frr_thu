@@ -19,10 +19,10 @@ import re
 from glob import glob
 
 # 完整任务文件路径
-COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
+COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/6.26测试-2/complete_task.json"
 # COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
 
-def ip_to_sat_id(ip_str, sat_type):
+def ip_to_sat_id_and_name(ip_str, sat_type):
     """从IP地址反推卫星ID
     
     Args:
@@ -45,14 +45,25 @@ def ip_to_sat_id(ip_str, sat_type):
     try:
         fourth_byte = int(parts[3])
         idx = (fourth_byte - 2) // 4 + 1
-        return idx
+        if sat_type == 'tsn':
+            sat_name = f"TSN_1_{idx}"
+        elif sat_type == 'yg':
+            sat_name = f"YG_1_{idx-8}"
+        elif sat_type == 'xw':
+            sat_name = f"XW_1_{idx-20}"
+        else:
+            raise "Error sat_type"
+        return idx, sat_name
 
     except (ValueError, IndexError):
         return None
     
 
-def extract_name_from_yaml(yaml_data):
-    """从YAML文件中提取名称"""
+def extract_ip_from_yaml(yaml_data):
+    """
+    从YAML文件中提取名称
+    文件中的 "name" 字段包含了卫星的 ip 地址
+    """
     if 'metadata' in yaml_data and 'name' in yaml_data['metadata']:
         return yaml_data['metadata']['name']
     return None
@@ -144,9 +155,20 @@ def create_default_task(sat_id, sat_type, sat_count):
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     # 创建基本任务结构
+    if sat_type == 'tsn':
+        sat_name = f"{sat_type.upper()}_1_{sat_id}"
+    elif sat_type == 'yg':
+        sat_name = f"{sat_type.upper()}_1_{sat_id-8}"
+    elif sat_type == 'xw':
+        sat_name = f"{sat_type.upper()}_1_{sat_id-20}"
+    else:
+        raise "Error sat_type"
+    
+    gpu_used = round(random.uniform(128, 4096), 0)
+
     task = {
         "sat_id": sat_id,
-        "sat_name": f"{sat_type.upper()}{sat_id}",
+        "sat_name": sat_name,
         "timestamp": current_time,
         
         # 默认CPU使用情况
@@ -177,7 +199,8 @@ def create_default_task(sat_id, sat_type, sat_count):
             "health": 1,
             "total": 8192,
             "total_data_type": 1,  # MB
-            "used": round(random.uniform(128, 4096), 0),
+            "used": gpu_used,
+            "gpu_occupied": (1 if gpu_used>104 else 0),
             "used_data_type": 1  # MB
         },
         
@@ -331,7 +354,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
         sat_count = 8
         for i in range(1, sat_count + 1):
             # 创建默认任务信息
-            task = create_default_task(i, sat_type, sat_count)
+            task = create_default_task(i, sat_type, sat_count) # TODO 目前会被 tsn 类型调用
             result["task_info"].append(task)
             print(f"为卫星{i}({sat_type})创建默认任务信息")
     else:
@@ -351,26 +374,26 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                 spec = yaml_data['spec']
                 
                 # 获取卫星名称
-                sat_name = extract_name_from_yaml(yaml_data)
-                if not sat_name:
-                    sat_name = os.path.basename(yaml_file).replace('.yaml', '')
+                sat_ip = extract_ip_from_yaml(yaml_data)
+                if not sat_ip:
+                    sat_ip = os.path.basename(yaml_file).replace('.yaml', '')
                 
-                # 从sat_name中解析IP地址，然后获取sat_id
-                derived_sat_id = ip_to_sat_id(sat_name, sat_type)
+                # 从sat_ip中解析IP地址，然后获取sat_id
+                derived_sat_id, derived_sat_name = ip_to_sat_id_and_name(sat_ip, sat_type)
                 
                 # 创建任务信息
                 task = {
                     "sat_id": derived_sat_id if derived_sat_id is not None else sat_id_counter,
-                    "sat_name": sat_name,
+                    "sat_name": derived_sat_name,
                     "timestamp": convert_timestamp(spec.get('timestamp', '')),
                 }
                 
                 # 只有在无法从IP解析sat_id时才使用计数器
                 if derived_sat_id is None:
-                    print(f"警告: 无法从 {sat_name} 解析IP地址获取sat_id，使用计数器值: {sat_id_counter}")
+                    print(f"警告: 无法从 {sat_ip} 解析IP地址获取sat_id，使用计数器值: {sat_id_counter}")
                     sat_id_counter += 1
                 else:
-                    print(f"从 {sat_name} 解析得到sat_id: {derived_sat_id}")
+                    print(f"从 {sat_ip} 解析得到sat_id: {derived_sat_id}")
                 
                 # CPU使用情况
                 if 'cpuUsage' in spec:
@@ -441,15 +464,18 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         "total": gpu_total,
                         "total_data_type": total_type,
                         "used": gpu_used,
+                        "gpu_occupied": (1 if gpu_used>104 else 0),
                         "used_data_type": used_type
                     }
                 else:
+                    gpu_used = round(random.uniform(128, 4096), 0)
                     # 默认GPU使用情况
                     task["gpu_usage"] = {
                         "health": 1,
                         "total": 8192,
                         "total_data_type": 1,  # MB
-                        "used": round(random.uniform(128, 4096), 0),
+                        "used": gpu_used,
+                        "gpu_occupied": (1 if gpu_used>104 else 0),
                         "used_data_type": 1  # MB
                     }
                 
@@ -509,7 +535,7 @@ if __name__ == "__main__":
     output_json_path = os.path.join(parent_dir, f"{sat_type}_constellation.json")
     
     print(f"开始处理卫星类型: {sat_type}，数据源: {vm_folder_path}")
-    print(f"将使用从sat_name中提取的IP地址来反推卫星ID")
+    print(f"将使用从sat_ip中提取的IP地址来反推卫星ID")
     success = convert_yaml_to_json(vm_folder_path, output_json_path, sat_type)
     
     if success:
