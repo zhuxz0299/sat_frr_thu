@@ -144,9 +144,6 @@ class TSNScanner:
             # NOCC-TSN/NOCC-YG/NOCC-XW ip地址(注意是vm的ip地址不是frr的ip地址), 顺序在分配ip时有点乱，后续改
             nocc_ips = ["10.0.64.178","10.0.64.186","10.0.64.182"]
             nocc_ips_tcl_list = " ".join([f"\"{ip}\"" for ip in nocc_ips])
-            
-            # 为NOCC设置UDP传输端口（与TSN默认12345端口不同）
-            nocc_udp_port = 12346
         
             expect_script = f"""#!/usr/bin/expect -f
 # 设置超时时间
@@ -184,8 +181,8 @@ catch {{
         send "/home/resource_manager/resource_request.sh -p passw0rd@123 -u root -i $ip\r"
         expect "# "
 
-        # 将获取的数据通过UDP发送给NOCC
-        puts "获取成功后通过UDP转发至NOCC"
+        # 方案一 tsn获取后直接转发nocc
+        puts "获取成功直接转发nocc"
         set parts [split $ip .]
         set fourth [lindex $parts 3]
         puts "$fourth"
@@ -201,14 +198,16 @@ catch {{
         }}
         puts "传输到 NOCC节点 $target"
 
-        # 使用UDP发送数据而不是SSH传输
-        send "bash /home/resource_manager/udp_send.sh --target_ip $target --port {nocc_udp_port} --file /home/resource_manager/resource_info/node-status-$ip.yaml\r"
+        ## 执行传输动作
+        send "sshpass -p passw0rd@123 scp -o StrictHostKeyChecking=no node-status-$ip.yaml root@$target:/home/resource_manager/resource_info\r"
         expect "# "
     }}
     
-    # 最后，将TSN自身的状态信息也通过UDP发送给NOCC
-    puts "发送TSN自身状态信息到NOCC"
-    send "bash /home/resource_manager/status_sender_activate.sh --ip [lindex $nocc_list 0]\r"
+    # tsn 获取自身资源信息，发送至NOCC
+    set target [lindex $nocc_list 0]
+    send "echo '正在转发TSN节点信息到NOCC节点 $target'\r"
+    expect "# "
+    send "bash /home/resource_manager/status_sender.sh --ip $target\r"
     expect "# "
 }} errMsg
 
@@ -250,7 +249,7 @@ if {{$errMsg ne ""}} {{
             
             # 检查返回码
             if result.returncode == 0:
-                logger.info(f"TSN{original_tsn_idx} 成功完成所有扫描任务并通过UDP转发NOCC，详细日志: {log_path}")
+                logger.info(f"TSN{original_tsn_idx} 成功完成所有扫描任务并转发NOCC，详细日志: {log_path}")
             else:
                 logger.error(f"TSN{original_tsn_idx} 扫描任务失败，请查看日志: {log_path}")
                 
@@ -259,7 +258,6 @@ if {{$errMsg ne ""}} {{
             
         except Exception as e:
             logger.error(f"TSN{original_tsn_idx} 执行扫描任务时出错: {e}")
-
 
 def main():
     parser = argparse.ArgumentParser(description='TSN节点扫描工具')
