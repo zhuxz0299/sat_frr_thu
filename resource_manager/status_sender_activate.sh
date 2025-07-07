@@ -1,6 +1,6 @@
 #!/bin/bash
 # 资源信息响应式发送
-# 用法：./status_sender_activate.sh
+# 用法：./status_sender_activate.sh --ip <目标IP> [--port <端口号>]
 
 # ---------- 配置区 ----------
 TARGET_USER="root"
@@ -10,11 +10,15 @@ INTERVAL_SECONDS=5
 LOG_FILE="/var/log/status_sender.log"
 INTERFACE="enp1s0"
 TARGET_IP=""  # 通过 --ip 参数设置
+PORT=12345    # 默认端口，可通过 --port 参数修改
 
 # ---------- 参数解析 ----------
 show_help() {
-    echo "用法: $0 --ip <目标IP>"
-    echo "示例: nohup $0 --ip 192.253.1.11 &"
+    echo "用法: $0 --ip <目标IP> [--port <端口号>]"
+    echo "选项:"
+    echo "  --ip <目标IP>     指定目标IP地址（必需）"
+    echo "  --port <端口号>   指定UDP目标端口（可选，默认为12345）"
+    echo "示例: nohup $0 --ip 192.253.1.11 --port 12346 &"
     exit 0
 }
 
@@ -23,6 +27,10 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --ip)
             TARGET_IP="$2"
+            shift 2
+            ;;
+        --port)
+            PORT="$2"
             shift 2
             ;;
         --help)
@@ -44,6 +52,12 @@ if [[ -z "$TARGET_IP" ]]; then
 elif ! [[ $TARGET_IP =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "错误：无效的IP地址格式 $TARGET_IP"
     exit 1
+fi
+
+# 验证端口参数
+if ! [[ $PORT =~ ^[0-9]+$ ]] || [[ $PORT -lt 1 ]] || [[ $PORT -gt 65535 ]]; then
+    echo "警告：无效的端口号 $PORT，将使用默认端口12345"
+    PORT=12345
 fi
 
 # ---------- 资源监控函数 ----------
@@ -138,7 +152,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 使用UDP发送状态信息
-log "主动请求已接收，开始使用UDP发送状态信息到 $TARGET_IP"
+log "主动请求已接收，开始使用UDP发送状态信息到 $TARGET_IP:$PORT"
 
 # 使用已有的get_local_ip函数获取本机IP
 local_ip=$(get_local_ip)
@@ -155,12 +169,12 @@ if [[ ! -f "$yaml_file" ]]; then
     log "使用备选YAML文件: $yaml_file"
 fi
 
-# 使用Bash UDP发送脚本
-bash /home/resource_manager/udp_send.sh --target_ip "$TARGET_IP" --file "$yaml_file"
+# 使用Bash UDP发送脚本，传递端口参数
+bash /home/resource_manager/udp_send.sh --target_ip "$TARGET_IP" --port "$PORT" --file "$yaml_file"
 
 # 检查是否成功
 if [ $? -eq 0 ]; then
-    log "状态信息通过UDP发送成功"
+    log "状态信息通过UDP发送成功 (目标: $TARGET_IP:$PORT)"
 else
     log "错误: 状态信息通过UDP发送失败"
     exit 1

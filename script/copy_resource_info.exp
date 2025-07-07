@@ -66,7 +66,7 @@ proc copy_resource_info {vm_name host_dir} {
 
 # 主脚本开始
 # 宿主机上的目标目录
-set host_dir "/home/sjtu/sat_frr_thu/resource_info"
+set host_dir "./resource_info"
 
 # 创建主目标目录（如果不存在）
 spawn bash -c "mkdir -p $host_dir"

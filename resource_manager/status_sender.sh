@@ -54,33 +54,34 @@ log() {
 generate_status_yaml() {
     local timestamp=$(TZ="Asia/Shanghai" date +"%Y-%m-%dT%H:%M:%S")
     
-    # 获取本机内网 IP
+    # 获取本机内网 IP（优先取 10 开头的 IPv4 地址）
     local_ip=$(hostname -I | awk '{for(i=1;i<=NF;i++) if ($i ~ /^10\./) print $i}' | head -n1)
     [[ -z "$local_ip" ]] && local_ip=$(hostname)
 
-    # 获取CPU使用率
+    # 获取CPU使用信息 (百分比)
     cpu_cores=$(nproc)
+    # 修复正则表达式，提取空闲CPU百分比
     cpu_usage=$(top -b -n1 | grep -oP '\d+\.\d+\s+id\b' | awk '{print 100 - $1}')
 
-    # 获取内存信息
+    # 获取内存使用信息 (MB)
     memory_info=$(free -m)
     total_memory=$(echo "$memory_info" | grep Mem: | awk '{print $2}')
     used_memory=$(echo "$memory_info" | grep Mem: | awk '{print $3}')
     free_memory=$(echo "$memory_info" | grep Mem: | awk '{print $4}')
 
-    # 获取磁盘信息
+    # 获取磁盘使用信息 (MB)
     disk_info=$(df -m / | tail -n 1)
     total_disk=$(echo "$disk_info" | awk '{print $2}')
     used_disk=$(echo "$disk_info" | awk '{print $3}')
     free_disk=$(echo "$disk_info" | awk '{print $4}')
     
-    # 获取GPU信息
-    gpu_info_0=$(dlsmi | sed -n '8p')
-    gpu_info_1=$(dlsmi | sed -n '9p')
-    total_dismem=$(echo "$gpu_info_1" | awk '{print $10}')
-    used_dismem=$(echo "$gpu_info_1" | awk '{print $8}')
-    free_dismem=$(expr $total_dismem - $used_dismem)
-    gpu_util=$(echo "$gpu_info_0" | awk '{print $8}')
+    # 获取GPU使用信息 (MB)
+	gpu_info_0=$(dlsmi | sed -n '8p')  # 获取GPU信息
+	gpu_info_1=$(dlsmi | sed -n '9p')  # 获取GPU信息
+	total_dismem=$(echo "$gpu_info_1" | awk '{print $10}')  # 获取总显存
+	used_dismem=$(echo "$gpu_info_1" | awk '{print $8}')   # 获取已用显存
+	free_dismem=$(expr $total_dismem - $used_dismem) # 获取空闲显存
+	gpu_util=$(echo "$gpu_info_0" | awk '{print $8}') # 获取利用率
     
     # # 获取链路信息
     # tc_output=$(tc -s qdisc show dev $INTERFACE)
@@ -95,8 +96,8 @@ generate_status_yaml() {
     # loss=${loss:-"0"}
     # rate=${rate:-"0bit"}
 
-    # 生成YAML文件
-    cat <<EOF > /home/resource_manager/resource_info/node_status-$local_ip.yaml
+    # 生成 YAML 文件
+    cat <<EOF > /home/resource_manager/resource_info/node-status-$local_ip.yaml
 metadata:
   name: node-status-$local_ip
 spec:
@@ -120,20 +121,18 @@ spec:
 EOF
 }
 
-# ---------- 主循环 ----------
-while true; do
-    generate_status_yaml || {
-        log "错误: 无法生成状态文件"
-        sleep $INTERVAL_SECONDS
-        continue
-    }
+# ---------- 主程序 ----------
 
-    log "开始发送状态文件到 $TARGET_IP:$REMOTE_DIR"
-    if sshpass -p "$TARGET_PASSWORD" scp -o StrictHostKeyChecking=no /home/resource_manager/resource_info/node_status-$local_ip.yaml "$TARGET_USER@$TARGET_IP:$REMOTE_DIR"; then
-        log "状态文件发送成功"
-    else
-        log "错误: 状态文件发送失败"
-    fi
-
+generate_status_yaml || {
+    log "错误: 无法生成状态文件"
     sleep $INTERVAL_SECONDS
-done
+    continue
+}
+
+log "开始发送状态文件到 $TARGET_IP:$REMOTE_DIR"
+if sshpass -p "$TARGET_PASSWORD" scp -o StrictHostKeyChecking=no /home/resource_manager/resource_info/node-status-$local_ip.yaml "$TARGET_USER@$TARGET_IP:$REMOTE_DIR"; then
+    log "状态文件发送成功"
+else
+    log "错误: 状态文件发送失败"
+fi
+
