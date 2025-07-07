@@ -171,34 +171,6 @@ class YAMLPreModifier:
                             connections.append((target_sat_id, "低轨星间"))
         
         return connections
-        """
-        生成单个链路信息
-        
-        Args:
-            link_type: 链路类型
-            end_sat_id: 目标卫星ID
-            
-        Returns:
-            链路信息字典
-        """
-        config = self.link_configs.get(link_type, self.link_configs["低轨星间"])
-        
-        # 生成随机的时延、抖动、丢包率
-        base_delay = 50.0 if "星间" in link_type else 100.0
-        delay = round(random.uniform(base_delay, base_delay + 30), 1)
-        jitter = round(random.uniform(0, 2.0), 1)
-        loss = round(random.uniform(0, 1.0), 1)
-        
-        return {
-            "health": 1, # 1 健康
-            "type": config["type"],
-            "rate": config["bw"],
-            "rate_data_type": config["unit"],
-            "delay": delay,
-            "jitter": jitter,
-            "loss": loss,
-            "end_sat_id": end_sat_id
-        }
 
     def generate_link_info(self, link_type: str, end_sat_id: str) -> Dict[str, Any]:
         """

@@ -122,9 +122,9 @@ def generate_link_list(sat_id, sat_count):
     
     for _ in range(link_count):
         # 生成一个不同于当前卫星的随机目标卫星ID
-        end_sat_id = random.randint(0, sat_count)
+        end_sat_id = random.randint(1, sat_count+1)
         while end_sat_id == sat_id:
-            end_sat_id = random.randint(0, sat_count)
+            end_sat_id = random.randint(1, sat_count+1)
             
         link = {
             "health": 1,
@@ -480,9 +480,16 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                     }
                 
                 # 添加链接列表
-                # 使用task中的sat_id，而不是计数器
-                sat_id_value = task["sat_id"]
-                task["linkList"] = generate_link_list(sat_id_value, sat_count)
+                # 从YAML文件中读取linkList，如果不存在则生成默认的
+                sat_id_value = task["sat_id"]  # 提前定义sat_id_value变量
+                if 'linkList' in spec and spec['linkList']:
+                    # 直接使用YAML文件中的linkList，并进行格式处理
+                    task["linkList"] = process_link_list_from_yaml(spec['linkList'])
+                    print(f"从YAML文件读取到{len(spec['linkList'])}个链接")
+                else:
+                    # 如果YAML文件中没有linkList，则生成默认的
+                    task["linkList"] = generate_link_list(sat_id_value, sat_count)
+                    print(f"YAML文件中没有linkList，为卫星{sat_id_value}生成默认链接")
                 
                 # 添加传感器列表，根据卫星类型处理
                 if sat_type.lower() in ["yg", "xw", "tsn"]:
@@ -504,6 +511,32 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
     
     print(f"成功创建JSON文件并保存到 {output_json_path}，包含 {len(result['task_info'])} 个卫星信息")
     return True
+
+def process_link_list_from_yaml(link_list):
+    """处理从YAML文件读取的linkList，确保格式正确
+    
+    Args:
+        link_list: 从YAML文件读取的linkList
+        
+    Returns:
+        list: 处理后的linkList
+    """
+    processed_links = []
+    
+    for link in link_list:
+        processed_link = {
+            "health": int(link.get('health', 1)),
+            "type": str(link.get('type', 'laser')),
+            "rate": float(link.get('rate', 25)),
+            "rate_data_type": int(link.get('rate_data_type', 3)),
+            "delay": float(link.get('delay', 100.0)),
+            "jitter": float(link.get('jitter', 0.0)),
+            "loss": float(link.get('loss', 0.0)),
+            "end_sat_id": str(link.get('end_sat_id', '1'))  # 确保end_sat_id是字符串
+        }
+        processed_links.append(processed_link)
+    
+    return processed_links
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
