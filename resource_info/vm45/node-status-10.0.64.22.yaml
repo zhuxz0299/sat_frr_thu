@@ -1,0 +1,53 @@
+metadata:
+  name: node-status-10.0.64.22
+spec:
+  cpuUsage:
+    cores: 2
+    usage: 3.2%
+  diskUsage:
+    free: 8331MB
+    total: 16706MB
+    used: 8376MB
+  gpuUsage:
+    free: 3992.0MB
+    total: 4096MB
+    used: 104.0MB
+    util: ''
+  linkList:
+  - delay: 118.5
+    end_sat_id: 16
+    health: 1
+    jitter: 0.1
+    loss: 0.6
+    rate: 25
+    rate_data_type: 3
+    type: laser
+  - delay: 100.7
+    end_sat_id: 28
+    health: 1
+    jitter: 1.2
+    loss: 0.6
+    rate: 25
+    rate_data_type: 3
+    type: laser
+  - delay: 101.3
+    end_sat_id: 35
+    health: 1
+    jitter: 0.7
+    loss: 0.5
+    rate: 25
+    rate_data_type: 3
+    type: laser
+  - delay: 111.7
+    end_sat_id: 36
+    health: 1
+    jitter: 0.3
+    loss: 0.7
+    rate: 25
+    rate_data_type: 3
+    type: laser
+  memoryUsage:
+    free: 84MB
+    total: 983MB
+    used: 468MB
+  timestamp: '2025-07-07T21:36:18'
