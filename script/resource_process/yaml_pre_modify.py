@@ -5,14 +5,20 @@ import re
 
 """
 YAML文件预处理脚本
-用于向node-status YAML文件中添加linkList字段
+用于向node-status YAML文件中添加linkList字段和更新GPU使用情况
 """
 
 import yaml
 import random
 import os
 import csv
+import json
 from typing import List, Dict, Any, Tuple
+
+# COMPLETE_TASK_PATH = "./temp/complete_task.json"  # 完整任务文件路径
+COMPLETE_TASK_PATH = "/root/ftp/double_ts/complete_task.json"
+TSN_CSV_PATH = "./frr/csv_tsn_modify/output_1.csv"  # TSN连接CSV文件路径
+XW_CSV_PATH = "./frr/csv_xw/output_1.csv"  # XW连接CSV文件路径
 
 class YAMLPreModifier:
     def __init__(self):
@@ -56,6 +62,17 @@ class YAMLPreModifier:
             "高轨对NOCC": {"bw": 1002, "unit": 2, "type": "Ka"},      # BW值1002, 1G
         }
         
+        # GPU数据单位映射 (0:KB, 1:MB, 2:GB, 3:TB)
+        self.gpu_unit_map = {
+            0: 1/1024,      # KB to MB
+            1: 1,           # MB to MB
+            2: 1024,        # GB to MB
+            3: 1024*1024    # TB to MB
+        }
+        
+        # 载入GPU需求数据
+        self.gpu_demands = self.load_gpu_demands(COMPLETE_TASK_PATH)
+        
         # 数据传输速率单位映射
         # 0 bps, 1 Kbps, 2 Mbps, 3 Gbps, 4 Tbps
         self.rate_unit_map = {
@@ -67,8 +84,8 @@ class YAMLPreModifier:
         }
         
         # 载入CSV数据
-        self.tsn_connections = self.load_csv_matrix("./frr/dynamic_frr/csv_tsn_modify/output_1.csv")
-        self.xw_connections = self.load_csv_matrix("./frr/dynamic_frr/csv_xw/output_1.csv")
+        self.tsn_connections = self.load_csv_matrix(TSN_CSV_PATH)
+        self.xw_connections = self.load_csv_matrix(XW_CSV_PATH)
 
     def load_csv_matrix(self, csv_path: str) -> List[List[float]]:
         """
@@ -98,6 +115,50 @@ class YAMLPreModifier:
             print(f"载入CSV文件 {csv_path} 失败: {str(e)}")
             matrix = []
         return matrix
+
+    def load_gpu_demands(self, json_path: str) -> Dict[int, float]:
+        """
+        从JSON文件中载入GPU需求数据
+        
+        Args:
+            json_path: JSON文件路径
+            
+        Returns:
+            字典，键为卫星ID，值为GPU需求量（以MB为单位）
+        """
+        gpu_demands = {}
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            if 'task_info' in data:
+                for task in data['task_info']:
+                    if 'comm_cmp_res' in task and 'cmp' in task['comm_cmp_res'] and 'cmp2user' in task['comm_cmp_res']:
+                        cmp = task['comm_cmp_res']['cmp']
+                        cmp2user = task['comm_cmp_res']['cmp2user']
+                        
+                        # 获取GPU需求信息
+                        if 'gpu_demand' in cmp and 'gpu_demand_data_type' in cmp and 'path_list' in cmp2user:
+                            gpu_demand = cmp['gpu_demand']
+                            gpu_demand_type = cmp['gpu_demand_data_type']
+                            path_list = cmp2user['path_list']
+                            
+                            if path_list:  # 确保path_list不为空
+                                sat_id = path_list[0]  # 取第一个值作为卫星ID
+                                
+                                # 转换为MB单位
+                                multiplier = self.gpu_unit_map.get(gpu_demand_type, 1)
+                                gpu_demand_mb = gpu_demand * multiplier
+                                
+                                gpu_demands[sat_id] = gpu_demand_mb
+                                print(f"载入卫星ID {sat_id} 的GPU需求: {gpu_demand_mb:.1f}MB")
+            
+            print(f"成功载入GPU需求数据: {json_path}, 共 {len(gpu_demands)} 个卫星")
+            
+        except Exception as e:
+            print(f"载入GPU需求数据 {json_path} 失败: {str(e)}")
+            
+        return gpu_demands
 
     def ip_to_sat_id(self, ip_str: str) -> int:
         """从IP地址反推卫星ID
@@ -241,7 +302,7 @@ class YAMLPreModifier:
     
     def modify_yaml_file(self, file_path: str, output_path: str = None) -> bool:
         """
-        修改YAML文件，添加linkList字段
+        修改YAML文件，添加linkList字段和更新GPU使用情况
         
         Args:
             file_path: 源YAML文件路径
@@ -262,9 +323,19 @@ class YAMLPreModifier:
             if 'spec' not in data:
                 data['spec'] = {}
             
-            # 根据文件路径生成linkList
-            link_list = self.generate_link_list_for_file(file_path)
-            data['spec']['linkList'] = link_list
+            # 从文件名中提取IP地址并推断卫星ID
+            sat_id = self.ip_to_sat_id(file_path)
+            
+            if sat_id is not None:
+                # 根据文件路径生成linkList
+                link_list = self.generate_link_list_for_file(file_path)
+                data['spec']['linkList'] = link_list
+                
+                # 更新GPU使用情况
+                self.update_gpu_usage(data, sat_id)
+            else:
+                print(f"无法从文件路径 {file_path} 中提取有效的卫星ID，跳过处理")
+                return False
             
             # 写入文件
             output_file = output_path if output_path else file_path
@@ -329,6 +400,39 @@ class YAMLPreModifier:
         
         print(f"\n总计成功处理 {total_success} 个文件")
         return total_success
+
+    def update_gpu_usage(self, data: Dict[str, Any], sat_id: int) -> None:
+        """
+        更新YAML数据中的GPU使用信息
+        
+        Args:
+            data: YAML数据字典
+            sat_id: 卫星ID
+        """
+        # 确保spec字段存在
+        if 'spec' not in data:
+            data['spec'] = {}
+        
+        # 确保gpuUsage字段存在
+        if 'gpuUsage' not in data['spec']:
+            data['spec']['gpuUsage'] = {}
+        
+        # 设置total为4096MB
+        total_mb = 4096
+        data['spec']['gpuUsage']['total'] = f"{total_mb}MB"
+        
+        # 获取GPU需求量，如果没有对应的需求则使用默认值104MB
+        used_mb = self.gpu_demands.get(sat_id, 104.0)
+        data['spec']['gpuUsage']['used'] = f"{used_mb:.1f}MB"
+        
+        # 计算free
+        free_mb = total_mb - used_mb
+        data['spec']['gpuUsage']['free'] = f"{free_mb:.1f}MB"
+        
+        # 设置util为空字符串（保持与原格式一致）
+        data['spec']['gpuUsage']['util'] = ''
+        
+        print(f"更新卫星ID {sat_id} 的GPU使用情况: used={used_mb:.1f}MB, free={free_mb:.1f}MB")
 
 def main():
     """主函数"""

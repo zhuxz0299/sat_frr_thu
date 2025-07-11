@@ -19,7 +19,7 @@ import re
 from glob import glob
 
 # 完整任务文件路径
-COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/6.26测试-2/complete_task.json"
+COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
 # COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
 
 def ip_to_sat_id_and_name(ip_str, sat_type):
@@ -202,8 +202,8 @@ def create_default_task(sat_id, sat_type, sat_count):
             "total": 8192,
             "total_data_type": 1,  # MB
             "used": gpu_used,
+            "used_data_type": 1,  # MB
             "gpu_occupied": (1 if gpu_used>104 else 0),
-            "used_data_type": 1  # MB
         },
         
         # 生成链接列表
@@ -356,7 +356,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
         sat_count = 8
         for i in range(1, sat_count + 1):
             # 创建默认任务信息
-            task = create_default_task(i, sat_type, sat_count) # TODO 目前会被 tsn 类型调用
+            task = create_default_task(i, sat_type, sat_count)
             result["task_info"].append(task)
             print(f"为卫星{i}({sat_type})创建默认任务信息")
     else:
@@ -466,8 +466,8 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         "total": gpu_total,
                         "total_data_type": total_type,
                         "used": gpu_used,
+                        "used_data_type": used_type,
                         "gpu_occupied": (1 if gpu_used>104 else 0),
-                        "used_data_type": used_type
                     }
                 else:
                     gpu_used = round(random.uniform(128, 4096), 0)
@@ -477,8 +477,8 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         "total": 8192,
                         "total_data_type": 1,  # MB
                         "used": gpu_used,
+                        "used_data_type": 1,  # MB
                         "gpu_occupied": (1 if gpu_used>104 else 0),
-                        "used_data_type": 1  # MB
                     }
                 
                 # 添加链接列表
