@@ -52,7 +52,8 @@ def ip_to_sat_id_and_name(ip_str, sat_type):
         elif sat_type == 'xw':
             sat_name = f"XW_1_{idx-20}"
         else:
-            raise "Error sat_type"
+            # print(f"警告: 未知的卫星类型 '{sat_type}'，使用默认命名")
+            sat_name = f"UNKNOWN_1_{idx}"
         return idx, sat_name
 
     except (ValueError, IndexError):
@@ -162,7 +163,8 @@ def create_default_task(sat_id, sat_type, sat_count):
     elif sat_type == 'xw':
         sat_name = f"{sat_type.upper()}_1_{sat_id-20}"
     else:
-        raise "Error sat_type"
+        # print(f"警告: 未知的卫星类型 '{sat_type}'，使用默认命名")
+        sat_name = f"{sat_type.upper()}_1_{sat_id}"
     
     gpu_used = round(random.uniform(128, 4096), 0)
 
@@ -548,10 +550,10 @@ if __name__ == "__main__":
     vm_folder_path = sys.argv[1]
     sat_type = sys.argv[2].lower()
     
-    # 验证卫星类型
-    if sat_type not in ["tsn", "xw", "yg"]:
-        print(f"错误: 卫星类型 {sat_type} 无效，必须是 \"tsn\", \"xw\", 或 \"yg\" 之一")
-        sys.exit(1)
+    # # 验证卫星类型
+    # if sat_type not in ["tsn", "xw", "yg"]:
+    #     print(f"错误: 卫星类型 {sat_type} 无效，必须是 \"tsn\", \"xw\", 或 \"yg\" 之一")
+    #     sys.exit(1)
     
     if not os.path.isdir(vm_folder_path):
         print(f"错误: 文件夹 {vm_folder_path} 不存在")

@@ -132,11 +132,8 @@ class ConstellationAnalyzer:
             elif constellation_type == 'yg':
                 # YG卫星根据传感器类型分类
                 sensors = satellite.get('sensors', [])
-                if not sensors:
-                    # 没有传感器的YG卫星
-                    self.satellite_types['yg_无传感器'].add(sat_id)
-                else:
-                    # 根据传感器类型分类
+                if sensors:
+                    # 只有有传感器的YG卫星才进行分类
                     for sensor in sensors:
                         sensor_type = sensor.get('sensor_type')
                         if sensor_type is not None:
@@ -162,9 +159,10 @@ class ConstellationAnalyzer:
             if 'cpu_usage' in satellite:
                 self.resource_types['cpu'].add(sat_id)
             
-            # GPU资源
+            # GPU资源、GPU内存资源
             if 'gpu_usage' in satellite:
                 self.resource_types['gpu'].add(sat_id)
+                self.resource_types['gpu_mem'].add(sat_id)
             
             # 磁盘资源
             if 'disk_usage' in satellite:
@@ -252,7 +250,7 @@ class ConstellationAnalyzer:
         print("-" * 50)
         
         # 基础资源
-        basic_resources = ['cpu', 'gpu', 'disk', 'memory']
+        basic_resources = ['cpu', 'gpu', 'disk', 'memory', 'gpu_mem']
         print("基础资源:")
         for resource in basic_resources:
             if resource in self.resource_types:
