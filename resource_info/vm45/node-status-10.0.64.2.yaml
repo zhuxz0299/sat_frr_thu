@@ -1,5 +1,7 @@
 metadata:
   name: node-status-10.0.64.2
+  sat_id: 1
+  sat_name: TSN_1_1
 spec:
   cpuUsage:
     cores: 2
@@ -14,67 +16,67 @@ spec:
     used: 104.0MB
     util: ''
   linkList:
-  - delay: 120.9
+  - delay: 126.5
     end_sat_id: 9
     health: 1
-    jitter: 0.2
+    jitter: 1.8
     loss: 0.8
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 104.2
+  - delay: 129.7
     end_sat_id: 10
     health: 1
-    jitter: 0.4
-    loss: 0.2
+    jitter: 0.5
+    loss: 0.6
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 100.0
+  - delay: 126.4
     end_sat_id: 20
     health: 1
-    jitter: 1.9
-    loss: 0.2
+    jitter: 1.6
+    loss: 0.9
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 124.0
+  - delay: 119.8
     end_sat_id: 21
     health: 1
-    jitter: 1.0
-    loss: 0.1
+    jitter: 0.4
+    loss: 1.0
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 103.0
+  - delay: 102.0
     end_sat_id: 22
     health: 1
-    jitter: 0.7
-    loss: 0.3
+    jitter: 1.4
+    loss: 0.6
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 113.4
+  - delay: 110.6
     end_sat_id: 32
     health: 1
-    jitter: 1.9
+    jitter: 1.5
+    loss: 0.5
+    rate: 25
+    rate_data_type: 3
+    type: laser
+  - delay: 120.4
+    end_sat_id: 40
+    health: 1
+    jitter: 1.0
     loss: 0.4
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 108.6
-    end_sat_id: 40
-    health: 1
-    jitter: 1.6
-    loss: 0.3
-    rate: 25
-    rate_data_type: 3
-    type: laser
-  - delay: 112.1
+  - delay: 100.6
     end_sat_id: 41
     health: 1
-    jitter: 1.0
-    loss: 0.1
+    jitter: 0.0
+    loss: 0.4
     rate: 25
     rate_data_type: 3
     type: laser

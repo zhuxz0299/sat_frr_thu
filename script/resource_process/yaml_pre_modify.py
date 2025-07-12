@@ -15,8 +15,8 @@ import csv
 import json
 from typing import List, Dict, Any, Tuple
 
-# COMPLETE_TASK_PATH = "./temp/complete_task.json"  # 完整任务文件路径
-COMPLETE_TASK_PATH = "/root/ftp/double_ts/complete_task.json"
+COMPLETE_TASK_PATH = "./temp/complete_task.json"  # 完整任务文件路径
+# COMPLETE_TASK_PATH = "/root/ftp/double_ts/complete_task.json"
 TSN_CSV_PATH = "./frr/csv_tsn_modify/output_1.csv"  # TSN连接CSV文件路径
 XW_CSV_PATH = "./frr/csv_xw/output_1.csv"  # XW连接CSV文件路径
 
@@ -160,11 +160,12 @@ class YAMLPreModifier:
             
         return gpu_demands
 
-    def ip_to_sat_id(self, ip_str: str) -> int:
+    def ip_to_sat_id_and_name(self, ip_str):
         """从IP地址反推卫星ID
         
         Args:
             ip_str: IP地址字符串，格式如 "10.0.64.46"
+            sat_type: 卫星类型，"tsn", "xw", "yg" 之一
         
         Returns:
             int: 卫星ID，如果无法解析则返回None
@@ -182,7 +183,17 @@ class YAMLPreModifier:
         try:
             fourth_byte = int(parts[3])
             idx = (fourth_byte - 2) // 4 + 1
-            return idx
+            if idx <= 8:
+                sat_name = f"TSN_1_{idx}"
+            elif idx <= 20:
+                sat_name = f"YG_1_{idx-8}"
+            elif idx <= 44:
+                sat_name = f"XW_1_{idx-20}"
+            else:
+                # print(f"警告: 未知的卫星类型 '{sat_type}'，使用默认命名")
+                sat_name = f"UNKNOWN_1_{idx}"
+            return idx, sat_name
+
         except (ValueError, IndexError):
             return None
 
@@ -276,7 +287,7 @@ class YAMLPreModifier:
         link_list = []
         
         # 从文件名中提取IP地址并推断卫星ID
-        sat_id = self.ip_to_sat_id(file_path)
+        sat_id, _ = self.ip_to_sat_id_and_name(file_path)
         
         if sat_id is None:
             print(f"无法从文件路径 {file_path} 中提取有效的卫星ID")
@@ -324,7 +335,7 @@ class YAMLPreModifier:
                 data['spec'] = {}
             
             # 从文件名中提取IP地址并推断卫星ID
-            sat_id = self.ip_to_sat_id(file_path)
+            sat_id, sat_name = self.ip_to_sat_id_and_name(file_path)
             
             if sat_id is not None:
                 # 根据文件路径生成linkList
@@ -333,6 +344,10 @@ class YAMLPreModifier:
                 
                 # 更新GPU使用情况
                 self.update_gpu_usage(data, sat_id)
+
+                # 增加 sat_id 以及 sat_name 字段
+                data['metadata']['sat_id'] = sat_id
+                data['metadata']['sat_name'] = sat_name
             else:
                 print(f"无法从文件路径 {file_path} 中提取有效的卫星ID，跳过处理")
                 return False

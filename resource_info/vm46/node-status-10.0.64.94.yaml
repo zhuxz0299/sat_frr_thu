@@ -1,5 +1,7 @@
 metadata:
   name: node-status-10.0.64.94
+  sat_id: 24
+  sat_name: XW_1_4
 spec:
   cpuUsage:
     cores: 2
@@ -14,35 +16,35 @@ spec:
     used: 104.0MB
     util: ''
   linkList:
-  - delay: 112.1
+  - delay: 113.0
     end_sat_id: 3
     health: 1
-    jitter: 0.8
-    loss: 0.9
+    jitter: 0.7
+    loss: 0.3
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 66.3
+  - delay: 55.9
     end_sat_id: 23
     health: 1
-    jitter: 1.6
-    loss: 0.7
+    jitter: 1.8
+    loss: 0.1
     rate: 15
     rate_data_type: 3
     type: laser
-  - delay: 62.9
+  - delay: 60.1
     end_sat_id: 25
     health: 1
-    jitter: 0.5
-    loss: 0.9
+    jitter: 1.6
+    loss: 0.1
     rate: 15
     rate_data_type: 3
     type: laser
-  - delay: 72.0
+  - delay: 53.0
     end_sat_id: 33
     health: 1
-    jitter: 0.1
-    loss: 0.1
+    jitter: 2.0
+    loss: 0.3
     rate: 15
     rate_data_type: 3
     type: laser

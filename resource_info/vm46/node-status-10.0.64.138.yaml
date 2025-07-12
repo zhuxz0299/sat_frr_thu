@@ -1,5 +1,7 @@
 metadata:
   name: node-status-10.0.64.138
+  sat_id: 35
+  sat_name: XW_1_15
 spec:
   cpuUsage:
     cores: 2
@@ -14,35 +16,35 @@ spec:
     used: 104.0MB
     util: ''
   linkList:
-  - delay: 105.5
+  - delay: 120.3
     end_sat_id: 6
     health: 1
-    jitter: 1.7
-    loss: 0.4
+    jitter: 2.0
+    loss: 0.1
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 70.9
+  - delay: 59.7
     end_sat_id: 26
     health: 1
-    jitter: 0.4
-    loss: 0.2
+    jitter: 1.7
+    loss: 0.6
     rate: 15
     rate_data_type: 3
     type: laser
-  - delay: 68.9
+  - delay: 70.4
     end_sat_id: 34
+    health: 1
+    jitter: 0.4
+    loss: 1.0
+    rate: 15
+    rate_data_type: 3
+    type: laser
+  - delay: 79.9
+    end_sat_id: 36
     health: 1
     jitter: 0.3
     loss: 0.7
-    rate: 15
-    rate_data_type: 3
-    type: laser
-  - delay: 68.2
-    end_sat_id: 36
-    health: 1
-    jitter: 0.9
-    loss: 1.0
     rate: 15
     rate_data_type: 3
     type: laser

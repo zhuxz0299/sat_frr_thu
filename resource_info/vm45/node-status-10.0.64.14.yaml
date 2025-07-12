@@ -1,5 +1,7 @@
 metadata:
   name: node-status-10.0.64.14
+  sat_id: 4
+  sat_name: TSN_1_4
 spec:
   cpuUsage:
     cores: 2
@@ -14,27 +16,27 @@ spec:
     used: 0.9MB
     util: ''
   linkList:
-  - delay: 104.2
+  - delay: 129.3
     end_sat_id: 13
     health: 1
-    jitter: 1.9
-    loss: 0.0
+    jitter: 0.1
+    loss: 0.3
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 107.1
+  - delay: 118.6
     end_sat_id: 25
     health: 1
-    jitter: 0.9
-    loss: 0.5
+    jitter: 1.5
+    loss: 1.0
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 111.2
+  - delay: 104.7
     end_sat_id: 33
     health: 1
-    jitter: 0.7
-    loss: 0.8
+    jitter: 0.4
+    loss: 0.2
     rate: 25
     rate_data_type: 3
     type: laser

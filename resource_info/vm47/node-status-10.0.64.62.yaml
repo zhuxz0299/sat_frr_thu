@@ -1,5 +1,7 @@
 metadata:
   name: node-status-10.0.64.62
+  sat_id: 16
+  sat_name: YG_1_8
 spec:
   cpuUsage:
     cores: 2
@@ -14,11 +16,11 @@ spec:
     used: 104.0MB
     util: ''
   linkList:
-  - delay: 102.7
+  - delay: 122.1
     end_sat_id: 6
     health: 1
-    jitter: 0.9
-    loss: 0.8
+    jitter: 0.5
+    loss: 0.0
     rate: 25
     rate_data_type: 3
     type: laser
