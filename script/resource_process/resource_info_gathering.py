@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-将VM文件夹下的YAML文件转换成JSON文件
-用法: python resource_info_gathering.py <vm_folder_path> <sat_type>
+将VM文件夹下的YAML文件或单个YAML文件转换成JSON文件
+用法: python resource_info_gathering.py <input_path> <sat_type>
 示例: python resource_info_gathering.py /home/sjtu/sat_frr_thu/resource_info/vm46 tsn
+      python resource_info_gathering.py /home/sjtu/sat_frr_thu/resource_info/vm46/node-status-10.0.64.38.yaml yg
 
+input_path 可以是文件夹路径或单个YAML文件路径
 sat_type 必须是 "tsn", "xw", 或 "yg" 之一
-输出文件将保存为 <vm_folder_path上一级目录>/<sat_type>_constellation.json
+输出文件将保存为：
+- 文件夹输入：<input_path上一级目录>/<sat_type>_constellation.json
+- 单文件输入：<文件所在目录>/<sat_type>_constellation_<文件名>.json
 """
 
 import os
@@ -19,8 +23,8 @@ import re
 from glob import glob
 
 # 完整任务文件路径
-COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
-# COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
+# COMPLETE_TASK_JSON_PATH = "/root/ftp/double_ts/complete_task.json"
+COMPLETE_TASK_JSON_PATH = "temp/complete_task.json"
 
 def ip_to_sat_id_and_name(ip_str, sat_type):
     """从IP地址反推卫星ID
@@ -312,22 +316,32 @@ def get_sensors_from_tasks(sat_id, sat_type):
         traceback.print_exc()
         return []  # 出错时返回空列表
 
-def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
-    """将VM文件夹下的YAML文件转换为JSON文件
+def convert_yaml_to_json(input_path, output_json_path, sat_type):
+    """将VM文件夹下的YAML文件或单个YAML文件转换为JSON文件
     
     Args:
-        vm_folder_path: VM文件夹路径
+        input_path: VM文件夹路径或单个YAML文件路径
         output_json_path: 输出JSON文件路径
         sat_type: 卫星类型，必须是 "tsn", "xw", 或 "yg" 之一
     
     Returns:
         bool: 是否成功
     """
-    # 获取所有YAML文件
-    yaml_files = glob(os.path.join(vm_folder_path, "*.yaml"))
-    
-    # 准备JSON结构
-    vm_name = os.path.basename(vm_folder_path)
+    # 判断输入路径是文件还是文件夹
+    if os.path.isfile(input_path):
+        # 单个文件处理
+        if not input_path.endswith('.yaml'):
+            print(f"错误: 文件 {input_path} 不是YAML文件")
+            return False
+        yaml_files = [input_path]
+        print(f"处理单个YAML文件: {input_path}")
+    elif os.path.isdir(input_path):
+        # 文件夹处理
+        yaml_files = glob(os.path.join(input_path, "*.yaml"))
+        print(f"处理文件夹: {input_path}，找到 {len(yaml_files)} 个YAML文件")
+    else:
+        print(f"错误: 路径 {input_path} 既不是文件也不是文件夹")
+        return False
     
     # 根据卫星类型设置file_id和constellation_name
     if sat_type.lower() == "tsn":
@@ -351,7 +365,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
     
     # 如果没有YAML文件，生成一个默认的JSON结构
     if not yaml_files:
-        print(f"在 {vm_folder_path} 中没有找到YAML文件，将生成默认JSON结构")
+        print(f"在 {input_path} 中没有找到YAML文件，将生成默认JSON结构")
         
         sat_count = 8
         for i in range(1, sat_count + 1):
@@ -542,12 +556,14 @@ def process_link_list_from_yaml(link_list):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("用法: python resource_info_gathering.py <vm_folder_path> <sat_type>")
+        print("用法: python resource_info_gathering.py <input_path> <sat_type>")
         print("示例: python resource_info_gathering.py /home/sjtu/sat_frr_thu/resource_info/vm46 tsn")
-        print("sat_type 必须是 \"tsn\", \"xw\", 或 \"yg\" 之一")
+        print("      python resource_info_gathering.py /home/sjtu/sat_frr_thu/resource_info/vm46/node-status-10.0.64.38.yaml yg")
+        print("input_path 可以是文件夹路径或单个YAML文件路径")
+        # print("sat_type 必须是 \"tsn\", \"xw\", 或 \"yg\" 之一")
         sys.exit(1)
     
-    vm_folder_path = sys.argv[1]
+    input_path = sys.argv[1]
     sat_type = sys.argv[2].lower()
     
     # # 验证卫星类型
@@ -555,8 +571,8 @@ if __name__ == "__main__":
     #     print(f"错误: 卫星类型 {sat_type} 无效，必须是 \"tsn\", \"xw\", 或 \"yg\" 之一")
     #     sys.exit(1)
     
-    if not os.path.isdir(vm_folder_path):
-        print(f"错误: 文件夹 {vm_folder_path} 不存在")
+    if not os.path.exists(input_path):
+        print(f"错误: 路径 {input_path} 不存在")
         sys.exit(1)
     
     # 检查complete_task.json是否存在
@@ -565,13 +581,21 @@ if __name__ == "__main__":
     else:
         print(f"警告: {COMPLETE_TASK_JSON_PATH} 不存在，将使用默认传感器配置")
     
-    # 确定输出文件路径 (在输入文件夹的上一级目录)
-    parent_dir = os.path.dirname(os.path.abspath(vm_folder_path))
-    output_json_path = os.path.join(parent_dir, f"{sat_type}_constellation.json")
+    # 确定输出文件路径
+    if os.path.isfile(input_path):
+        # 单个文件：输出到文件所在目录
+        parent_dir = os.path.dirname(os.path.abspath(input_path))
+        file_basename = os.path.splitext(os.path.basename(input_path))[0]
+        output_json_path = os.path.join(parent_dir, f"{sat_type}_constellation_{file_basename}.json")
+    else:
+        # 文件夹：输出到上一级目录
+        parent_dir = os.path.dirname(os.path.abspath(input_path))
+        output_json_path = os.path.join(parent_dir, f"{sat_type}_constellation.json")
     
-    print(f"开始处理卫星类型: {sat_type}，数据源: {vm_folder_path}")
+    print(f"当前时间：{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"开始处理卫星类型: {sat_type}，数据源: {input_path}")
     print(f"将使用从sat_ip中提取的IP地址来反推卫星ID")
-    success = convert_yaml_to_json(vm_folder_path, output_json_path, sat_type)
+    success = convert_yaml_to_json(input_path, output_json_path, sat_type)
     
     if success:
         print(f"处理完成: {sat_type} 星座JSON文件已生成到 {output_json_path}")
