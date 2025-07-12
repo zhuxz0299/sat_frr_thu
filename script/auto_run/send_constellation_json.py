@@ -12,7 +12,6 @@ import sys
 import time
 import subprocess
 import argparse
-import getpass
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -286,22 +285,17 @@ def main():
     parser = argparse.ArgumentParser(description='星座信息传输器')
     parser.add_argument('--ip', '-i', default='192.168.200.254', help='目标主机IP地址')
     parser.add_argument('--user', '-u', default='123', help='用户名')
-    parser.add_argument('--password', '-p', help='密码（不提供则会提示输入）')
+    parser.add_argument('--password', '-p', default='', help='密码（不提供则默认为空）')
     parser.add_argument('--interval', '-t', type=int, default=10, help='运行间隔（秒），默认10秒')
     parser.add_argument('--once', '-o', action='store_true', help='只运行一次，不持续循环')
     
     args = parser.parse_args()
     
-    # 处理密码
-    password = args.password
-    if password is None:
-        password = getpass.getpass(f"请输入 {args.user}@{args.ip} 的密码 (直接回车表示无密码): ")
-    
     # 创建传输器
     sender = ConstellationSender(
         ip=args.ip,
         user=args.user,
-        password=password,
+        password=args.password,
         interval=args.interval
     )
     
