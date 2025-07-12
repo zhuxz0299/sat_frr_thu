@@ -5,7 +5,7 @@ import re
 
 """
 YAML文件预处理脚本
-用于向node-status YAML文件中添加linkList字段和更新GPU使用情况
+用于向node-status YAML文件中添加linkList字段、更新GPU使用情况和添加sensors字段
 """
 
 import yaml
@@ -72,6 +72,9 @@ class YAMLPreModifier:
         
         # 载入GPU需求数据
         self.gpu_demands = self.load_gpu_demands(COMPLETE_TASK_PATH)
+        
+        # 载入传感器分配数据
+        self.sensor_assignments = self.load_sensor_assignments(COMPLETE_TASK_PATH)
         
         # 数据传输速率单位映射
         # 0 bps, 1 Kbps, 2 Mbps, 3 Gbps, 4 Tbps
@@ -159,6 +162,64 @@ class YAMLPreModifier:
             print(f"载入GPU需求数据 {json_path} 失败: {str(e)}")
             
         return gpu_demands
+
+    def load_sensor_assignments(self, json_path: str) -> Dict[int, List[Dict[str, Any]]]:
+        """
+        从JSON文件中载入传感器分配信息
+        
+        Args:
+            json_path: JSON文件路径
+            
+        Returns:
+            字典，键为卫星ID，值为传感器列表
+        """
+        sensor_assignments = {}
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            if 'task_info' in data:
+                for task in data['task_info']:
+                    task_id = task.get('task_id')
+                    if 'rs_plan_res' in task and 'plan_list' in task['rs_plan_res']:
+                        plan_list = task['rs_plan_res']['plan_list']
+                        
+                        for plan in plan_list:
+                            sat_id = plan.get('sat_id')
+                            sensor_type = plan.get('sensors')
+                            
+                            if sat_id is not None and sensor_type is not None:
+                                # 如果该卫星ID还没有记录，初始化为空列表
+                                if sat_id not in sensor_assignments:
+                                    sensor_assignments[sat_id] = []
+                                
+                                # 检查是否已经存在相同sensor_type的传感器
+                                existing_sensor = None
+                                for sensor in sensor_assignments[sat_id]:
+                                    if sensor['sensor_type'] == sensor_type:
+                                        existing_sensor = sensor
+                                        break
+                                
+                                if existing_sensor:
+                                    # 如果已存在，更新occupied字段
+                                    existing_sensor['occupied'] = task_id
+                                else:
+                                    # 如果不存在，添加新的传感器
+                                    sensor_info = {
+                                        'sensor_type': sensor_type,
+                                        'health': 1,  # 默认健康
+                                        'occupied': task_id  # 任务编号
+                                    }
+                                    sensor_assignments[sat_id].append(sensor_info)
+                                
+                                print(f"卫星ID {sat_id} 的传感器 {sensor_type} 被任务 {task_id} 占用")
+            
+            print(f"成功载入传感器分配数据: {json_path}, 共 {len(sensor_assignments)} 个卫星")
+            
+        except Exception as e:
+            print(f"载入传感器分配数据 {json_path} 失败: {str(e)}")
+            
+        return sensor_assignments
 
     def ip_to_sat_id_and_name(self, ip_str):
         """从IP地址反推卫星ID
@@ -313,7 +374,8 @@ class YAMLPreModifier:
     
     def modify_yaml_file(self, file_path: str, output_path: str = None) -> bool:
         """
-        修改YAML文件，添加linkList字段和更新GPU使用情况
+        修改YAML文件，添加linkList字段、更新GPU使用情况并添加sensors字段
+        添加 sat_id 以及 sat_name 字段
         
         Args:
             file_path: 源YAML文件路径
@@ -344,6 +406,9 @@ class YAMLPreModifier:
                 
                 # 更新GPU使用情况
                 self.update_gpu_usage(data, sat_id)
+                
+                # 添加传感器信息
+                self.update_sensor_info(data, sat_id)
 
                 # 增加 sat_id 以及 sat_name 字段
                 data['metadata']['sat_id'] = sat_id
@@ -359,6 +424,7 @@ class YAMLPreModifier:
             
             print(f"成功修改文件: {output_file}")
             print(f"添加了 {len(link_list)} 个链路信息")
+            print(f"添加了传感器信息")
             
             return True
             
@@ -448,6 +514,34 @@ class YAMLPreModifier:
         data['spec']['gpuUsage']['util'] = ''
         
         print(f"更新卫星ID {sat_id} 的GPU使用情况: used={used_mb:.1f}MB, free={free_mb:.1f}MB")
+
+    def update_sensor_info(self, data: Dict[str, Any], sat_id: int) -> None:
+        """
+        更新YAML数据中的传感器信息
+        
+        Args:
+            data: YAML数据字典
+            sat_id: 卫星ID
+        """
+        # 确保spec字段存在
+        if 'spec' not in data:
+            data['spec'] = {}
+        
+        # 获取该卫星的传感器分配信息
+        sensors = self.sensor_assignments.get(sat_id, [])
+        
+        # 只有当有传感器分配时才添加sensors字段
+        if sensors:
+            print(f"卫星ID {sat_id} 从任务中获取传感器信息: {len(sensors)} 个")
+            
+            # 添加sensors字段
+            data['spec']['sensors'] = sensors
+            
+            # 打印传感器信息
+            for sensor in sensors:
+                print(f"  传感器类型: {sensor['sensor_type']}, 健康状态: {sensor['health']}, 占用任务: {sensor['occupied']}")
+        else:
+            print(f"卫星ID {sat_id} 没有任务分配的传感器，不添加sensors字段")
 
 def main():
     """主函数"""
