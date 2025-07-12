@@ -32,7 +32,7 @@ class ConstellationSender:
         self.interval = interval
         
         # 脚本路径
-        self.resource_info_gathering_py = "./script/resource_process/resource_info_gathering.py"
+        self.resource_info_gathering_py = "./script/resource_process/resource_info_gathering_20.py"
         
         # 源文件路径
         self.source_dir = "./resource_info"
