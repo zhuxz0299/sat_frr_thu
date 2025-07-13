@@ -60,14 +60,14 @@ class YAMLGenerator:
             2: "KJG可见光"
         }
         
-        # 卫星类型配置
+        # 卫星类型配置 - XW数量最多，YG次之，其他较少
         self.satellite_configs = {
-            "XW": {"count": 100, "id_range": (1, 100)},      # 低轨
-            "YG": {"count": 100, "id_range": (101, 200)},    # 低轨
-            "TSN": {"count": 50, "id_range": (201, 250)},    # 中轨
-            "HEO": {"count": 20, "id_range": (251, 270)},    # 高轨
-            "NOCC": {"count": 5, "id_range": (271, 275)},    # NOCC
-            "GROUND": {"count": 625, "id_range": (276, 900)} # 地面
+            "XW": {"count": 600, "percentage": 0.60},        # 低轨，占60%
+            "YG": {"count": 300, "percentage": 0.30},        # 低轨，占30%
+            "TSN": {"count": 40, "percentage": 0.04},        # 中轨，占4%
+            "HEO": {"count": 30, "percentage": 0.03},        # 高轨，占3%
+            "NOCC": {"count": 15, "percentage": 0.015},      # NOCC，占1.5%
+            "GROUND": {"count": 15, "percentage": 0.015}     # 地面，占1.5%
         }
         
         # 预设的IP地址基础
@@ -79,10 +79,12 @@ class YAMLGenerator:
         # 用于记录已使用的链路，确保所有链路类型都被包含
         self.used_link_types = set()
         self.all_satellites = []  # 存储所有卫星信息
+        self.generated_links = {}  # 存储已生成的链路，用于确保双向一致性 {(sat_id1, sat_id2): link_info}
         
     def generate_random_linkList(self, sat_id: int, total_sats: int) -> List[Dict[str, Any]]:
         """
         为指定卫星生成符合约束的随机链路列表
+        确保双向链路的一致性
         
         Args:
             sat_id: 当前卫星ID
@@ -98,6 +100,30 @@ class YAMLGenerator:
         current_sat_type = current_sat["sat_type"]
         links = []
         
+        # 首先检查是否已经有其他卫星指向当前卫星的链路
+        # 如果有，需要创建反向链路
+        existing_reverse_links = []
+        # 创建generated_links的副本来避免迭代时修改字典
+        generated_links_copy = dict(self.generated_links)
+        for (source_id, target_id), link_info in generated_links_copy.items():
+            if target_id == sat_id:
+                # 找到指向当前卫星的链路，创建反向链路
+                reverse_link = {
+                    "delay": link_info["delay"],
+                    "end_sat_id": source_id,
+                    "health": link_info["health"],
+                    "jitter": link_info["jitter"],
+                    "loss": link_info["loss"],
+                    "rate": link_info["rate"],
+                    "rate_data_type": link_info["rate_data_type"],
+                    "type": link_info["type"]
+                }
+                existing_reverse_links.append(reverse_link)
+                # 记录这个反向链路
+                self.generated_links[(sat_id, source_id)] = reverse_link
+        
+        links.extend(existing_reverse_links)
+        
         # 获取适用于当前卫星类型的链路配置
         applicable_links = []
         for link_name, config in self.link_configs.items():
@@ -105,39 +131,46 @@ class YAMLGenerator:
                 applicable_links.append((link_name, config))
         
         if not applicable_links:
-            return []
+            return links
         
-        # 随机生成1-3个链路
-        num_links = random.randint(1, min(3, len(applicable_links)))
-        selected_link_configs = random.sample(applicable_links, num_links)
-        
-        for link_name, config in selected_link_configs:
-            # 找到符合目标类型的卫星
-            target_satellites = []
-            for target_type in config["target_types"]:
-                target_satellites.extend(self.get_satellites_by_type(target_type))
+        # 随机生成新的链路（确保不超过总数限制）
+        max_new_links = max(0, 3 - len(links))  # 总共不超过3个链路
+        if max_new_links > 0:
+            num_new_links = random.randint(1, min(max_new_links, len(applicable_links)))
+            selected_link_configs = random.sample(applicable_links, num_new_links)
             
-            # 排除自己
-            target_satellites = [sat for sat in target_satellites if sat["sat_id"] != sat_id]
-            
-            if target_satellites:
-                target_sat = random.choice(target_satellites)
+            for link_name, config in selected_link_configs:
+                # 找到符合目标类型的卫星
+                target_satellites = []
+                for target_type in config["target_types"]:
+                    target_satellites.extend(self.get_satellites_by_type(target_type))
                 
-                # 生成链路信息
-                link = {
-                    "delay": round(random.uniform(50.0, 150.0), 1),
-                    "end_sat_id": target_sat["sat_id"],
-                    "health": 1,
-                    "jitter": round(random.uniform(0.0, 2.0), 1),
-                    "loss": round(random.uniform(0.0, 1.0), 1),
-                    "rate": config["bw"],
-                    "rate_data_type": config["unit"],
-                    "type": config["type"]
-                }
-                links.append(link)
+                # 排除自己和已经有链路的目标
+                existing_targets = {link["end_sat_id"] for link in links}
+                target_satellites = [sat for sat in target_satellites 
+                                   if sat["sat_id"] != sat_id and sat["sat_id"] not in existing_targets]
                 
-                # 记录使用的链路类型
-                self.used_link_types.add(link_name)
+                if target_satellites:
+                    target_sat = random.choice(target_satellites)
+                    
+                    # 生成链路信息
+                    link = {
+                        "delay": round(random.uniform(50.0, 150.0), 1),
+                        "end_sat_id": target_sat["sat_id"],
+                        "health": 1,
+                        "jitter": round(random.uniform(0.0, 2.0), 1),
+                        "loss": round(random.uniform(0.0, 1.0), 1),
+                        "rate": config["bw"],
+                        "rate_data_type": config["unit"],
+                        "type": config["type"]
+                    }
+                    links.append(link)
+                    
+                    # 记录这个链路，用于后续生成反向链路
+                    self.generated_links[(sat_id, target_sat["sat_id"])] = link
+                    
+                    # 记录使用的链路类型
+                    self.used_link_types.add(link_name)
         
         return links
     
@@ -257,8 +290,9 @@ class YAMLGenerator:
         # 初始化卫星信息
         self.initialize_satellites(num_files)
         
-        # 重置链路类型使用记录
+        # 重置链路类型使用记录和已生成链路记录
         self.used_link_types = set()
+        self.generated_links = {}
         
         success_count = 0
         
@@ -294,8 +328,14 @@ class YAMLGenerator:
         print("检查并补充未使用的链路类型...")
         self.ensure_all_link_types_used()
         
+        # 修复双向链路不一致性
+        self.fix_bidirectional_inconsistencies()
+        
         print(f"生成完成！成功创建 {success_count}/{num_files} 个YAML文件")
         print(f"文件保存在: {self.output_dir}")
+        
+        # 验证双向链路一致性
+        self.verify_bidirectional_links()
         
         # 打印卫星类型统计
         type_counts = {}
@@ -329,11 +369,38 @@ class YAMLGenerator:
         self.all_satellites = []
         sat_id = 1
         
-        # 按比例分配卫星数量
-        for sat_type, config in self.satellite_configs.items():
-            count = min(config["count"], total_sats // 6)  # 简单均分
-            if sat_type == "GROUND":
-                count = max(1, total_sats - len(self.all_satellites))  # 剩余的都是地面
+        # 按比例分配卫星数量，XW最多，YG次之，其他较少
+        allocated_counts = {}
+        remaining_sats = total_sats
+        
+        # 按顺序分配：XW -> YG -> TSN -> HEO -> NOCC -> GROUND
+        priority_order = ["XW", "YG", "TSN", "HEO", "NOCC", "GROUND"]
+        
+        for sat_type in priority_order:
+            if sat_type in self.satellite_configs:
+                config = self.satellite_configs[sat_type]
+                
+                if sat_type == "GROUND":
+                    # 最后剩余的都分配给地面站
+                    count = max(1, remaining_sats)
+                else:
+                    # 按比例计算数量
+                    count = int(total_sats * config["percentage"])
+                    # 确保不超过剩余数量
+                    count = min(count, remaining_sats - 1)  # 至少为地面站留1个
+                
+                allocated_counts[sat_type] = count
+                remaining_sats -= count
+                
+                if remaining_sats <= 0:
+                    break
+        
+        # 生成卫星信息
+        for sat_type in priority_order:
+            if sat_type not in allocated_counts:
+                continue
+                
+            count = allocated_counts[sat_type]
             
             for i in range(count):
                 if sat_id > total_sats:
@@ -358,7 +425,15 @@ class YAMLGenerator:
                 })
                 sat_id += 1
         
+        # 打印分配统计
         print(f"初始化了 {len(self.all_satellites)} 个卫星")
+        print("分配详情:")
+        for sat_type in priority_order:
+            if sat_type in allocated_counts:
+                count = allocated_counts[sat_type]
+                percentage = (count / total_sats) * 100
+                print(f"  {sat_type}: {count} 个 ({percentage:.1f}%)")
+        
         
     def get_satellite_by_id(self, sat_id: int) -> Dict[str, Any]:
         """
@@ -453,13 +528,200 @@ class YAMLGenerator:
                             with open(source_filepath, 'w', encoding='utf-8') as f:
                                 yaml.dump(yaml_content, f, default_flow_style=False, allow_unicode=True, indent=2)
                             
-                            print(f"为卫星 {source_sat['sat_name']} 添加了链路类型: {link_name}")
+                            # 同时为目标卫星添加反向链路
+                            target_filename = f"node-status-{target_sat['ip']}.yaml"
+                            target_filepath = os.path.join(self.output_dir, target_filename)
+                            
+                            if os.path.exists(target_filepath):
+                                # 读取目标文件
+                                with open(target_filepath, 'r', encoding='utf-8') as f:
+                                    target_yaml_content = yaml.safe_load(f)
+                                
+                                # 添加反向链路
+                                reverse_link = {
+                                    "delay": new_link["delay"],
+                                    "end_sat_id": source_sat["sat_id"],
+                                    "health": new_link["health"],
+                                    "jitter": new_link["jitter"],
+                                    "loss": new_link["loss"],
+                                    "rate": new_link["rate"],
+                                    "rate_data_type": new_link["rate_data_type"],
+                                    "type": new_link["type"]
+                                }
+                                target_yaml_content["spec"]["linkList"].append(reverse_link)
+                                
+                                # 写回目标文件
+                                with open(target_filepath, 'w', encoding='utf-8') as f:
+                                    yaml.dump(target_yaml_content, f, default_flow_style=False, allow_unicode=True, indent=2)
+                            
+                            print(f"为卫星 {source_sat['sat_name']} 和 {target_sat['sat_name']} 添加了双向链路: {link_name}")
                             self.used_link_types.add(link_name)
         
         print(f"最终使用的链路类型: {len(self.used_link_types)}/{len(self.link_configs)}")
         print(f"使用的链路类型: {sorted(self.used_link_types)}")
         if unused_link_types - self.used_link_types:
             print(f"仍未使用的链路类型: {unused_link_types - self.used_link_types}")
+
+    def verify_bidirectional_links(self):
+        """
+        验证生成的链路是否满足双向一致性
+        """
+        print("验证双向链路一致性...")
+        
+        # 统计所有已生成的链路
+        all_links = {}  # {sat_id: [links]}
+        
+        for sat_id in range(1, len(self.all_satellites) + 1):
+            sat_info = self.get_satellite_by_id(sat_id)
+            if not sat_info:
+                continue
+                
+            ip_address = sat_info["ip"]
+            filename = f"node-status-{ip_address}.yaml"
+            filepath = os.path.join(self.output_dir, filename)
+            
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        yaml_content = yaml.safe_load(f)
+                    
+                    links = yaml_content.get("spec", {}).get("linkList", [])
+                    all_links[sat_id] = links
+                except Exception as e:
+                    print(f"读取文件 {filename} 时出错: {e}")
+        
+        # 检查双向一致性
+        inconsistent_pairs = []
+        
+        for source_id, links in all_links.items():
+            for link in links:
+                target_id = link["end_sat_id"]
+                
+                # 检查目标卫星是否有反向链路
+                target_links = all_links.get(target_id, [])
+                reverse_link_found = False
+                
+                for target_link in target_links:
+                    # 确保比较时数据类型一致
+                    if int(target_link["end_sat_id"]) == int(source_id):
+                        # 检查链路参数是否一致
+                        if (target_link["rate"] == link["rate"] and
+                            target_link["rate_data_type"] == link["rate_data_type"] and
+                            target_link["type"] == link["type"] and
+                            target_link["delay"] == link["delay"] and
+                            target_link["jitter"] == link["jitter"] and
+                            target_link["loss"] == link["loss"]):
+                            reverse_link_found = True
+                            break
+                
+                if not reverse_link_found:
+                    inconsistent_pairs.append((source_id, target_id))
+        
+        if inconsistent_pairs:
+            print(f"发现 {len(inconsistent_pairs)} 对不一致的链路:")
+            for source_id, target_id in inconsistent_pairs[:10]:  # 只显示前10个
+                print(f"  卫星 {source_id} -> 卫星 {target_id} 缺少反向链路")
+        else:
+            print("✓ 所有链路都满足双向一致性")
+        
+        return len(inconsistent_pairs) == 0
+
+    def fix_bidirectional_inconsistencies(self):
+        """
+        修复双向链路不一致的问题
+        """
+        print("修复双向链路不一致性...")
+        
+        # 第一次扫描：找到所有不一致的链路
+        inconsistent_links = []
+        
+        for sat_id in range(1, len(self.all_satellites) + 1):
+            sat_info = self.get_satellite_by_id(sat_id)
+            if not sat_info:
+                continue
+                
+            ip_address = sat_info["ip"]
+            filename = f"node-status-{ip_address}.yaml"
+            filepath = os.path.join(self.output_dir, filename)
+            
+            if os.path.exists(filepath):
+                try:
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        yaml_content = yaml.safe_load(f)
+                    
+                    links = yaml_content.get("spec", {}).get("linkList", [])
+                    
+                    for link in links:
+                        target_id = int(link["end_sat_id"])
+                        
+                        # 检查目标卫星是否有反向链路
+                        target_sat = self.get_satellite_by_id(target_id)
+                        if target_sat:
+                            target_filename = f"node-status-{target_sat['ip']}.yaml"
+                            target_filepath = os.path.join(self.output_dir, target_filename)
+                            
+                            if os.path.exists(target_filepath):
+                                with open(target_filepath, 'r', encoding='utf-8') as f:
+                                    target_yaml_content = yaml.safe_load(f)
+                                
+                                target_links = target_yaml_content.get("spec", {}).get("linkList", [])
+                                reverse_link_found = False
+                                
+                                for target_link in target_links:
+                                    if int(target_link["end_sat_id"]) == int(sat_id):
+                                        reverse_link_found = True
+                                        break
+                                
+                                if not reverse_link_found:
+                                    # 记录需要添加的反向链路
+                                    inconsistent_links.append((sat_id, target_id, link, target_filepath))
+                        
+                except Exception as e:
+                    print(f"读取文件 {filename} 时出错: {e}")
+        
+        # 第二次扫描：添加所有缺失的反向链路
+        fixed_count = 0
+        
+        for source_id, target_id, original_link, target_filepath in inconsistent_links:
+            try:
+                # 重新读取目标文件（可能已被其他修复更新）
+                with open(target_filepath, 'r', encoding='utf-8') as f:
+                    target_yaml_content = yaml.safe_load(f)
+                
+                # 再次检查是否已有反向链路（避免重复添加）
+                target_links = target_yaml_content.get("spec", {}).get("linkList", [])
+                reverse_link_exists = False
+                
+                for target_link in target_links:
+                    if int(target_link["end_sat_id"]) == int(source_id):
+                        reverse_link_exists = True
+                        break
+                
+                if not reverse_link_exists:
+                    # 添加反向链路
+                    reverse_link = {
+                        "delay": original_link["delay"],
+                        "end_sat_id": source_id,
+                        "health": original_link["health"],
+                        "jitter": original_link["jitter"],
+                        "loss": original_link["loss"],
+                        "rate": original_link["rate"],
+                        "rate_data_type": original_link["rate_data_type"],
+                        "type": original_link["type"]
+                    }
+                    target_yaml_content["spec"]["linkList"].append(reverse_link)
+                    
+                    # 写回目标文件
+                    with open(target_filepath, 'w', encoding='utf-8') as f:
+                        yaml.dump(target_yaml_content, f, default_flow_style=False, allow_unicode=True, indent=2)
+                    
+                    fixed_count += 1
+                    # print(f"修复链路: 卫星{target_id} -> 卫星{source_id}")
+                    
+            except Exception as e:
+                print(f"修复链路时出错: {e}")
+        
+        # print(f"修复了 {fixed_count} 个不一致的链路")
 
 def main():
     """主函数"""

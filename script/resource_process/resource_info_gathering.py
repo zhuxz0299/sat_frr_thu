@@ -427,6 +427,23 @@ def convert_yaml_to_json(input_path, output_json_path, sat_type):
         sat_count = len(yaml_files)  # 总卫星数量
         sat_id_counter = 1  # 从1开始计数
         
+        # 检查所有YAML文件是否包含sensor字段
+        has_sensor_in_yaml = False
+        for yaml_file in yaml_files:
+            try:
+                with open(yaml_file, 'r') as f:
+                    yaml_data = yaml.safe_load(f)
+                if yaml_data and 'spec' in yaml_data and 'sensors' in yaml_data['spec']:
+                    has_sensor_in_yaml = True
+                    break
+            except Exception:
+                continue
+        
+        if has_sensor_in_yaml:
+            print("检测到YAML文件中包含sensor字段，将优先使用YAML中的传感器信息")
+        else:
+            print("YAML文件中未发现sensor字段，将从complete_task.json读取传感器信息")
+        
         for yaml_file in yaml_files:
             try:
                 with open(yaml_file, 'r') as f:
@@ -550,12 +567,16 @@ def convert_yaml_to_json(input_path, output_json_path, sat_type):
                     task["linkList"] = generate_link_list(sat_id_value, sat_count)
                     print(f"YAML文件中没有linkList，为卫星{sat_id_value}生成默认链接")
                 
-                # 添加传感器列表，根据卫星类型处理
-                if sat_type.lower() in ["yg", "xw", "tsn"]:
-                    # 从complete_task.json中获取传感器信息，使用task中的sat_id
+                # 添加传感器列表，根据卫星类型和YAML文件内容处理
+                if 'sensors' in spec and spec['sensors']:
+                    # YAML文件中有sensors字段，直接使用
+                    task["sensors"] = process_sensors_from_yaml(spec['sensors'])
+                    print(f"从YAML文件读取到{len(spec['sensors'])}个传感器")
+                elif sat_type.lower() in ["yg", "xw", "tsn"] and not has_sensor_in_yaml:
+                    # YAML文件中没有sensors字段，且所有YAML文件都没有sensor字段，从complete_task.json中获取传感器信息
                     task["sensors"] = get_sensors_from_tasks(sat_id_value, sat_type)
                 else:
-                    # 其他类型卫星使用空传感器列表
+                    # 其他情况使用空传感器列表
                     task["sensors"] = []
                 
                 # 添加到任务列表
@@ -596,6 +617,27 @@ def process_link_list_from_yaml(link_list):
         processed_links.append(processed_link)
     
     return processed_links
+
+def process_sensors_from_yaml(sensors_list):
+    """处理从YAML文件读取的sensors字段，确保格式正确
+    
+    Args:
+        sensors_list: 从YAML文件读取的sensors列表
+        
+    Returns:
+        list: 处理后的sensors列表
+    """
+    processed_sensors = []
+    
+    for sensor in sensors_list:
+        processed_sensor = {
+            "sensor_type": int(sensor.get('sensor_type', 0)),
+            "health": int(sensor.get('health', 1)),
+            "occupied": int(sensor.get('occupied', 0))
+        }
+        processed_sensors.append(processed_sensor)
+    
+    return processed_sensors
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
