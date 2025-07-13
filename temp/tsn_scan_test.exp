@@ -1,0 +1,31 @@
+#!/usr/bin/expect -f
+
+# 设置超时时间
+set timeout 60
+
+# 连接到TSN的VM
+spawn sudo virsh console test1
+# expect "password for zmx:"
+# send "zmx\r"
+
+sleep 1
+send "\r"
+
+expect "localhost login:"
+send "root\r"
+expect "Password:"
+send "passw0rd@123\r"
+
+expect "# "
+
+# 循环处理每个IP
+puts "正在扫描可见域内低轨卫星IP: 127.0.0.1"
+send "/home/resource_manager/resource_request.sh --ip 127.0.0.1\r"
+expect "# "
+
+# 退出TSN的VM控制
+sleep 1
+send "exit\r"
+## 确保退出
+sleep 1
+send "exit\r"

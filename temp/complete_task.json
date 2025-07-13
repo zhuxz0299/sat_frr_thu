@@ -1,0 +1,788 @@
+{
+    "file_id": 3,
+    "constellation_name": "YAOGAN",
+    "constellation_id": "1",
+    "task_info": [
+        {
+            "task_id": 1,
+            "task_name": "task_1",
+            "req_user": "47",
+            "user_name": "10",
+            "task_type": 1,
+            "req_time": "2025-03-19 04:01:08",
+            "user_rec_time": "2025-03-19 04:02:00",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 9,
+                        "sensors": 2,
+                        "imaging_location": [
+                            [
+                                120.2,
+                                15.71
+                            ],
+                            [
+                                124.9,
+                                15.71
+                            ],
+                            [
+                                120.2,
+                                11.26
+                            ],
+                            [
+                                124.9,
+                                11.26
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:17",
+                        "end_time": "2025-03-19 04:01:23"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:44",
+                    "cmp_start_time": "2025-03-19 04:01:36",
+                    "cpu_demand": 0.4,
+                    "disk_demand": 176,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.3,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 107,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        5,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:01:54",
+                    "trans_start_time": "2025-03-19 04:01:53"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            9,
+                            1,
+                            2,
+                            5
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:31",
+                        "trans_start_time": "2025-03-19 04:01:30"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 7,
+            "task_name": "task_7",
+            "req_user": "47",
+            "user_name": "95",
+            "task_type": 2,
+            "req_time": "2025-03-19 04:01:09",
+            "user_rec_time": "2025-03-19 04:02:04",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 10,
+                        "sensors": 2,
+                        "imaging_location": [
+                            [
+                                130.28,
+                                25.8
+                            ],
+                            [
+                                131.82,
+                                25.8
+                            ],
+                            [
+                                130.28,
+                                24.3
+                            ],
+                            [
+                                131.82,
+                                24.3
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:15",
+                        "end_time": "2025-03-19 04:01:23"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:51",
+                    "cmp_start_time": "2025-03-19 04:01:42",
+                    "cpu_demand": 0.4,
+                    "disk_demand": 151,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.9,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 155,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        4,
+                        1,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:01:59",
+                    "trans_start_time": "2025-03-19 04:01:58"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            10,
+                            1,
+                            4
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:32",
+                        "trans_start_time": "2025-03-19 04:01:31"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 13,
+            "task_name": "task_13",
+            "req_user": "47",
+            "user_name": "91",
+            "task_type": 2,
+            "req_time": "2025-03-19 04:01:10",
+            "user_rec_time": "2025-03-19 04:02:05",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 9,
+                        "sensors": 1,
+                        "imaging_location": [
+                            [
+                                106.68,
+                                4.42
+                            ],
+                            [
+                                111.11,
+                                4.42
+                            ],
+                            [
+                                106.68,
+                                3.86
+                            ],
+                            [
+                                111.11,
+                                3.86
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:18",
+                        "end_time": "2025-03-19 04:01:28"
+                    },
+                    {
+                        "sat_id": 20,
+                        "sensors": 2,
+                        "imaging_location": [
+                            [
+                                106.68,
+                                4.42
+                            ],
+                            [
+                                111.11,
+                                4.42
+                            ],
+                            [
+                                106.68,
+                                3.86
+                            ],
+                            [
+                                111.11,
+                                3.86
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:18",
+                        "end_time": "2025-03-19 04:01:25"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:48",
+                    "cmp_start_time": "2025-03-19 04:01:42",
+                    "cpu_demand": 0.5,
+                    "disk_demand": 147,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.5,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 182,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        44,
+                        4,
+                        1,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:01:55",
+                    "trans_start_time": "2025-03-19 04:01:54"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            9,
+                            32,
+                            21,
+                            22,
+                            23,
+                            44
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:34",
+                        "trans_start_time": "2025-03-19 04:01:33"
+                    },
+                    {
+                        "path_list": [
+                            20,
+                            31,
+                            32,
+                            21,
+                            22,
+                            23,
+                            44
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:34",
+                        "trans_start_time": "2025-03-19 04:01:33"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 17,
+            "task_name": "task_17",
+            "req_user": "47",
+            "user_name": "48",
+            "task_type": 1,
+            "req_time": "2025-03-19 04:01:10",
+            "user_rec_time": "2025-03-19 04:02:10",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 9,
+                        "sensors": 0,
+                        "imaging_location": [
+                            [
+                                105.24,
+                                9.14
+                            ],
+                            [
+                                110.23,
+                                9.14
+                            ],
+                            [
+                                105.24,
+                                5.99
+                            ],
+                            [
+                                110.23,
+                                5.99
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:17",
+                        "end_time": "2025-03-19 04:01:27"
+                    },
+                    {
+                        "sat_id": 20,
+                        "sensors": 2,
+                        "imaging_location": [
+                            [
+                                105.24,
+                                9.14
+                            ],
+                            [
+                                110.23,
+                                9.14
+                            ],
+                            [
+                                105.24,
+                                5.99
+                            ],
+                            [
+                                110.23,
+                                5.99
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:17",
+                        "end_time": "2025-03-19 04:01:24"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:54",
+                    "cmp_start_time": "2025-03-19 04:01:44",
+                    "cpu_demand": 0.3,
+                    "disk_demand": 119,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.1,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 149,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        7,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:02:03",
+                    "trans_start_time": "2025-03-19 04:02:02"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            9,
+                            1,
+                            7
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:34",
+                        "trans_start_time": "2025-03-19 04:01:33"
+                    },
+                    {
+                        "path_list": [
+                            20,
+                            1,
+                            7
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:34",
+                        "trans_start_time": "2025-03-19 04:01:33"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 19,
+            "task_name": "task_19",
+            "req_user": "47",
+            "user_name": "56",
+            "task_type": 1,
+            "req_time": "2025-03-19 04:01:09",
+            "user_rec_time": "2025-03-19 04:02:02",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 9,
+                        "sensors": 1,
+                        "imaging_location": [
+                            [
+                                124.41,
+                                19.52
+                            ],
+                            [
+                                129.32,
+                                19.52
+                            ],
+                            [
+                                124.41,
+                                18.61
+                            ],
+                            [
+                                129.32,
+                                18.61
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:14",
+                        "end_time": "2025-03-19 04:01:24"
+                    },
+                    {
+                        "sat_id": 10,
+                        "sensors": 2,
+                        "imaging_location": [
+                            [
+                                124.41,
+                                19.52
+                            ],
+                            [
+                                129.32,
+                                19.52
+                            ],
+                            [
+                                124.41,
+                                18.61
+                            ],
+                            [
+                                129.32,
+                                18.61
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:14",
+                        "end_time": "2025-03-19 04:01:21"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:49",
+                    "cmp_start_time": "2025-03-19 04:01:43",
+                    "cpu_demand": 0.5,
+                    "disk_demand": 164,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.5,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 131,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        3,
+                        1,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:01:56",
+                    "trans_start_time": "2025-03-19 04:01:55"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            9,
+                            1,
+                            3
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:33",
+                        "trans_start_time": "2025-03-19 04:01:32"
+                    },
+                    {
+                        "path_list": [
+                            10,
+                            1,
+                            3
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:33",
+                        "trans_start_time": "2025-03-19 04:01:32"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 21,
+            "task_name": "task_21",
+            "req_user": "47",
+            "user_name": "98",
+            "task_type": 1,
+            "req_time": "2025-03-19 04:01:09",
+            "user_rec_time": "2025-03-19 04:02:12",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 9,
+                        "sensors": 0,
+                        "imaging_location": [
+                            [
+                                109.78,
+                                24.26
+                            ],
+                            [
+                                111.12,
+                                24.26
+                            ],
+                            [
+                                109.78,
+                                20.07
+                            ],
+                            [
+                                111.12,
+                                20.07
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:16",
+                        "end_time": "2025-03-19 04:01:26"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:53",
+                    "cmp_start_time": "2025-03-19 04:01:43",
+                    "cpu_demand": 0.4,
+                    "disk_demand": 116,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.5,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 233,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        43,
+                        4,
+                        1,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:02:04",
+                    "trans_start_time": "2025-03-19 04:02:03"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            9,
+                            32,
+                            21,
+                            22,
+                            43
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:33",
+                        "trans_start_time": "2025-03-19 04:01:32"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 23,
+            "task_name": "task_23",
+            "req_user": "47",
+            "user_name": "42",
+            "task_type": 1,
+            "req_time": "2025-03-19 04:01:10",
+            "user_rec_time": "2025-03-19 04:02:09",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 9,
+                        "sensors": 1,
+                        "imaging_location": [
+                            [
+                                121.56,
+                                20.72
+                            ],
+                            [
+                                122.36,
+                                20.72
+                            ],
+                            [
+                                121.56,
+                                18.25
+                            ],
+                            [
+                                122.36,
+                                18.25
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:19",
+                        "end_time": "2025-03-19 04:01:29"
+                    },
+                    {
+                        "sat_id": 10,
+                        "sensors": 2,
+                        "imaging_location": [
+                            [
+                                121.56,
+                                20.72
+                            ],
+                            [
+                                122.36,
+                                20.72
+                            ],
+                            [
+                                121.56,
+                                18.25
+                            ],
+                            [
+                                122.36,
+                                18.25
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:19",
+                        "end_time": "2025-03-19 04:01:28"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:50",
+                    "cmp_start_time": "2025-03-19 04:01:40",
+                    "cpu_demand": 0.9,
+                    "disk_demand": 178,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.3,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 293,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        5,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:02:01",
+                    "trans_start_time": "2025-03-19 04:02:00"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            9,
+                            1,
+                            2,
+                            5
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:35",
+                        "trans_start_time": "2025-03-19 04:01:34"
+                    },
+                    {
+                        "path_list": [
+                            10,
+                            1,
+                            2,
+                            5
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:35",
+                        "trans_start_time": "2025-03-19 04:01:34"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": 24,
+            "task_name": "task_24",
+            "req_user": "47",
+            "user_name": "81",
+            "task_type": 2,
+            "req_time": "2025-03-19 04:01:06",
+            "user_rec_time": "2025-03-19 04:02:04",
+            "rs_state": 0,
+            "comm_cmp_state": 0,
+            "rs_plan_res": {
+                "target_type": 1,
+                "plan_list": [
+                    {
+                        "sat_id": 10,
+                        "sensors": 1,
+                        "imaging_location": [
+                            [
+                                133.3,
+                                15.27
+                            ],
+                            [
+                                135.05,
+                                15.27
+                            ],
+                            [
+                                133.3,
+                                14.48
+                            ],
+                            [
+                                135.05,
+                                14.48
+                            ]
+                        ],
+                        "start_time": "2025-03-19 04:01:11",
+                        "end_time": "2025-03-19 04:01:19"
+                    }
+                ]
+            },
+            "comm_cmp_res": {
+                "cmp": {
+                    "cmp_end_time": "2025-03-19 04:01:49",
+                    "cmp_start_time": "2025-03-19 04:01:42",
+                    "cpu_demand": 0.5,
+                    "disk_demand": 254,
+                    "disk_demand_data_type": 1,
+                    "gpu_demand": 0.4,
+                    "gpu_demand_data_type": 1,
+                    "mem_demand": 226,
+                    "mem_demand_data_type": 1
+                },
+                "cmp2user": {
+                    "path_list": [
+                        37,
+                        4,
+                        1,
+                        8,
+                        47
+                    ],
+                    "rate": "10",
+                    "rate_data_type": 2,
+                    "trans_end_time": "2025-03-19 04:01:58",
+                    "trans_start_time": "2025-03-19 04:01:57"
+                },
+                "rs2cmp": [
+                    {
+                        "path_list": [
+                            10,
+                            21,
+                            32,
+                            31,
+                            30,
+                            29,
+                            28,
+                            37
+                        ],
+                        "rate": "10",
+                        "rate_data_type": 2,
+                        "trans_end_time": "2025-03-19 04:01:36",
+                        "trans_start_time": "2025-03-19 04:01:35"
+                    }
+                ]
+            }
+        }
+    ]
+}
