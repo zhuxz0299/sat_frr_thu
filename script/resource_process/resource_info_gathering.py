@@ -73,6 +73,55 @@ def extract_ip_from_yaml(yaml_data):
         return yaml_data['metadata']['name']
     return None
 
+def extract_sat_info_from_yaml(yaml_data, sat_type):
+    """
+    从YAML文件中提取卫星ID和名称
+    优先从metadata中获取sat_id和sat_name，如果不存在则从IP地址推断
+    
+    Args:
+        yaml_data: YAML数据
+        sat_type: 卫星类型
+        
+    Returns:
+        tuple: (sat_id, sat_name) 或 (None, None) 如果无法获取
+    """
+    # 优先尝试从metadata中直接获取sat_id和sat_name
+    if 'metadata' in yaml_data:
+        metadata = yaml_data['metadata']
+        
+        # 检查是否存在sat_id字段
+        if 'sat_id' in metadata:
+            sat_id = metadata['sat_id']
+            # 如果还有sat_name字段，直接使用
+            if 'sat_name' in metadata:
+                sat_name = metadata['sat_name']
+                print(f"从metadata中获取到sat_id: {sat_id}, sat_name: {sat_name}")
+                return int(sat_id), sat_name
+            else:
+                # 只有sat_id，根据sat_type生成sat_name
+                if sat_type == 'tsn':
+                    sat_name = f"TSN_1_{sat_id}"
+                elif sat_type == 'yg':
+                    sat_name = f"YG_1_{sat_id-8}"
+                elif sat_type == 'xw':
+                    sat_name = f"XW_1_{sat_id-20}"
+                else:
+                    sat_name = f"{sat_type.upper()}_1_{sat_id}"
+                print(f"从metadata中获取到sat_id: {sat_id}, 生成sat_name: {sat_name}")
+                return int(sat_id), sat_name
+    
+    # 如果metadata中没有sat_id，则尝试从IP地址推断
+    sat_ip = extract_ip_from_yaml(yaml_data)
+    if sat_ip:
+        result = ip_to_sat_id_and_name(sat_ip, sat_type)
+        if result:
+            sat_id, sat_name = result
+            print(f"从IP地址 {sat_ip} 推断得到sat_id: {sat_id}, sat_name: {sat_name}")
+            return sat_id, sat_name
+    
+    print("无法从YAML文件中获取或推断sat_id和sat_name")
+    return None, None
+
 def convert_size_to_type(size_str):
     """将带单位的大小字符串转换为数值和单位类型
     
@@ -389,27 +438,21 @@ def convert_yaml_to_json(input_path, output_json_path, sat_type):
                 
                 spec = yaml_data['spec']
                 
-                # 获取卫星名称
-                sat_ip = extract_ip_from_yaml(yaml_data)
-                if not sat_ip:
-                    sat_ip = os.path.basename(yaml_file).replace('.yaml', '')
-                
-                # 从sat_ip中解析IP地址，然后获取sat_id
-                derived_sat_id, derived_sat_name = ip_to_sat_id_and_name(sat_ip, sat_type)
+                # 获取卫星ID和名称
+                # 优先从metadata中获取，如果没有则从IP地址推断
+                derived_sat_id, derived_sat_name = extract_sat_info_from_yaml(yaml_data, sat_type)
                 
                 # 创建任务信息
                 task = {
                     "sat_id": derived_sat_id if derived_sat_id is not None else sat_id_counter,
-                    "sat_name": derived_sat_name,
+                    "sat_name": derived_sat_name if derived_sat_name is not None else f"UNKNOWN_{sat_type.upper()}_{sat_id_counter}",
                     "timestamp": convert_timestamp(spec.get('timestamp', '')),
                 }
                 
-                # 只有在无法从IP解析sat_id时才使用计数器
+                # 只有在无法获取sat_id时才使用计数器
                 if derived_sat_id is None:
-                    print(f"警告: 无法从 {sat_ip} 解析IP地址获取sat_id，使用计数器值: {sat_id_counter}")
+                    print(f"警告: 无法从YAML文件获取sat_id，使用计数器值: {sat_id_counter}")
                     sat_id_counter += 1
-                else:
-                    print(f"从 {sat_ip} 解析得到sat_id: {derived_sat_id}")
                 
                 # CPU使用情况
                 if 'cpuUsage' in spec:
