@@ -213,12 +213,18 @@ def create_default_task(sat_id, sat_type, sat_count):
     
     # TSN类型不添加GPU字段，其他类型添加GPU字段
     if sat_type.lower() != 'tsn':
+        gpu_total = 8192
+        # 生成使用率，然后转换为实际使用量
+        usage_percent = random.uniform(15, 80)
+        final_usage_percent = apply_usage_fluctuation(usage_percent, 0.0, 100.0)
+        gpu_used = round(gpu_total * final_usage_percent / 100.0, 1)
+        
         task["gpu_usage"] = {
             "health": 1,
-            "total": random.choice([4096, 8192, 16384]),
+            "total": gpu_total,
             "total_data_type": 1,  # MB
-            "used": round(apply_usage_fluctuation(random.uniform(15, 80)), 1),  # 使用率%
-            "gpu_occupied": random.choice([0, 1]),
+            "used": gpu_used,  # 实际使用的显存量 (MB)
+            "gpu_occupied": (1 if gpu_used > 104 else 0),
         }
     
     # 根据卫星类型设置传感器
@@ -466,23 +472,21 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         "used": round(final_usage_percent, 1)  # 使用率%
                     }
                 
-                # GPU使用情况 (TSN类型不添加GPU字段，其他类型使用率%)
+                # GPU使用情况 (TSN类型不添加GPU字段，其他类型显存使用量)
                 if sat_type.lower() != 'tsn':
                     if 'gpuUsage' in spec:
                         gpu_total, total_type = convert_size_to_type(spec['gpuUsage'].get('total', '0MB'))
                         gpu_used, _ = convert_size_to_type(spec['gpuUsage'].get('used', '0MB'))
                         
-                        # 计算使用百分比
-                        usage_percent = (gpu_used / gpu_total * 100) if gpu_total > 0 else 0.0
-                        # 对使用百分比进行倍数浮动
-                        final_usage_percent = apply_usage_fluctuation(usage_percent, 0.0, 100.0)
+                        # 对原始使用量进行倍数浮动，但不能超过总量
+                        final_gpu_used = apply_usage_fluctuation(gpu_used, 0.0, gpu_total)
                         
                         task["gpu_usage"] = {
                             "health": 1,
                             "total": gpu_total,  # 总GPU内存不变
                             "total_data_type": total_type,
-                            "used": round(final_usage_percent, 1),  # 使用率%
-                            "gpu_occupied": (1 if final_usage_percent > 10 else 0),
+                            "used": round(final_gpu_used, 1),  # 实际使用的显存量
+                            "gpu_occupied": (1 if final_gpu_used > 104 else 0),
                         }
                         
                 
@@ -567,11 +571,15 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                     
                     if "gpu_usage" in new_task and sat_type.lower() != 'tsn':
                         new_task["gpu_usage"] = new_task["gpu_usage"].copy()
-                        base_usage_percent = new_task["gpu_usage"]["used"]
-                        final_usage_percent = round(apply_usage_fluctuation(base_usage_percent, 0.0, 100.0), 1)
-                        new_task["gpu_usage"]["used"] = final_usage_percent
-                        new_task["gpu_usage"]["gpu_occupied"] = (1 if final_usage_percent > 10 else 0)
-                    
+                        base_gpu_used = new_task["gpu_usage"]["used"]
+                        gpu_total = new_task["gpu_usage"]["total"]
+                        
+                        # 对原始使用量进行倍数浮动，但不能超过总量
+                        final_gpu_used = apply_usage_fluctuation(base_gpu_used, 0.0, gpu_total)
+                        
+                        new_task["gpu_usage"]["used"] = round(final_gpu_used, 1)
+                        new_task["gpu_usage"]["gpu_occupied"] = (1 if final_gpu_used > 104 else 0)
+
                     # 生成新的链接列表
                     new_task["linkList"] = generate_link_list(missing_sat_id, len(expected_sat_ids))
                     
