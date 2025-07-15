@@ -16,11 +16,11 @@ spec:
     used: 104.0MB
     util: ''
   linkList:
-  - delay: 115.7
+  - delay: 126.1
     end_sat_id: 1
     health: 1
-    jitter: 0.2
-    loss: 0.4
+    jitter: 0.5
+    loss: 0.6
     rate: 25
     rate_data_type: 3
     type: laser
@@ -28,4 +28,14 @@ spec:
     free: 85MB
     total: 983MB
     used: 462MB
+  sensors:
+  - health: 1
+    occupied: 1
+    sensor_type: 2
+  - health: 1
+    occupied: 23
+    sensor_type: 1
+  - health: 1
+    occupied: 21
+    sensor_type: 0
   timestamp: '2025-06-19T21:28:15'

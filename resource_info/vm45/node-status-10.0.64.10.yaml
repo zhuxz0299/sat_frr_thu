@@ -16,19 +16,19 @@ spec:
     used: 0.5MB
     util: ''
   linkList:
-  - delay: 109.5
+  - delay: 112.8
     end_sat_id: 24
     health: 1
-    jitter: 1.2
-    loss: 0.5
+    jitter: 0.3
+    loss: 0.3
     rate: 25
     rate_data_type: 3
     type: laser
-  - delay: 121.4
+  - delay: 104.8
     end_sat_id: 44
     health: 1
-    jitter: 0.0
-    loss: 0.3
+    jitter: 1.9
+    loss: 0.1
     rate: 25
     rate_data_type: 3
     type: laser
