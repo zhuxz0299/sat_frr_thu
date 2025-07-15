@@ -446,6 +446,7 @@ def main():
         print(f"错误: JSON文件不存在: {json_path}")
         sys.exit(1)
     
+    print(f"当前时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("="*80)
     print("字段值校验工具")
     print("="*80)
