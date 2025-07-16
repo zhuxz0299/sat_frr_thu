@@ -141,6 +141,19 @@ def generate_link_list(sat_id, sat_count):
 
     return links
 
+def should_have_gpu(sat_id):
+    """判断指定的卫星ID是否需要GPU字段
+    
+    Args:
+        sat_id: 卫星ID
+        
+    Returns:
+        bool: 如果需要GPU字段返回True，否则返回False
+    """
+    # 指定的卫星ID列表：9,14,21,38,2,4,6,8
+    gpu_satellite_ids = {2, 4, 6, 8, 9, 14, 21, 38}
+    return sat_id in gpu_satellite_ids
+
 def apply_usage_fluctuation(base_value, min_limit=0.0, max_limit=100.0):
     """对使用率进行倍数浮动
     
@@ -151,6 +164,7 @@ def apply_usage_fluctuation(base_value, min_limit=0.0, max_limit=100.0):
     
     Returns:
         浮动后的值
+
     """
     fluctuation = random.uniform(0.5, 2.0)
     return max(min_limit, min(max_limit, base_value * fluctuation))
@@ -211,8 +225,8 @@ def create_default_task(sat_id, sat_type, sat_count):
         "linkList": generate_link_list(sat_id, sat_count)
     }
     
-    # TSN类型不添加GPU字段，其他类型添加GPU字段
-    if sat_type.lower() != 'tsn':
+    # 根据卫星ID判断是否添加GPU字段
+    if should_have_gpu(sat_id):
         gpu_total = 8192
         # 生成使用率，然后转换为实际使用量
         usage_percent = random.uniform(15, 80)
@@ -224,6 +238,7 @@ def create_default_task(sat_id, sat_type, sat_count):
             "total": gpu_total,
             "total_data_type": 1,  # MB
             "used": gpu_used,  # 实际使用的显存量 (MB)
+            "used_data_type": 1,  # MB
             "gpu_occupied": (1 if gpu_used > 104 else 0),
         }
     
@@ -472,11 +487,11 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         "used": round(final_usage_percent, 1)  # 使用率%
                     }
                 
-                # GPU使用情况 (TSN类型不添加GPU字段，其他类型显存使用量)
-                if sat_type.lower() != 'tsn':
+                # GPU使用情况 (根据卫星ID判断是否添加GPU字段)
+                if should_have_gpu(derived_sat_id):
                     if 'gpuUsage' in spec:
                         gpu_total, total_type = convert_size_to_type(spec['gpuUsage'].get('total', '0MB'))
-                        gpu_used, _ = convert_size_to_type(spec['gpuUsage'].get('used', '0MB'))
+                        gpu_used, used_type = convert_size_to_type(spec['gpuUsage'].get('used', '0MB'))
                         
                         # 对原始使用量进行倍数浮动，但不能超过总量
                         final_gpu_used = apply_usage_fluctuation(gpu_used, 0.0, gpu_total)
@@ -486,6 +501,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                             "total": gpu_total,  # 总GPU内存不变
                             "total_data_type": total_type,
                             "used": round(final_gpu_used, 1),  # 实际使用的显存量
+                            "used_data_type": used_type,  # 与total_data_type相同
                             "gpu_occupied": (1 if final_gpu_used > 104 else 0),
                         }
                         
@@ -569,7 +585,7 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         base_usage_percent = new_task["disk_usage"]["used"]
                         new_task["disk_usage"]["used"] = round(apply_usage_fluctuation(base_usage_percent, 0.0, 100.0), 1)
                     
-                    if "gpu_usage" in new_task and sat_type.lower() != 'tsn':
+                    if "gpu_usage" in new_task and should_have_gpu(missing_sat_id):
                         new_task["gpu_usage"] = new_task["gpu_usage"].copy()
                         base_gpu_used = new_task["gpu_usage"]["used"]
                         gpu_total = new_task["gpu_usage"]["total"]
@@ -579,6 +595,9 @@ def convert_yaml_to_json(vm_folder_path, output_json_path, sat_type):
                         
                         new_task["gpu_usage"]["used"] = round(final_gpu_used, 1)
                         new_task["gpu_usage"]["gpu_occupied"] = (1 if final_gpu_used > 104 else 0)
+                    elif "gpu_usage" in new_task and not should_have_gpu(missing_sat_id):
+                        # 如果该卫星不应该有GPU字段，则删除它
+                        del new_task["gpu_usage"]
 
                     # 生成新的链接列表
                     new_task["linkList"] = generate_link_list(missing_sat_id, len(expected_sat_ids))
